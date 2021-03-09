@@ -40,6 +40,6 @@
             <Button Content="Faire ressortir&#xD;&#xA; les contours :" Width="110" Height="46" BorderBrush="#FFFB0A0A" Foreground="#FFF9F8F8" Background="Black" Click="RessortirContour"/>
             <Button Content="Repoussage" Width="110" Foreground="#FFFDFDFD" BorderBrush="#FFFB0202" Background="Black" Click="Repoussage"/>
         </ComboBox>
-        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Cliquer pour defiler" VerticalAlignment="Top" Height="22" Width="105" Margin="10,185,0,0" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Filtre convolution" VerticalAlignment="Top" Height="22" Width="105" Margin="10,185,0,0" Grid.Column="1"/>
     </Grid>
 </Window>

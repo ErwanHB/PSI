@@ -110,10 +110,10 @@ namespace WpfApp1
                         Pixel temp = new Pixel(rvb);
                         this.matriceBGR[i, j] = temp;
                     }
-                    if ((this.longueur * 3) % 4 != 0)
+                    /*if ((this.longueur * 3) % 4 != 0)
                     {
                         cpt += (this.longueur * 3) % 4;
-                    }
+                    }*/
                 }
             }
         }
@@ -201,14 +201,14 @@ namespace WpfApp1
                     bytes[index] = Convert.ToByte(this.matriceBGR[i, j].R);
                     index++;
                 }
-                if (bourrage != 0)
+                /*if (bourrage != 0)
                 {
                     for (int a = 0; a < bourrage; a++)
                     {
                         bytes[index] = 0x00;
                         index++;
                     }
-                }
+                }*/
             }
             File.WriteAllBytes(file, bytes); //./Images/Sortie.bmp
         }
