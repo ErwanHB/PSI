@@ -173,7 +173,6 @@ namespace WpfApp1
                 compteurDeModification++;
             }
         }
-
         private void RenfortBord(object sender, RoutedEventArgs e)
         {
             if (flag == true)
@@ -220,6 +219,24 @@ namespace WpfApp1
             }
         }
         #endregion
+        #endregion
+
+        #region Creation d'image
+        private void Histogramme(object sender, RoutedEventArgs e)
+        {
+            if (flag == true)
+            {
+                //Histogramme
+                image = Creation.Histogramme(image);
+                image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
+                this.bitmap = new BitmapImage();
+                this.bitmap.BeginInit();
+                this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
+                this.bitmap.EndInit();
+                ImageViewer.Source = this.bitmap;
+                compteurDeModification++;
+            }
+        }
         #endregion
         private void ___TextBox1__TextChanged(object sender, TextChangedEventArgs e)
         {

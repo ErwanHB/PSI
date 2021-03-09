@@ -244,23 +244,14 @@ namespace WpfApp1
         /// <returns></returns>
         public byte[] Convertir_Int_To_Endian(int val, int taille)
         {
-            int test = 0;
-            for (int i = 1; i <= taille; i++)
+            byte[] tab = new byte[taille];
+            while (val / 256 != 0)
             {
-                test += Convert.ToInt32(Math.Pow(256, i));
+                taille--;
+                tab[taille] = Convert.ToByte(val / Convert.ToInt32(Math.Pow(256, taille)));
+                val -= val % Convert.ToInt32(Math.Pow(256, taille));
             }
-            if (test < val) return null;
-            else
-            {
-                byte[] tab = new byte[taille];
-                while (val / 256 != 0)
-                {
-                    taille--;
-                    tab[taille] = Convert.ToByte(val / Convert.ToInt32(Math.Pow(256, taille)));
-                    val -= val % Convert.ToInt32(Math.Pow(256, taille));
-                }
-                return tab;
-            }
+            return tab;
         }
 
         public Pixel[,] MatriceBGR
