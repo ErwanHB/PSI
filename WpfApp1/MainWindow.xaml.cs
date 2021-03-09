@@ -30,6 +30,8 @@ namespace WpfApp1
         MyImage image;
         int compteurDeModification;
         bool flag=false;
+        string name;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -53,6 +55,7 @@ namespace WpfApp1
             ImageViewer.Source = this.bitmap;
             this.image = new MyImage(filename);
             this.flag = true;
+            this.name = Directory.GetCurrentDirectory();;
         }
         private void Button_Rotation(object sender, RoutedEventArgs e)
         {
@@ -80,10 +83,10 @@ namespace WpfApp1
                     }
                 }
                 image.MatriceBGR = matriceBGR;
-                image.From_Image_To_File("temp.bmp");
+                image.From_Image_To_File(name+"\\temp"+compteurDeModification+".bmp");
                 this.bitmap = new BitmapImage();
                 this.bitmap.BeginInit();
-                this.bitmap.UriSource = new Uri("temp.bmp");
+                this.bitmap.UriSource = new Uri(name+"\\temp"+compteurDeModification+".bmp");
                 this.bitmap.EndInit();
                 ImageViewer.Source = this.bitmap;
                 compteurDeModification++;
@@ -110,10 +113,10 @@ namespace WpfApp1
                 }
                 image.MatriceBGR = matriceBGR;
 
-                image.From_Image_To_File("./temp" + compteurDeModification + ".bmp");
+                image.From_Image_To_File(name+"\\temp"+compteurDeModification+".bmp");
                 this.bitmap = new BitmapImage();
                 this.bitmap.BeginInit();
-                this.bitmap.UriSource = new Uri("C:/Users/Megaport/Downloads/Image_dans_WPF/WpfApp1/WpfApp1/bin/Debug/temp" + compteurDeModification + ".bmp");
+                this.bitmap.UriSource = new Uri(name+"\\temp"+compteurDeModification+".bmp");
                 this.bitmap.EndInit();
                 ImageViewer.Source = this.bitmap;
                 compteurDeModification++;
@@ -134,10 +137,10 @@ namespace WpfApp1
                     }
                 }
                 image.MatriceBGR = matriceBGRMiroir;
-                image.From_Image_To_File("./temp" + compteurDeModification + ".bmp");
+                image.From_Image_To_File(name+"\\temp"+compteurDeModification+".bmp");
                 this.bitmap = new BitmapImage();
                 this.bitmap.BeginInit();
-                this.bitmap.UriSource = new Uri("C:/Users/Megaport/Downloads/Image_dans_WPF/WpfApp1/WpfApp1/bin/Debug/temp" + compteurDeModification + ".bmp");
+                this.bitmap.UriSource = new Uri(name+"\\temp"+compteurDeModification+".bmp");
                 this.bitmap.EndInit();
                 ImageViewer.Source = this.bitmap;
                 compteurDeModification++;
@@ -150,7 +153,7 @@ namespace WpfApp1
             this.Close();
             for(int i=compteurDeModification-3;i>=0;i--)
             {
-                File.Delete("./temp"+i+".bmp");
+                File.Delete(name+"\\temp"+i+".bmp");
             }
         }
 
@@ -168,10 +171,10 @@ namespace WpfApp1
             {
                 //flou
                 image = Filtre.Convolution(image, 3);
-                image.From_Image_To_File("./temp" + compteurDeModification + ".bmp");
+                image.From_Image_To_File(name+"\\temp"+compteurDeModification+".bmp");
                 this.bitmap = new BitmapImage();
                 this.bitmap.BeginInit();
-                this.bitmap.UriSource = new Uri("C:/Users/Megaport/Downloads/Image_dans_WPF/WpfApp1/WpfApp1/bin/Debug/temp" + compteurDeModification + ".bmp");
+                this.bitmap.UriSource = new Uri(name+"\\temp"+compteurDeModification+".bmp");
                 this.bitmap.EndInit();
                 ImageViewer.Source = this.bitmap;
                 compteurDeModification++;
@@ -184,10 +187,10 @@ namespace WpfApp1
             {
                 //renfort des bord
                 image = Filtre.Convolution(image, 2);
-                image.From_Image_To_File("./temp" + compteurDeModification + ".bmp");
+                image.From_Image_To_File(name+"\\temp"+compteurDeModification+".bmp");
                 this.bitmap = new BitmapImage();
                 this.bitmap.BeginInit();
-                this.bitmap.UriSource = new Uri("C:/Users/Megaport/Downloads/Image_dans_WPF/WpfApp1/WpfApp1/bin/Debug/temp" + compteurDeModification + ".bmp");
+                this.bitmap.UriSource = new Uri(name+"\\temp"+compteurDeModification+".bmp");
                 this.bitmap.EndInit();
                 ImageViewer.Source = this.bitmap;
                 compteurDeModification++;
@@ -199,10 +202,10 @@ namespace WpfApp1
             {
                 //ressortir les contours
                 image = Filtre.Convolution(image, 1);
-                image.From_Image_To_File("./temp" + compteurDeModification + ".bmp");
+                image.From_Image_To_File(name+"\\temp"+compteurDeModification+".bmp");
                 this.bitmap = new BitmapImage();
                 this.bitmap.BeginInit();
-                this.bitmap.UriSource = new Uri("C:/Users/Megaport/Downloads/Image_dans_WPF/WpfApp1/WpfApp1/bin/Debug/temp" + compteurDeModification + ".bmp");
+                this.bitmap.UriSource = new Uri(name+"\\temp"+compteurDeModification+".bmp");
                 this.bitmap.EndInit();
                 ImageViewer.Source = this.bitmap;
                 compteurDeModification++;
@@ -214,10 +217,10 @@ namespace WpfApp1
             {
                 //Repoussage
                 image = Filtre.Convolution(image, 4);
-                image.From_Image_To_File("./temp" + compteurDeModification + ".bmp");
+                image.From_Image_To_File(name+"\\temp"+compteurDeModification+".bmp");
                 this.bitmap = new BitmapImage();
                 this.bitmap.BeginInit();
-                this.bitmap.UriSource = new Uri("C:/Users/Megaport/Downloads/Image_dans_WPF/WpfApp1/WpfApp1/bin/Debug/temp" + compteurDeModification + ".bmp");
+                this.bitmap.UriSource = new Uri(name+"\\temp"+compteurDeModification+".bmp");
                 this.bitmap.EndInit();
                 ImageViewer.Source = this.bitmap;
                 compteurDeModification++;
