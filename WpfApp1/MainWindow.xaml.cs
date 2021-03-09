@@ -31,6 +31,8 @@ namespace WpfApp1
         int compteurDeModification;
         bool flag=false;
         string name;
+        bool flag2 = false;
+        string texte;
 
         public MainWindow()
         {
@@ -146,7 +148,7 @@ namespace WpfApp1
                 compteurDeModification++;
             }
         }
-        #endregion
+        #region filtre
         public void fileExitMenuItem_Click(object sender, RoutedEventArgs e)
         {
             // Close this window
@@ -156,15 +158,6 @@ namespace WpfApp1
                 File.Delete(name+"\\temp"+i+".bmp");
             }
         }
-
-        private void ___TextBox1__TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (this.flag == true)
-            {
-                image.From_Image_To_File(___TextBox1_.Text);
-            }
-        }
-
         private void Flou (object sender, RoutedEventArgs e)
         {
             if (flag == true)
@@ -226,10 +219,20 @@ namespace WpfApp1
                 compteurDeModification++;
             }
         }
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        #endregion
+        #endregion
+        private void ___TextBox1__TextChanged(object sender, TextChangedEventArgs e)
         {
+            this.texte =___TextBox1_.Text;
+            flag2 = true;
+        }
 
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            if(this.flag == true&&flag2==true)
+            {
+                image.From_Image_To_File(name+"\\"+texte+".bmp");
+            }
         }
     }
 }
