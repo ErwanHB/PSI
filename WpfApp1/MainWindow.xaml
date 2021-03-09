@@ -26,9 +26,9 @@
         <Button Content="Nuance de gris" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top" Width="123" Click="NuanceDeGris" RenderTransformOrigin="5.64,-2.529" Height="30" Grid.Column="1" Foreground="White" BorderBrush="Red" Background="Black"/>
         <Button Content="Noir et Blanc" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Width="123" Click="NoirEtBlanc" RenderTransformOrigin="5.64,-2.529" Height="30" Grid.Column="1" Foreground="White" BorderBrush="Red" Background="Black"/>
         <Button Content="exit" HorizontalAlignment="Left" Margin="516,10,0,0" VerticalAlignment="Top" Width="123" Click="fileExitMenuItem_Click" RenderTransformOrigin="5.64,-2.529" Height="30" Foreground="White" BorderBrush="Red" Background="Black"/>
-        <TextBox x:Name="___TextBox1_" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="ex : ./Nouveau.bmp " VerticalAlignment="Top" Width="123" Margin="10,386,0,0" Grid.Column="1" Background="#FF0F0E0E" BorderBrush="Red" Foreground="White" TextChanged="___TextBox1__TextChanged"/>
-        <TextBox HorizontalAlignment="Left" Height="42" TextWrapping="Wrap" Text="Pour enregistrer entrer un nom de fichier :" VerticalAlignment="Top" Width="123" Margin="10,339,0,0" TextAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" FontStyle="Italic" Grid.Column="1"/>
-        <ComboBox VerticalAlignment="Top" Margin="10,185,10,0" Grid.Column="1" BorderBrush="Black" Foreground="Black" Background="Black" SelectionChanged="ComboBox_SelectionChanged">
+        <TextBox x:Name="___TextBox1_" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="ex : Nouveau  " VerticalAlignment="Top" Width="76" Margin="10,386,0,0" Grid.Column="1" Background="#FF0F0E0E" BorderBrush="Red" Foreground="White" TextChanged="___TextBox1__TextChanged" Cursor="None"/>
+        <TextBox HorizontalAlignment="Left" Height="50" TextWrapping="Wrap" Text="Pour enregistrer entrer un nom de fichier puis cliquez sur le bouton" VerticalAlignment="Top" Width="123" Margin="10,331,0,0" TextAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" FontStyle="Italic" Grid.Column="1"/>
+        <ComboBox VerticalAlignment="Top" Margin="10,185,10,0" Grid.Column="1" BorderBrush="Black" Foreground="Black" Background="Black">
             <ComboBox.OpacityMask>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black" Offset="0"/>
@@ -40,6 +40,7 @@
             <Button Content="Faire ressortir&#xD;&#xA; les contours :" Width="110" Height="46" BorderBrush="#FFFB0A0A" Foreground="#FFF9F8F8" Background="Black" Click="RessortirContour"/>
             <Button Content="Repoussage" Width="110" Foreground="#FFFDFDFD" BorderBrush="#FFFB0202" Background="Black" Click="Repoussage"/>
         </ComboBox>
-        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Filtre convolution" VerticalAlignment="Top" Height="22" Width="105" Margin="10,185,0,0" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Cliquer pour defiler" VerticalAlignment="Top" Height="22" Width="105" Margin="10,185,0,0" Grid.Column="1"/>
+        <CheckBox Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Margin="114,388,-42,0" Checked="CheckBox_Checked"/>
     </Grid>
 </Window>
