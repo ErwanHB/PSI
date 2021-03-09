@@ -80,10 +80,10 @@ namespace WpfApp1
                     }
                 }
                 image.MatriceBGR = matriceBGR;
-                image.From_Image_To_File("./temp" + compteurDeModification + ".bmp");
+                image.From_Image_To_File("temp.bmp");
                 this.bitmap = new BitmapImage();
                 this.bitmap.BeginInit();
-                this.bitmap.UriSource = new Uri("C:/Users/Megaport/Downloads/Image_dans_WPF/WpfApp1/WpfApp1/bin/Debug/temp" + compteurDeModification + ".bmp");
+                this.bitmap.UriSource = new Uri("temp.bmp");
                 this.bitmap.EndInit();
                 ImageViewer.Source = this.bitmap;
                 compteurDeModification++;
