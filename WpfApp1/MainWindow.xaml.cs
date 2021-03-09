@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Windows.Forms;
 using System.ComponentModel;
-
+using System.Threading;
 
 namespace WpfApp1
 {
@@ -23,8 +23,13 @@ namespace WpfApp1
     /// Logique d'interaction pour MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {// string filename = @"C:\Users\aellul\Desktop\WpfApp1\WpfApp1\bin\Debug\coco.bmp";
+    {
+
         OpenFileDialog dlg;
+        BitmapImage bitmap;
+        MyImage image;
+        int compteurDeModification;
+        bool flag=false;
         public MainWindow()
         {
             InitializeComponent();
@@ -41,13 +46,189 @@ namespace WpfApp1
                 filename = dlg.FileName;
                                      
             }
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(filename);         
-            bitmap.EndInit();
-            ImageViewer.Source = bitmap;
+            this.bitmap = new BitmapImage();
+            this.bitmap.BeginInit();
+            this.bitmap.UriSource = new Uri(filename);         
+            this.bitmap.EndInit();
+            ImageViewer.Source = this.bitmap;
+            this.image = new MyImage(filename);
+            this.flag = true;
         }
+        private void Button_Rotation(object sender, RoutedEventArgs e)
+        {
+            RotateTransform rotateTransform = new RotateTransform(45);
+
+        }
+
+        #region Traitemement d'image (TD3)
+
+        public void NuanceDeGris(object sender, RoutedEventArgs e)
+        {
+            if (this.flag == true)
+            {
+                Pixel[,] matriceBGR = image.MatriceBGR;
+                int moyenne = 0;
+                for (int i = 0; i < matriceBGR.GetLength(0); i++)
+                {
+                    for (int j = 0; j < matriceBGR.GetLength(1); j++)
+                    {
+                        moyenne = (matriceBGR[i, j].R + matriceBGR[i, j].V + matriceBGR[i, j].B) / 3;
+                        matriceBGR[i, j].R = moyenne;
+                        matriceBGR[i, j].V = moyenne;
+                        matriceBGR[i, j].B = moyenne;
+                        moyenne = 0;
+                    }
+                }
+                image.MatriceBGR = matriceBGR;
+                image.From_Image_To_File("./temp" + compteurDeModification + ".bmp");
+                this.bitmap = new BitmapImage();
+                this.bitmap.BeginInit();
+                this.bitmap.UriSource = new Uri("C:/Users/Megaport/Downloads/Image_dans_WPF/WpfApp1/WpfApp1/bin/Debug/temp" + compteurDeModification + ".bmp");
+                this.bitmap.EndInit();
+                ImageViewer.Source = this.bitmap;
+                compteurDeModification++;
             }
         }
+        public void NoirEtBlanc(object sender, RoutedEventArgs e)
+        {
+            if (this.flag == true)
+            {
+                int valeur = 128;
+                Pixel[,] matriceBGR = image.MatriceBGR;
+                int moyenne = 0;
+                for (int i = 0; i < matriceBGR.GetLength(0); i++)
+                {
+                    for (int j = 0; j < matriceBGR.GetLength(1); j++)
+                    {
+                        moyenne = (matriceBGR[i, j].R + matriceBGR[i, j].V + matriceBGR[i, j].B) / 3;
+                        if (moyenne < valeur) moyenne = 0;
+                        else moyenne = 255;
+                        matriceBGR[i, j].R = moyenne;
+                        matriceBGR[i, j].V = moyenne;
+                        matriceBGR[i, j].B = moyenne;
+                    }
+                }
+                image.MatriceBGR = matriceBGR;
+
+                image.From_Image_To_File("./temp" + compteurDeModification + ".bmp");
+                this.bitmap = new BitmapImage();
+                this.bitmap.BeginInit();
+                this.bitmap.UriSource = new Uri("C:/Users/Megaport/Downloads/Image_dans_WPF/WpfApp1/WpfApp1/bin/Debug/temp" + compteurDeModification + ".bmp");
+                this.bitmap.EndInit();
+                ImageViewer.Source = this.bitmap;
+                compteurDeModification++;
+            }
+        }
+
+        public void Miroir(object sender, RoutedEventArgs e)
+        {
+            if (this.flag == true)
+            {
+                Pixel[,] matriceBGR = image.MatriceBGR;
+                Pixel[,] matriceBGRMiroir = new Pixel[matriceBGR.GetLength(0), matriceBGR.GetLength(1)];
+                for (int i = 0; i < matriceBGR.GetLength(0); i++)
+                {
+                    for (int j = 0; j < matriceBGR.GetLength(1); j++)
+                    {
+                        matriceBGRMiroir[i, j] = matriceBGR[i, matriceBGR.GetLength(1) - 1 - j];
+                    }
+                }
+                image.MatriceBGR = matriceBGRMiroir;
+                image.From_Image_To_File("./temp" + compteurDeModification + ".bmp");
+                this.bitmap = new BitmapImage();
+                this.bitmap.BeginInit();
+                this.bitmap.UriSource = new Uri("C:/Users/Megaport/Downloads/Image_dans_WPF/WpfApp1/WpfApp1/bin/Debug/temp" + compteurDeModification + ".bmp");
+                this.bitmap.EndInit();
+                ImageViewer.Source = this.bitmap;
+                compteurDeModification++;
+            }
+        }
+        #endregion
+        public void fileExitMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            // Close this window
+            this.Close();
+            for(int i=compteurDeModification-3;i>=0;i--)
+            {
+                File.Delete("./temp"+i+".bmp");
+            }
+        }
+
+        private void ___TextBox1__TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (this.flag == true)
+            {
+                image.From_Image_To_File(___TextBox1_.Text);
+            }
+        }
+
+        private void Flou (object sender, RoutedEventArgs e)
+        {
+            if (flag == true)
+            {
+                //flou
+                image = Filtre.Convolution(image, 3);
+                image.From_Image_To_File("./temp" + compteurDeModification + ".bmp");
+                this.bitmap = new BitmapImage();
+                this.bitmap.BeginInit();
+                this.bitmap.UriSource = new Uri("C:/Users/Megaport/Downloads/Image_dans_WPF/WpfApp1/WpfApp1/bin/Debug/temp" + compteurDeModification + ".bmp");
+                this.bitmap.EndInit();
+                ImageViewer.Source = this.bitmap;
+                compteurDeModification++;
+            }
+        }
+
+        private void RenfortBord(object sender, RoutedEventArgs e)
+        {
+            if (flag == true)
+            {
+                //renfort des bord
+                image = Filtre.Convolution(image, 2);
+                image.From_Image_To_File("./temp" + compteurDeModification + ".bmp");
+                this.bitmap = new BitmapImage();
+                this.bitmap.BeginInit();
+                this.bitmap.UriSource = new Uri("C:/Users/Megaport/Downloads/Image_dans_WPF/WpfApp1/WpfApp1/bin/Debug/temp" + compteurDeModification + ".bmp");
+                this.bitmap.EndInit();
+                ImageViewer.Source = this.bitmap;
+                compteurDeModification++;
+            }
+        }
+        private void RessortirContour(object sender, RoutedEventArgs e)
+        {
+            if (flag == true)
+            {
+                //ressortir les contours
+                image = Filtre.Convolution(image, 1);
+                image.From_Image_To_File("./temp" + compteurDeModification + ".bmp");
+                this.bitmap = new BitmapImage();
+                this.bitmap.BeginInit();
+                this.bitmap.UriSource = new Uri("C:/Users/Megaport/Downloads/Image_dans_WPF/WpfApp1/WpfApp1/bin/Debug/temp" + compteurDeModification + ".bmp");
+                this.bitmap.EndInit();
+                ImageViewer.Source = this.bitmap;
+                compteurDeModification++;
+            }
+        }
+        private void Repoussage(object sender, RoutedEventArgs e)
+        {
+            if (flag == true)
+            {
+                //Repoussage
+                image = Filtre.Convolution(image, 4);
+                image.From_Image_To_File("./temp" + compteurDeModification + ".bmp");
+                this.bitmap = new BitmapImage();
+                this.bitmap.BeginInit();
+                this.bitmap.UriSource = new Uri("C:/Users/Megaport/Downloads/Image_dans_WPF/WpfApp1/WpfApp1/bin/Debug/temp" + compteurDeModification + ".bmp");
+                this.bitmap.EndInit();
+                ImageViewer.Source = this.bitmap;
+                compteurDeModification++;
+            }
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+    }
+}
     
 

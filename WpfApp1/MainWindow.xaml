@@ -6,11 +6,40 @@
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Image HorizontalAlignment="Left" Height="400" Margin="185,0,0,0" VerticalAlignment="Top" Width="600" Name="ImageViewer">
 
-        </Image>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="40,96,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-
+    <Grid Background="Black">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Image HorizontalAlignment="Left" Height="364" Margin="10,45,0,0" VerticalAlignment="Top" Width="639" Name="ImageViewer"/>
+        <Button Content="Cliquez pour ouvrir une image : " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="176" Click="Button_Click" Height="30" BorderBrush="Red" Foreground="White">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="#FF080808" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <Button Content="Rotation*" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="123" Click="Button_Rotation" RenderTransformOrigin="1.968,0.114" Height="30" Grid.Column="1" Background="#FF0E0E0E" BorderBrush="#FFFD0000" Foreground="White"/>
+        <Button Content="Miroir" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" Width="123" Click="Miroir" RenderTransformOrigin="5.64,-2.529" Height="30" Grid.Column="1" Foreground="White" BorderBrush="Red" Background="Black"/>
+        <Button Content="Nuance de gris" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top" Width="123" Click="NuanceDeGris" RenderTransformOrigin="5.64,-2.529" Height="30" Grid.Column="1" Foreground="White" BorderBrush="Red" Background="Black"/>
+        <Button Content="Noir et Blanc" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Width="123" Click="NoirEtBlanc" RenderTransformOrigin="5.64,-2.529" Height="30" Grid.Column="1" Foreground="White" BorderBrush="Red" Background="Black"/>
+        <Button Content="exit" HorizontalAlignment="Left" Margin="516,10,0,0" VerticalAlignment="Top" Width="123" Click="fileExitMenuItem_Click" RenderTransformOrigin="5.64,-2.529" Height="30" Foreground="White" BorderBrush="Red" Background="Black"/>
+        <TextBox x:Name="___TextBox1_" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="ex : ./Nouveau.bmp " VerticalAlignment="Top" Width="123" Margin="10,386,0,0" Grid.Column="1" Background="#FF0F0E0E" BorderBrush="Red" Foreground="White" TextChanged="___TextBox1__TextChanged"/>
+        <TextBox HorizontalAlignment="Left" Height="42" TextWrapping="Wrap" Text="Pour enregistrer entrer un nom de fichier :" VerticalAlignment="Top" Width="123" Margin="10,339,0,0" TextAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" FontStyle="Italic" Grid.Column="1"/>
+        <ComboBox VerticalAlignment="Top" Margin="10,185,10,0" Grid.Column="1" BorderBrush="Black" Foreground="Black" Background="Black" SelectionChanged="ComboBox_SelectionChanged">
+            <ComboBox.OpacityMask>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="Black" Offset="1"/>
+                </LinearGradientBrush>
+            </ComboBox.OpacityMask>
+            <Button Content="Flou :" Width="110" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="Flou"/>
+            <Button Content="Renfort des bords :" Width="110" Background="Black" BorderBrush="Red" Foreground="White" Click="RenfortBord"/>
+            <Button Content="Faire ressortir&#xD;&#xA; les contours :" Width="110" Height="46" BorderBrush="#FFFB0A0A" Foreground="#FFF9F8F8" Background="Black" Click="RessortirContour"/>
+            <Button Content="Repoussage" Width="110" Foreground="#FFFDFDFD" BorderBrush="#FFFB0202" Background="Black" Click="Repoussage"/>
+        </ComboBox>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Cliquer pour defiler" VerticalAlignment="Top" Height="22" Width="105" Margin="10,185,0,0" Grid.Column="1"/>
     </Grid>
 </Window>
