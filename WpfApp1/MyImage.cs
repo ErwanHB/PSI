@@ -52,14 +52,27 @@ namespace WpfApp1
         public int Largeur
         {
             get { return this.largeur; }
+            set { largeur = value; }
         }
         public int Longueur
         {
             get { return this.longueur; }
+            set { longueur = value; }
         }
         public byte[] Header
         {
+            set { header = value; }
             get { return this.header; }
+        }
+        public int Taille
+        {
+            set { this.taille = value; }
+            get { return this.taille; }
+        }
+        public int Offset
+        {
+            set { this.offset = value; }
+            get { return this.offset; }
         }
         #endregion
 
