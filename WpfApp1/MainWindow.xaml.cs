@@ -497,7 +497,7 @@ namespace WpfApp1
                 image.MatriceBGR = MatriceBGRnew;
                 image.Taille = image.Offset + longueur * largeur*3;
                 image.Largeur = largeur;
-                image.Longueur = longueur;
+                image.Hauteur = longueur;
                 byte[] largeur2 = image.Convertir_Int_To_Endian(largeur, 4);
                 byte[] d =image.Convertir_Int_To_Endian(image.Taille,4);
                 byte[] header=image.Header;

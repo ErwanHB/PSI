@@ -44,7 +44,7 @@ namespace WpfApp1
         int taille;
         int offset;
         int largeur;
-        int longueur;
+        int hauteur;
         int nombreBitsParPixel;
         Pixel[,] matriceBGR;
         byte[] header;
@@ -54,10 +54,10 @@ namespace WpfApp1
             get { return this.largeur; }
             set { largeur = value; }
         }
-        public int Longueur
+        public int Hauteur
         {
-            get { return this.longueur; }
-            set { longueur = value; }
+            get { return this.hauteur; }
+            set { hauteur = value; }
         }
         public byte[] Header
         {
@@ -95,11 +95,11 @@ namespace WpfApp1
 
                 this.largeur = Convertir_Endian_To_Int(myfile, 18, 4);
 
-                this.longueur = Convertir_Endian_To_Int(myfile, 22, 4);
+                this.hauteur = Convertir_Endian_To_Int(myfile, 22, 4);
 
                 this.nombreBitsParPixel = Convertir_Endian_To_Int(myfile, 28, 2);
 
-                this.matriceBGR = new Pixel[this.longueur, this.largeur];
+                this.matriceBGR = new Pixel[this.hauteur, this.largeur];
 
                 this.header = new byte[this.offset];
 
@@ -111,7 +111,7 @@ namespace WpfApp1
                 int cpt = this.offset;
                 int[] rvb = new int[3];
 
-                for (int i = 0; i < this.longueur; i++)
+                for (int i = 0; i < this.hauteur; i++)
                 {
                     for (int j = 0; j < this.largeur; j++)
                     {
@@ -123,9 +123,9 @@ namespace WpfApp1
                         Pixel temp = new Pixel(rvb);
                         this.matriceBGR[i, j] = temp;
                     }
-                    if ((this.longueur * 3) % 4 != 0)
+                    if ((this.hauteur * 3) % 4 != 0)
                     {
-                        cpt += (this.longueur * 3) % 4;
+                        cpt += (this.hauteur * 3) % 4;
                     }
                 }
             }
@@ -148,14 +148,14 @@ namespace WpfApp1
 
                 this.largeur = Convertir_Endian_To_Int(header, 18, 4);
 
-                this.longueur = Convertir_Endian_To_Int(header, 22, 4);
+                this.hauteur = Convertir_Endian_To_Int(header, 22, 4);
 
-                if (this.largeur % 4 == 0 && this.longueur % 4 == 0)
+                if (this.largeur % 4 == 0 && this.hauteur % 4 == 0)
                 {
                     this.nombreBitsParPixel = Convertir_Endian_To_Int(header, 28, 2);
                 }
             }
-            this.matriceBGR = new Pixel[this.largeur, this.longueur];
+            this.matriceBGR = new Pixel[this.largeur, this.hauteur];
         }
 
         /// <summary>
@@ -176,9 +176,9 @@ namespace WpfApp1
 
                 this.largeur = Convertir_Endian_To_Int(header, 18, 4);
 
-                this.longueur = Convertir_Endian_To_Int(header, 22, 4);
+                this.hauteur = Convertir_Endian_To_Int(header, 22, 4);
 
-                if (this.largeur % 4 == 0 && this.longueur % 4 == 0)
+                if (this.largeur % 4 == 0 && this.hauteur % 4 == 0)
                 {
                     this.nombreBitsParPixel = Convertir_Endian_To_Int(header, 28, 2);
                 }
@@ -286,7 +286,7 @@ namespace WpfApp1
         int taille;
         int offset;
         int largeur;
-        int longueur;
+        int hauteur;
         int nombreBitsParPixel;
         Pixel[,] matriceBGR;
         byte[] header;
@@ -295,9 +295,9 @@ namespace WpfApp1
         {
             get { return this.largeur; }
         }
-        public int Longueur
+        public int hauteur
         {
-            get { return this.longueur; }
+            get { return this.hauteur; }
         }
         public byte[] Header
         {
@@ -324,13 +324,13 @@ namespace WpfApp1
 
                 this.largeur = Convertir_Endian_To_Int(myfile, 18, 4);
 
-                this.longueur = Convertir_Endian_To_Int(myfile, 22, 4);
+                this.hauteur = Convertir_Endian_To_Int(myfile, 22, 4);
 
-                if (this.largeur % 4 == 0 && this.longueur % 4 == 0)
+                if (this.largeur % 4 == 0 && this.hauteur % 4 == 0)
                 {
                     this.nombreBitsParPixel = Convertir_Endian_To_Int(myfile, 28, 2);
 
-                    this.matriceBGR = new Pixel[this.longueur, this.largeur];
+                    this.matriceBGR = new Pixel[this.hauteur, this.largeur];
 
                     this.header = new byte[this.offset];
 
@@ -371,14 +371,14 @@ namespace WpfApp1
 
                 this.largeur = Convertir_Endian_To_Int(header, 18, 4);
 
-                this.longueur = Convertir_Endian_To_Int(header, 22, 4);
+                this.hauteur = Convertir_Endian_To_Int(header, 22, 4);
 
-                if (this.largeur % 4 == 0 && this.longueur % 4 == 0)
+                if (this.largeur % 4 == 0 && this.hauteur % 4 == 0)
                 {
                     this.nombreBitsParPixel = Convertir_Endian_To_Int(header, 28, 2);
                 }
             }
-            this.matriceBGR = new Pixel[this.largeur, this.longueur];
+            this.matriceBGR = new Pixel[this.largeur, this.hauteur];
         }
 
         /// <summary>
@@ -399,9 +399,9 @@ namespace WpfApp1
 
                 this.largeur = Convertir_Endian_To_Int(header, 18, 4);
 
-                this.longueur = Convertir_Endian_To_Int(header, 22, 4);
+                this.hauteur = Convertir_Endian_To_Int(header, 22, 4);
 
-                if (this.largeur % 4 == 0 && this.longueur % 4 == 0)
+                if (this.largeur % 4 == 0 && this.hauteur % 4 == 0)
                 {
                     this.nombreBitsParPixel = Convertir_Endian_To_Int(header, 28, 2);
                 }
