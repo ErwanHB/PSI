@@ -284,14 +284,18 @@ namespace WpfApp1
                                         {
                                             for (int cpt2 = 0; cpt2 < cptTemporaire2; cpt2++)
                                             {
-                                                moyenne.R = image.MatriceBGR[i - cpt1 , j - cpt2].R;
-                                                moyenne.V= image.MatriceBGR[i - cpt1, j - cpt2].V;
-                                                moyenne.B = image.MatriceBGR[i - cpt1, j - cpt2].B;
+                                                moyenne.R += image.MatriceBGR[i - cpt1 , j - cpt2].R;
+                                                moyenne.V+= image.MatriceBGR[i - cpt1, j - cpt2].V;
+                                                moyenne.B += image.MatriceBGR[i - cpt1, j - cpt2].B;
                                             }
                                         }
-                                        MatriceBGRnew[i - cptLongueur, j - cptLargeur].R = moyenne.R/(cptTemporaire1+cptTemporaire2-1);
-                                        MatriceBGRnew[i - cptLongueur, j - cptLargeur].V = moyenne.V / (cptTemporaire1 + cptTemporaire2-1);
-                                        MatriceBGRnew[i - cptLongueur, j - cptLargeur].B = moyenne.B / (cptTemporaire1 + cptTemporaire2-1);
+                                        MatriceBGRnew[i - cptLongueur, j - cptLargeur].R = moyenne.R/(cptTemporaire1*cptTemporaire2);
+                                        MatriceBGRnew[i - cptLongueur, j - cptLargeur].V = moyenne.V / (cptTemporaire1 * cptTemporaire2);
+                                        MatriceBGRnew[i - cptLongueur, j - cptLargeur].B = moyenne.B / (cptTemporaire1 * cptTemporaire2);
+                                        cptTemporaire2 = 1;
+                                    }
+                                    if (j - cptLargeur == largeur - 1)
+                                    {
                                         cptTemporaire2 = 1;
                                     }
                                 }
@@ -303,14 +307,13 @@ namespace WpfApp1
                     //facteur d'aggrandissement >1
                     else
                     {
-                        //aggrandissement en largeur
                         a = Convert.ToInt32(Math.Floor(agrandis));
                         double b = Convert.ToDouble(Convert.ToSingle(agrandis - a) % Convert.ToSingle(1));
-                        b = Math.Round(b, 1);
-                        int cptLargeur = 0;
+                        int cptLargeur=0;
+                        int cptLongueur = 0;
+                        #region aggrandissmenet coef partie complete
                         for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
                         {
-                            cptLargeur = 0;
                             for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
                             {
                                 for (int index = 0; index < a; index++)
@@ -319,7 +322,11 @@ namespace WpfApp1
                                 }
                                 cptLargeur += a - 1;
                             }
+                            cptLongueur++;
+                            cptLargeur = 0;
                         }
+                        #endregion
+                        #region Preparation aggrandissmenet largeur coef partie decimal
                         cptLargeur = 0;
                         bool[] changementl = new bool[largeur];
                         for (int j = 0; j < largeur; j++)
@@ -329,7 +336,7 @@ namespace WpfApp1
                         for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
                         {
 
-                            int p = rnd.Next(0, 10);
+                            Double p = rnd.NextDouble();
                             if (p <= b * 10)
                             {
                                 if (j + cptLargeur < largeur)
@@ -377,31 +384,12 @@ namespace WpfApp1
                                 }
                             }
                         }
-
-                        int cptLongueur = 0;
-                        //aggrandissement en hauteur
-                        bool[] changementL = new bool[longueur];
-                        for (int j = 0; j < longueur; j++)
-                        {
-                            changementl[j] = false;
-                        }
-                        for (int i = 0; i < image.MatriceBGR.GetLength(1); i++)
-                        {
-                            cptLongueur = 0;
-                            for (int j = 0; j < image.MatriceBGR.GetLength(0); j++)
-                            {
-                                for (int index = 0; index < a; index++)
-                                {
-                                    MatriceBGRnew[j + index + cptLongueur, i] = image.MatriceBGR[j, i];
-                                }
-                                cptLongueur += a - 1;
-                            }
-                        }
-
+                        #endregion
+                        #region Preparation aggrandissmenet heutaur coef partie decimal
                         cptLongueur = 0;
                         for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
                         {
-                            int p = rnd.Next(0, 10);
+                            Double p = rnd.NextDouble();
                             if (p <= b * 10)
                             {
                                 if (i + cptLongueur < longueur)
@@ -449,6 +437,8 @@ namespace WpfApp1
                                 }
                             }
                         }
+                        #endregion
+
 
                     }
                 }
@@ -610,6 +600,7 @@ namespace WpfApp1
             this.bitmap.EndInit();
             ImageViewer.Source = this.bitmap;
             compteurDeModification++;
+            flag = true;
 
         }
         #endregion
