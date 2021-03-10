@@ -254,12 +254,15 @@ namespace WpfApp1
         public byte[] Convertir_Int_To_Endian(int val, int taille)
         {
             byte[] tab = new byte[taille];
-            while (val / 256 != 0)
+            do
             {
                 taille--;
-                tab[taille] = Convert.ToByte(val / Convert.ToInt32(Math.Pow(256, taille)));
-                val -= val % Convert.ToInt32(Math.Pow(256, taille));
-            }
+                int a = val / Convert.ToInt32(Math.Pow(256, taille));
+                tab[taille] = Convert.ToByte(a);
+                int b = a * Convert.ToInt32(Math.Pow(256, taille));
+                val -= b;
+            } while (taille > 0);
+
             return tab;
         }
 

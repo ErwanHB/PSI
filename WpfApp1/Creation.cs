@@ -32,7 +32,7 @@ namespace WpfApp1
 
             byte[] header = image.Header;
             //Modification du header
-            byte[] taille_octet = image.Convertir_Int_To_Endian(54 + (histo.Length*3), 4);
+            byte[] taille_octet = image.Convertir_Int_To_Endian(54 + (max*256*3*3), 4);
             header[2] = taille_octet[0];
             header[3] = taille_octet[1];
             header[4] = taille_octet[2];
@@ -44,7 +44,7 @@ namespace WpfApp1
             header[19] = largeur[2];
             header[20] = largeur[3];
 
-            byte[] hauteur = image.Convertir_Int_To_Endian(image.Hauteur * image.Largeur, 4);
+            byte[] hauteur = image.Convertir_Int_To_Endian(max, 4);
             header[21] = hauteur[0];
             header[22] = hauteur[1];
             header[23] = hauteur[2];
