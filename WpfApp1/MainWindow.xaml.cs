@@ -58,7 +58,7 @@ namespace WpfApp1
             ImageViewer.Source = this.bitmap;
             this.image = new MyImage(filename);
             this.flag = true;
-            this.name = Directory.GetCurrentDirectory(); ;
+            this.name = Directory.GetCurrentDirectory();
         }
         public void Sortie(object sender, RoutedEventArgs e)
         {
@@ -533,6 +533,7 @@ namespace WpfApp1
 
         private void Fractale(object sender, RoutedEventArgs e)
         {
+            this.name = Directory.GetCurrentDirectory();
             image = Creation.Fractale();
             image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
             this.bitmap = new BitmapImage();
