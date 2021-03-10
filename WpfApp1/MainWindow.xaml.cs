@@ -205,33 +205,82 @@ namespace WpfApp1
                     //facteur d'aggrandissement <1
                     if (largeur - image.MatriceBGR.GetLength(1) < 0)
                     {
-                        decimal b = Math.Round(agrandis, 1);
-                        for (int i = 0; i < longueur; i++)
+                        double b = Convert.ToDouble(Math.Round(agrandis, 1));
+
+                        #region retrecissement en largeur
+                        bool[] tab = new bool[image.MatriceBGR.GetLength(1)];
+                        for (int i = 0; i < image.MatriceBGR.GetLength(1); i++)
                         {
-                            int cptLongeur = 0;
-                            for (int j = 0; j < largeur; j++)
+                            tab[i] = false;
+                        }
+                        int cptLongueur = 0; 
+                        int cptLargeur = 0;
+                        for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
+                        {
+                            double p = rnd.NextDouble();
+                            if (p <= b )
                             {
-                                int p = rnd.Next(0, 10);
-                                if (p <= b * 10)
+                                cptLargeur++;
+                            }
+                            else 
+                            {
+                                if (j - cptLargeur < largeur)
                                 {
-                                    cptLongeur++;
+                                    tab[j] = true;
                                 }
-                                if (j + cptLongeur < image.MatriceBGR.GetLength(1)) MatriceBGRnew[i, j] = image.MatriceBGR[i, j + cptLongeur];
                             }
                         }
-                        for (int j = 0; j < largeur; j++)
+                        #endregion
+
+                        #region retrecissement en hauteur
+                        bool[] tab2 = new bool[image.MatriceBGR.GetLength(0)];
+                        for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
                         {
-                            int cptLongueur = 0;
-                            for (int i = 0; i < longueur; i++)
+                            tab2[i] = false;
+                        }
+                        for (int j = 0; j < image.MatriceBGR.GetLength(0); j++)
+                        {
+
+                            double p = rnd.NextDouble();
+                            if (p <= b)
                             {
-                                int p = rnd.Next(0, 10);
-                                if (p <= b * 10)
+                                cptLongueur++;
+                            }
+                            else
+                            {
+                                if (j - cptLongueur < longueur)
                                 {
-                                    cptLongueur++;
+                                    tab2[j] = true;
                                 }
-                                if (i + cptLongueur < image.MatriceBGR.GetLength(0)) MatriceBGRnew[i, j] = image.MatriceBGR[i + cptLongueur, j];
                             }
                         }
+                        #endregion
+
+                        #region matrice
+                        cptLongueur = 0;
+                        for (int i=0;i< image.MatriceBGR.GetLength(0); i++)
+                        {
+                            cptLargeur = 0;
+                            if (tab2[i] != true)
+                            {
+                                cptLongueur++;
+                            }
+                            else
+                            {
+                                for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
+                                {
+                                    if (tab[j] != true)
+                                    {
+                                        cptLargeur++;
+                                    }
+                                    else
+                                    {
+                                        MatriceBGRnew[i - cptLongueur, j - cptLargeur] = image.MatriceBGR[i, j];
+                                    }
+                                }
+                            }
+                        }
+                        #endregion
                     }
                     //facteur d'aggrandissement >1
                     else
@@ -341,15 +390,15 @@ namespace WpfApp1
                                 {
                                     if (i + 1 < image.MatriceBGR.GetLength(0))
                                     {
-                                        MatriceBGRnew[i + cptLongueur, 0].R = (image.MatriceBGR[i, 0].R + image.MatriceBGR[i + 1, 0].R) / 2;
-                                        MatriceBGRnew[i + cptLongueur, 0].V = (image.MatriceBGR[i, 0].V + image.MatriceBGR[i + 1, 0].V) / 2;
-                                        MatriceBGRnew[i + cptLongueur, 0].B = (image.MatriceBGR[i, 0].B + image.MatriceBGR[i + 1, 0].B) / 2;
+                                        MatriceBGRnew[i + cptLongueur, 0].R = (MatriceBGRnew[i, 0].R + MatriceBGRnew[i + 1, 0].R) / 2;
+                                        MatriceBGRnew[i + cptLongueur, 0].V = (MatriceBGRnew[i, 0].V + MatriceBGRnew[i + 1, 0].V) / 2;
+                                        MatriceBGRnew[i + cptLongueur, 0].B = (MatriceBGRnew[i, 0].B + MatriceBGRnew[i + 1, 0].B) / 2;
                                     }
                                     else
                                     {
-                                        MatriceBGRnew[i + cptLongueur, 0].R = (image.MatriceBGR[i, 0].R + 0) / 2;
-                                        MatriceBGRnew[i + cptLongueur, 0].V = (image.MatriceBGR[i, 0].V + 0) / 2;
-                                        MatriceBGRnew[i + cptLongueur, 0].B = (image.MatriceBGR[i, 0].B + 0) / 2;
+                                        MatriceBGRnew[i + cptLongueur, 0].R = (MatriceBGRnew[i, 0].R + 0) / 2;
+                                        MatriceBGRnew[i + cptLongueur, 0].V = (MatriceBGRnew[i, 0].V + 0) / 2;
+                                        MatriceBGRnew[i + cptLongueur, 0].B = (MatriceBGRnew[i, 0].B + 0) / 2;
                                     }
                                     changementl[i + cptLongueur] = true;
                                     cptLongueur++;
@@ -391,21 +440,21 @@ namespace WpfApp1
                 image.Hauteur = longueur;
                 byte[] largeur2 = image.Convertir_Int_To_Endian(largeur, 4);
                 byte[] taille2 = image.Convertir_Int_To_Endian(image.Taille, 4);
-                byte[] hauteur2 = image.Convertir_Int_To_Endian(largeur, 4);
+                byte[] hauteur2 = image.Convertir_Int_To_Endian(longueur, 4);
                 byte[] taille_image2 = image.Convertir_Int_To_Endian((largeur*longueur * 3), 4);
                 byte[] header = image.Header;
                 header[2] = taille2[0];
                 header[3] = taille2[1];
                 header[4] = taille2[2];
                 header[5] = taille2[3];
-                header[17] = largeur2[0];
-                header[18] = largeur2[1];
-                header[19] = largeur2[2];
-                header[20] = largeur2[3];
-                header[21] = hauteur2[0];
-                header[22] = hauteur2[1];
-                header[23] = hauteur2[2];
-                header[24] = hauteur2[3];
+                header[18] = largeur2[0];
+                header[19] = largeur2[1];
+                header[20] = largeur2[2];
+                header[21] = largeur2[3];
+                header[22] = hauteur2[0];
+                header[23] = hauteur2[1];
+                header[24] = hauteur2[2];
+                header[25] = hauteur2[3];
                 header[34] = taille_image2[0];
                 header[35] = taille_image2[1];
                 header[36] = taille_image2[2];

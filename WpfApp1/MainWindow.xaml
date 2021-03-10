@@ -27,7 +27,7 @@
         <Button Content="Exit" HorizontalAlignment="Left" Margin="459,10,0,0" VerticalAlignment="Top" Width="123" Click="Sortie" RenderTransformOrigin="5.64,-2.529" Height="30" Foreground="White" BorderBrush="Red" Background="Black"/>
         <!-- enregistration d'image -->
         <TextBox x:Name="TextBoxNouveau" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Nouveau" VerticalAlignment="Top" Width="156" Margin="10,386,0,0" Grid.Column="1" Background="#FF0F0E0E" BorderBrush="Red" Foreground="White" Cursor="None" TextAlignment="Center"/>
-        <TextBox HorizontalAlignment="Left" Height="34" TextWrapping="Wrap" Text="Pour enregistrer entrer un nom de fichier puis cliquez sur le bouton" VerticalAlignment="Top" Width="185" Margin="10,347,0,0" TextAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" FontStyle="Italic" Grid.Column="1" IsEnabled="False" FontSize="11"/>
+        <TextBox HorizontalAlignment="Left" Height="34" TextWrapping="Wrap" Text="Pour enregistrer entrer un nom de fichier puis cliquez sur le bouton" VerticalAlignment="Top" Width="191" Margin="9,347,0,0" TextAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" FontStyle="Italic" Grid.Column="1" IsEnabled="False" FontSize="11"/>
         <CheckBox x:Name="CheckBoxNouveau" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Margin="171,388,0,0" Checked="Enregistrer" Width="19" Height="15" RenderTransformOrigin="0.448,0.505"/>
         <!-- Modification d'image -->
         <ComboBox VerticalAlignment="Top" Margin="9,45,1,0" BorderBrush="Black" Foreground="Black" Background="Black" Height="22" Grid.Column="1">
