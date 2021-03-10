@@ -584,6 +584,7 @@ namespace WpfApp1
 
         private void Fractale(object sender, RoutedEventArgs e)
         {
+            name = "C:/Users/guigu/OneDrive/Bureau/Projet Scientifique/WPF/WpfApp1/bin/Debug";
             image = Creation.Fractale();
             image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
             this.bitmap = new BitmapImage();
@@ -592,7 +593,7 @@ namespace WpfApp1
             this.bitmap.EndInit();
             ImageViewer.Source = this.bitmap;
             compteurDeModification++;
-
+            flag=true;
         }
         #endregion
 
