@@ -75,6 +75,7 @@
                 </LinearGradientBrush>
             </ComboBox.OpacityMask>
             <Button Content="Histogramme :" Width="110" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="Histo"/>
+            <Button Content="Fractale :" Width="110" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="Fractale"/>
         </ComboBox>
         <!-- enregistration d'image -->
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="104" Margin="21,99,0,0" Grid.Column="1" IsEnabled="False" RenderTransformOrigin="0.699,0.534" Text="Creation d'image :"/>
