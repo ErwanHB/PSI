@@ -60,17 +60,17 @@ namespace WpfApp1
             {
                 for(int a = 0; a < hauteur_couleur[i]; a++)
                 {
-                    if (i < 255)
+                    if (i < 256)
                     {
                        couleur = new int[] { i, 0, 0 };
                     }
-                    else if (i < 255*2)
+                    else if (i < 256*2)
                     {
-                        couleur = new int[] { 0, i, 0 };
+                        couleur = new int[] { 0, i-256, 0 };
                     }
                     else
                     {
-                        couleur = new int[] { 0, 0, i };
+                        couleur = new int[] { 0, 0, i-256*2 };
                     }
                     histo[a, i] = new Pixel(couleur);
                 }
