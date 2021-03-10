@@ -207,6 +207,7 @@ namespace WpfApp1
             {
                 for (int j = 0; j < this.matriceBGR.GetLength(1); j++)
                 {
+                    
                     bytes[index] = Convert.ToByte(this.matriceBGR[i, j].B);
                     index++;
                     bytes[index] = Convert.ToByte(this.matriceBGR[i, j].V);
