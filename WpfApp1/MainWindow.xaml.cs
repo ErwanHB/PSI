@@ -60,8 +60,28 @@ namespace WpfApp1
             this.flag = true;
             this.name = Directory.GetCurrentDirectory(); ;
         }
+        public void Sortie(object sender, RoutedEventArgs e)
+        {
+            // Close this window
+            this.Close();
+            for (int i = compteurDeModification - 3; i >= 0; i--)
+            {
+                File.Delete(name + "\\temp" + i + ".bmp");
+            }
+        }
+        private void Enregistrer(object sender, RoutedEventArgs e)
+        {
+            if (this.flag == true)
+            {
+                image.From_Image_To_File(name + "\\" + TextBoxNouveau.Text + ".bmp");
+            }
+            Thread.Sleep(250);
+            CheckBoxNouveau.IsChecked = false;
+        }
 
         #region Traitemement d'image (TD3)
+
+        #region modification
         public void NuanceDeGris(object sender, RoutedEventArgs e)
         {
             if (this.flag == true)
@@ -146,8 +166,6 @@ namespace WpfApp1
                 compteurDeModification++;
             }
         }
-        #region Fonction agrandir
-
         private void Agrandir(object sender, RoutedEventArgs e)
         {
             if (this.flag == true)
@@ -407,16 +425,8 @@ namespace WpfApp1
             CheckBoxAgrandir.IsChecked = false;
         }
         #endregion
+
         #region filtre
-        public void Sortie(object sender, RoutedEventArgs e)
-        {
-            // Close this window
-            this.Close();
-            for (int i = compteurDeModification - 3; i >= 0; i--)
-            {
-                File.Delete(name + "\\temp" + i + ".bmp");
-            }
-        }
         private void Flou(object sender, RoutedEventArgs e)
         {
             if (flag == true)
@@ -505,18 +515,6 @@ namespace WpfApp1
             image.MatriceBGR = matriceBGRRotation;
         }
         #endregion
-        #endregion
-
-        #region Enregistration de l'image
-        private void Enregistrer(object sender, RoutedEventArgs e)
-        {
-            if (this.flag == true)
-            {
-                image.From_Image_To_File(name + "\\" + TextBoxNouveau.Text + ".bmp");
-            }
-            Thread.Sleep(250);
-            CheckBoxNouveau.IsChecked = false;
-        }
         #endregion
 
         #region Creation d'image 
