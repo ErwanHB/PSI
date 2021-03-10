@@ -30,12 +30,9 @@ namespace WpfApp1
         BitmapImage bitmap;
         MyImage image;
         int compteurDeModification;
+
         bool flag = false;
         string name;
-        bool flag2 = false;
-        string texte;
-        bool flag3 = false;
-        string texte2;
         #endregion
 
         public MainWindow()
@@ -45,7 +42,7 @@ namespace WpfApp1
             dlg.Filter = "Image files (*.bmp)|*.bmp";
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Ouvrir(object sender, RoutedEventArgs e)
         {
             string filename = null;
 
@@ -62,11 +59,6 @@ namespace WpfApp1
             this.image = new MyImage(filename);
             this.flag = true;
             this.name = Directory.GetCurrentDirectory(); ;
-        }
-        private void Button_Rotation(object sender, RoutedEventArgs e)
-        {
-            RotateTransform rotateTransform = new RotateTransform(45);
-
         }
 
         #region Traitemement d'image (TD3)
@@ -97,11 +89,12 @@ namespace WpfApp1
                 compteurDeModification++;
             }
         }
+
         public void NoirEtBlanc(object sender, RoutedEventArgs e)
         {
             if (this.flag == true)
             {
-                int valeur = 128;
+                int valeur = Convert.ToInt32(seuil.Text);
                 Pixel[,] matriceBGR = image.MatriceBGR;
                 int moyenne = 0;
                 for (int i = 0; i < matriceBGR.GetLength(0); i++)
@@ -126,6 +119,8 @@ namespace WpfApp1
                 ImageViewer.Source = this.bitmap;
                 compteurDeModification++;
             }
+            Thread.Sleep(250);
+            CheckBoxNoir.IsChecked = false;
         }
 
         public void Miroir(object sender, RoutedEventArgs e)
@@ -152,19 +147,14 @@ namespace WpfApp1
             }
         }
         #region Fonction agrandir
-        private void ___TextBox2__TextChanged(object sender, TextChangedEventArgs e)
-        {
-            this.texte2 = ___TextBox2__.Text;
-            flag3 = true;
-        }
 
-        private void CheckBox_Checked2(object sender, RoutedEventArgs e)
+        private void Agrandir(object sender, RoutedEventArgs e)
         {
-            if (this.flag == true && flag3 == true)
+            if (this.flag == true)
             {
 
                 int a = 0;
-                decimal agrandis = Convert.ToDecimal(texte2);
+                decimal agrandis = Convert.ToDecimal(coefficient.Text);
                 int longueur = Convert.ToInt32(Math.Truncate(image.MatriceBGR.GetLength(0) * agrandis));
                 int largeur = Convert.ToInt32(Math.Truncate(image.MatriceBGR.GetLength(1) * agrandis));
                 Pixel[,] MatriceBGRnew = new Pixel[longueur, largeur];
@@ -413,11 +403,12 @@ namespace WpfApp1
                 compteurDeModification++;
 
             }
-            CheckBox2.IsChecked = false;
+            Thread.Sleep(250);
+            CheckBoxAgrandir.IsChecked = false;
         }
         #endregion
         #region filtre
-        public void fileExitMenuItem_Click(object sender, RoutedEventArgs e)
+        public void Sortie(object sender, RoutedEventArgs e)
         {
             // Close this window
             this.Close();
@@ -517,20 +508,14 @@ namespace WpfApp1
         #endregion
 
         #region Enregistration de l'image
-        private void ___TextBox1__TextChanged(object sender, TextChangedEventArgs e)
+        private void Enregistrer(object sender, RoutedEventArgs e)
         {
-            this.texte = ___TextBox1_.Text;
-            flag2 = true;
-        }
-
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            if (this.flag == true && flag2 == true)
+            if (this.flag == true)
             {
-                image.From_Image_To_File(name + "\\" + texte + ".bmp");
+                image.From_Image_To_File(name + "\\" + TextBoxNouveau.Text + ".bmp");
             }
-            Thread.Sleep(100);
-            CheckBox1.IsChecked = false;
+            Thread.Sleep(250);
+            CheckBoxNouveau.IsChecked = false;
         }
         #endregion
 
