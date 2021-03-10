@@ -56,7 +56,7 @@ namespace WpfApp1
             header[36] = taille_image[2];
             header[37] = taille_image[3];
 
-            for (int i = 0; i < histo.GetLength(1)-1; i++)
+            for (int i = 0; i < hauteur_couleur.Length; i++)
             {
                 for(int a = 0; a < hauteur_couleur[i]; a++)
                 {
