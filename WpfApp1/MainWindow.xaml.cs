@@ -520,6 +520,22 @@ namespace WpfApp1
             CheckBox2.IsChecked = false;
         }
         #endregion
+        #region Creation d'image 
+        private void Histo(object sender, RoutedEventArgs e)
+        {
+            if (this.flag == true)
+            {
+                image = Creation.Histogramme(image);
+                image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
+                this.bitmap = new BitmapImage();
+                this.bitmap.BeginInit();
+                this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
+                this.bitmap.EndInit();
+                ImageViewer.Source = this.bitmap;
+                compteurDeModification++;
+            }
+        }
+        #endregion
 
     }
 }

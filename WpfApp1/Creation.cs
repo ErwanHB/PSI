@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WpfApp1
 {
-    class Creation
+    public class Creation
     {
         public static MyImage Histogramme(MyImage image)
         {
