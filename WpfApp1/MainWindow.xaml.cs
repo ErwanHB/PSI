@@ -205,7 +205,7 @@ namespace WpfApp1
                     //facteur d'aggrandissement <1
                     if (largeur - image.MatriceBGR.GetLength(1) < 0)
                     {
-                        double b = Convert.ToDouble(Math.Round(agrandis, 1));
+                        double b = Convert.ToDouble(agrandis);
 
                         #region retrecissement en largeur
                         bool[] tab = new bool[image.MatriceBGR.GetLength(1)];
@@ -257,6 +257,8 @@ namespace WpfApp1
                         #endregion
 
                         #region matrice
+                        int cptTemporaire1 = 1;
+                        int cptTemporaire2 = 1;
                         cptLongueur = 0;
                         for (int i=0;i< image.MatriceBGR.GetLength(0); i++)
                         {
@@ -264,6 +266,7 @@ namespace WpfApp1
                             if (tab2[i] != true)
                             {
                                 cptLongueur++;
+                                cptTemporaire1++;
                             }
                             else
                             {
@@ -272,12 +275,27 @@ namespace WpfApp1
                                     if (tab[j] != true)
                                     {
                                         cptLargeur++;
+                                        cptTemporaire2++;
                                     }
                                     else
                                     {
-                                        MatriceBGRnew[i - cptLongueur, j - cptLargeur] = image.MatriceBGR[i, j];
+                                        Pixel moyenne = new Pixel(0,0,0);
+                                        for (int cpt1=0;cpt1<cptTemporaire1;cpt1++)
+                                        {
+                                            for (int cpt2 = 0; cpt2 < cptTemporaire2; cpt2++)
+                                            {
+                                                moyenne.R = image.MatriceBGR[i - cpt1 , j - cpt2].R;
+                                                moyenne.V= image.MatriceBGR[i - cpt1, j - cpt2].V;
+                                                moyenne.B = image.MatriceBGR[i - cpt1, j - cpt2].B;
+                                            }
+                                        }
+                                        MatriceBGRnew[i - cptLongueur, j - cptLargeur].R = moyenne.R/(cptTemporaire1+cptTemporaire2-1);
+                                        MatriceBGRnew[i - cptLongueur, j - cptLargeur].V = moyenne.V / (cptTemporaire1 + cptTemporaire2-1);
+                                        MatriceBGRnew[i - cptLongueur, j - cptLargeur].B = moyenne.B / (cptTemporaire1 + cptTemporaire2-1);
+                                        cptTemporaire2 = 1;
                                     }
                                 }
+                                cptTemporaire1 = 1;
                             }
                         }
                         #endregion
