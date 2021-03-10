@@ -70,7 +70,6 @@ namespace WpfApp1
         }
 
         #region Traitemement d'image (TD3)
-
         public void NuanceDeGris(object sender, RoutedEventArgs e)
         {
             if (this.flag == true)
@@ -383,22 +382,35 @@ namespace WpfApp1
                 image.Largeur = largeur;
                 image.Hauteur = longueur;
                 byte[] largeur2 = image.Convertir_Int_To_Endian(largeur, 4);
-                byte[] d = image.Convertir_Int_To_Endian(image.Taille, 4);
+                byte[] taille2 = image.Convertir_Int_To_Endian(image.Taille, 4);
+                byte[] hauteur2 = image.Convertir_Int_To_Endian(largeur, 4);
+                byte[] taille_image2 = image.Convertir_Int_To_Endian((largeur*longueur * 3), 4);
                 byte[] header = image.Header;
-                header[2] = d[0];
-                header[3] = d[1];
-                header[4] = d[2];
-                header[5] = d[3];
+                header[2] = taille2[0];
+                header[3] = taille2[1];
+                header[4] = taille2[2];
+                header[5] = taille2[3];
                 header[17] = largeur2[0];
                 header[18] = largeur2[1];
                 header[19] = largeur2[2];
                 header[20] = largeur2[3];
-                byte[] hauteur = image.Convertir_Int_To_Endian(largeur, 4);
-                header[21] = hauteur[0];
-                header[22] = hauteur[1];
-                header[23] = hauteur[2];
-                header[24] = hauteur[3];
+                header[21] = hauteur2[0];
+                header[22] = hauteur2[1];
+                header[23] = hauteur2[2];
+                header[24] = hauteur2[3];
+                header[34] = taille_image2[0];
+                header[35] = taille_image2[1];
+                header[36] = taille_image2[2];
+                header[37] = taille_image2[3];
                 image.Header = header;
+
+                image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
+                this.bitmap = new BitmapImage();
+                this.bitmap.BeginInit();
+                this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
+                this.bitmap.EndInit();
+                ImageViewer.Source = this.bitmap;
+                compteurDeModification++;
 
             }
             CheckBox2.IsChecked = false;
@@ -503,6 +515,7 @@ namespace WpfApp1
         }
         #endregion
         #endregion
+
         #region Enregistration de l'image
         private void ___TextBox1__TextChanged(object sender, TextChangedEventArgs e)
         {
