@@ -42,7 +42,7 @@ namespace WpfApp1
             dlg.Filter = "Image files (*.bmp)|*.bmp";
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Ouvrir(object sender, RoutedEventArgs e)
         {
             string filename = null;
 
