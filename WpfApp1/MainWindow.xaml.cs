@@ -177,6 +177,7 @@ namespace WpfApp1
                 int largeur = Convert.ToInt32(Math.Truncate(image.MatriceBGR.GetLength(1) * agrandis));
                 Pixel[,] MatriceBGRnew = new Pixel[longueur, largeur];
                 Random rnd = new Random();
+                Pixel[,] MatriceBGRtemp = MatriceBGRnew;
 
                 // initialisation de la nouvelle matrice
                 for (int i = 0; i < longueur; i++)
@@ -311,138 +312,110 @@ namespace WpfApp1
                         double b = Convert.ToDouble(Convert.ToSingle(agrandis - a) % Convert.ToSingle(1));
                         int cptLargeur=0;
                         int cptLongueur = 0;
+
                         #region aggrandissmenet coef partie complete
                         for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
                         {
-                            for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
+
+                            for (int cpt1 = 0; cpt1 < a; cpt1++)
                             {
-                                for (int index = 0; index < a; index++)
+                                for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
                                 {
-                                    MatriceBGRnew[i, j + index + cptLargeur] = image.MatriceBGR[i, j];
+                                    for (int cpt2 = 0; cpt2 < a; cpt2++)
+                                    {
+                                        MatriceBGRnew[i + cptLongueur, j + cptLargeur] = image.MatriceBGR[i, j];
+                                        cptLargeur++;
+                                    }
+                                    cptLargeur--;
                                 }
-                                cptLargeur += a - 1;
+                                cptLargeur = 0;
+                                cptLongueur++;
                             }
-                            cptLongueur++;
-                            cptLargeur = 0;
+                            cptLongueur--;
                         }
                         #endregion
-                        #region Preparation aggrandissmenet largeur coef partie decimal
-                        cptLargeur = 0;
-                        bool[] changementl = new bool[largeur];
+
+                        #region  aggrandissmenet coef partie decimal
+                        //configuration tableau de bool 1
+                        bool[] changementl = new bool[image.MatriceBGR.GetLength(1)*a];
+                        for (int j = 0; j < image.MatriceBGR.GetLength(1)*a; j++)
+                        {
+
+                            Double p = rnd.NextDouble();
+                            if (p <= b * 10)
+                            {
+                                changementl[j] = true;
+                            }
+                            else
+                            {
+                                changementl[j] = false;
+                            }
+                        }
+                        //modification de la matrice en fonction
+                        for(int i=0;i<image.MatriceBGR.GetLength(0)*a;i++)
+                        {
+                            cptLargeur = 0;
+                            for( int j = 0; j < image.MatriceBGR.GetLength(1) * a;j++ )
+                            {
+                                if (j + cptLargeur < largeur)
+                                {
+                                    if (changementl[j] == true)
+                                    {
+                                        MatriceBGRtemp[i, j + cptLargeur].R = (MatriceBGRnew[i, j].R + MatriceBGRnew[i, j + 1].R) / 2;
+                                        MatriceBGRtemp[i, j + cptLargeur].V = (MatriceBGRnew[i, j].V + MatriceBGRnew[i, j + 1].V) / 2;
+                                        MatriceBGRtemp[i, j + cptLargeur].B = (MatriceBGRnew[i, j].B + MatriceBGRnew[i, j + 1].B) / 2;
+                                        cptLargeur++;
+                                    }
+                                    else
+                                    {
+                                        MatriceBGRtemp[i, j + cptLargeur] = MatriceBGRnew[i, j];
+                                    }
+                                }
+                            }
+                        }
+
+                        //Configuration tableau de bool 2
+                        bool[] changement2 = new bool[image.MatriceBGR.GetLength(0) * a];
+                        for (int i = 0; i < image.MatriceBGR.GetLength(0)*a; i++)
+                        {
+                            Double p = rnd.NextDouble();
+                            if (p <= b * 10)
+                            {
+                                changement2[i] = true;
+                            }
+                            else
+                            {
+                                changement2[i] = false;
+                            }
+                        }
+                        //modification de la matrice en fonction
+                         MatriceBGRnew = MatriceBGRtemp;
                         for (int j = 0; j < largeur; j++)
                         {
-                            changementl[j] = false;
-                        }
-                        for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
-                        {
-
-                            Double p = rnd.NextDouble();
-                            if (p <= b * 10)
+                            cptLongueur = 0;
+                            for (int i = 0; i < image.MatriceBGR.GetLength(0) * a; i++)
                             {
-                                if (j + cptLargeur < largeur)
+                                if(i+cptLongueur<longueur)
                                 {
-                                    if (j + 1 < image.MatriceBGR.GetLength(1))
+                                    
+                                    if(changement2[i]==true)
                                     {
-                                        MatriceBGRnew[0, j + cptLargeur].R = (MatriceBGRnew[0, j].R + MatriceBGRnew[0, j + 1].R) / 2;
-                                        MatriceBGRnew[0, j + cptLargeur].V = (MatriceBGRnew[0, j].V + MatriceBGRnew[0, j + 1].V) / 2;
-                                        MatriceBGRnew[0, j + cptLargeur].B = (MatriceBGRnew[0, j].B + MatriceBGRnew[0, j + 1].B) / 2;
+                                        MatriceBGRtemp[i+cptLongueur, j].R = (MatriceBGRnew[i, j].R + MatriceBGRnew[i+1, j].R) / 2;
+                                        MatriceBGRtemp[i + cptLongueur, j].V = (MatriceBGRnew[i, j].V + MatriceBGRnew[i + 1, j].V) / 2;
+                                        MatriceBGRtemp[i + cptLongueur, j].B = (MatriceBGRnew[i, j].B + MatriceBGRnew[i + 1, j].B) / 2;
                                     }
                                     else
                                     {
-                                        MatriceBGRnew[0, j + cptLargeur].R = (MatriceBGRnew[0, j].R + 0) / 2;
-                                        MatriceBGRnew[0, j + cptLargeur].V = (MatriceBGRnew[0, j].V + 0) / 2;
-                                        MatriceBGRnew[0, j + cptLargeur].B = (MatriceBGRnew[0, j].B + 0) / 2;
-                                    }
-                                    changementl[j + cptLargeur] = true;
-                                    cptLargeur++;
-                                }
-                            }
-                        }
-                        for (int i = 1; i < image.MatriceBGR.GetLength(0); i++)
-                        {
-                            cptLargeur = 0;
-                            for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
-                            {
-                                if (j + cptLargeur < largeur)
-                                {
-                                    if (changementl[j + cptLargeur] == true)
-                                    {
-                                        if (j + 1 < image.MatriceBGR.GetLength(1))
-                                        {
-                                            MatriceBGRnew[i, j + cptLargeur].R = (MatriceBGRnew[i, j].R + MatriceBGRnew[i, j + 1].R) / 2;
-                                            MatriceBGRnew[i, j + cptLargeur].V = (MatriceBGRnew[i, j].V + MatriceBGRnew[i, j + 1].V) / 2;
-                                            MatriceBGRnew[i, j + cptLargeur].B = (MatriceBGRnew[i, j].B + MatriceBGRnew[i, j + 1].B) / 2;
-                                        }
-                                        else
-                                        {
-                                            MatriceBGRnew[i, j + cptLargeur].R = (MatriceBGRnew[i, j].R + 0) / 2;
-                                            MatriceBGRnew[i, j + cptLargeur].V = (MatriceBGRnew[i, j].V + 0) / 2;
-                                            MatriceBGRnew[i, j + cptLargeur].B = (MatriceBGRnew[i, j].B + 0) / 2;
-                                        }
-                                        cptLargeur++;
+                                        MatriceBGRtemp[i, j + cptLargeur] = MatriceBGRtemp[i, j];
                                     }
                                 }
                             }
                         }
-                        #endregion
-                        #region Preparation aggrandissmenet heutaur coef partie decimal
-                        cptLongueur = 0;
-                        for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
-                        {
-                            Double p = rnd.NextDouble();
-                            if (p <= b * 10)
-                            {
-                                if (i + cptLongueur < longueur)
-                                {
-                                    if (i + 1 < image.MatriceBGR.GetLength(0))
-                                    {
-                                        MatriceBGRnew[i + cptLongueur, 0].R = (MatriceBGRnew[i, 0].R + MatriceBGRnew[i + 1, 0].R) / 2;
-                                        MatriceBGRnew[i + cptLongueur, 0].V = (MatriceBGRnew[i, 0].V + MatriceBGRnew[i + 1, 0].V) / 2;
-                                        MatriceBGRnew[i + cptLongueur, 0].B = (MatriceBGRnew[i, 0].B + MatriceBGRnew[i + 1, 0].B) / 2;
-                                    }
-                                    else
-                                    {
-                                        MatriceBGRnew[i + cptLongueur, 0].R = (MatriceBGRnew[i, 0].R + 0) / 2;
-                                        MatriceBGRnew[i + cptLongueur, 0].V = (MatriceBGRnew[i, 0].V + 0) / 2;
-                                        MatriceBGRnew[i + cptLongueur, 0].B = (MatriceBGRnew[i, 0].B + 0) / 2;
-                                    }
-                                    changementl[i + cptLongueur] = true;
-                                    cptLongueur++;
-                                }
-                            }
-                        }
-                        for (int j = 1; j < image.MatriceBGR.GetLength(1); j++)
-                        {
-                            cptLargeur = 0;
-                            for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
-                            {
-                                if (i + cptLongueur < longueur)
-                                {
-                                    if (changementl[i + cptLongueur] == true)
-                                    {
-                                        if (i + 1 < image.MatriceBGR.GetLength(0))
-                                        {
-                                            MatriceBGRnew[i + cptLongueur, j].R = (MatriceBGRnew[i, j].R + MatriceBGRnew[i + 1, j].R) / 2;
-                                            MatriceBGRnew[i + cptLongueur, j].V = (MatriceBGRnew[i, j].V + MatriceBGRnew[i + 1, j].V) / 2;
-                                            MatriceBGRnew[i + cptLongueur, j].B = (MatriceBGRnew[i, j].B + MatriceBGRnew[i + 1, j].B) / 2;
-                                        }
-                                        else
-                                        {
-                                            MatriceBGRnew[i + cptLongueur, j].R = (MatriceBGRnew[i, j].R + 0) / 2;
-                                            MatriceBGRnew[i + cptLongueur, j].V = (MatriceBGRnew[i, j].V + 0) / 2;
-                                            MatriceBGRnew[i + cptLongueur, j].B = (MatriceBGRnew[i, j].B + 0) / 2;
-                                        }
-                                        cptLargeur++;
-                                    }
-                                }
-                            }
-                        }
-                        #endregion
 
-
+                        #endregion
                     }
                 }
-                image.MatriceBGR = MatriceBGRnew;
+                image.MatriceBGR = MatriceBGRtemp;
                 image.Taille = image.Offset + longueur * largeur * 3;
                 image.Largeur = largeur;
                 image.Hauteur = longueur;
