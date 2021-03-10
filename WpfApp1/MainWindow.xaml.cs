@@ -344,7 +344,7 @@ namespace WpfApp1
                         #endregion
 
                         #region  aggrandissmenet coef partie decimal
-                        //configuration tableau de bool 1
+                        //aggrandissement largeur
                         cptLargeur = 0;
                         for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
                         {
@@ -376,10 +376,38 @@ namespace WpfApp1
                                 }
                             }
                         }
+                        //aggrandissement hauteur
+                        cptLongueur = 0;
+                        for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
+                        {
 
-                            
-                        
-
+                            Double p = rnd.NextDouble();
+                            if (p <= b)
+                            {
+                                for (int j = 0; j < largeur; j++)
+                                {
+                                    if (i + cptLongueur < longueur)
+                                    {
+                                        MatriceBGRtemp[i+cptLongueur, j ] = MatriceBGRnew[i, j];
+                                        if (i + 1 + cptLongueur < longueur)
+                                        {
+                                            MatriceBGRtemp[i + 1 + cptLongueur, j ] = MatriceBGRnew[i, j];
+                                        }
+                                    }
+                                }
+                                cptLongueur++;
+                            }
+                            else
+                            {
+                                for (int j = 0; j < largeur; j++)
+                                {
+                                    if (i + cptLongueur < longueur)
+                                    {
+                                        MatriceBGRtemp[i + cptLongueur, j ] = MatriceBGRnew[i, j];
+                                    }
+                                }
+                            }
+                        }
                         #endregion
                     }
                 }
