@@ -109,7 +109,6 @@ namespace WpfApp1
                 compteurDeModification++;
             }
         }
-
         public void NoirEtBlanc(object sender, RoutedEventArgs e)
         {
             if (this.flag == true)
@@ -142,7 +141,6 @@ namespace WpfApp1
             Thread.Sleep(250);
             CheckBoxNoir.IsChecked = false;
         }
-
         public void Miroir(object sender, RoutedEventArgs e)
         {
             if (this.flag == true)
@@ -344,7 +342,7 @@ namespace WpfApp1
                         #endregion
 
                         #region  aggrandissmenet coef partie decimal
-                        //configuration tableau de bool 1
+                        //aggrandissement largeur
                         cptLargeur = 0;
                         for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
                         {
@@ -376,10 +374,38 @@ namespace WpfApp1
                                 }
                             }
                         }
+                        //aggrandissement hauteur
+                        cptLongueur = 0;
+                        for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
+                        {
 
-                            
-                        
-
+                            Double p = rnd.NextDouble();
+                            if (p <= b)
+                            {
+                                for (int j = 0; j < largeur; j++)
+                                {
+                                    if (i + cptLongueur < longueur)
+                                    {
+                                        MatriceBGRtemp[i+cptLongueur, j ] = MatriceBGRnew[i, j];
+                                        if (i + 1 + cptLongueur < longueur)
+                                        {
+                                            MatriceBGRtemp[i + 1 + cptLongueur, j ] = MatriceBGRnew[i, j];
+                                        }
+                                    }
+                                }
+                                cptLongueur++;
+                            }
+                            else
+                            {
+                                for (int j = 0; j < largeur; j++)
+                                {
+                                    if (i + cptLongueur < longueur)
+                                    {
+                                        MatriceBGRtemp[i + cptLongueur, j ] = MatriceBGRnew[i, j];
+                                    }
+                                }
+                            }
+                        }
                         #endregion
                     }
                 }
@@ -421,6 +447,79 @@ namespace WpfApp1
             }
             Thread.Sleep(250);
             CheckBoxAgrandir.IsChecked = false;
+        }
+        private void Rotation(object sender, RoutedEventArgs e)
+        {
+            if (flag == true)
+            {
+                int largeur1 = 0;
+                int longueur1 = 0;
+                int angle = Convert.ToInt32(coeffRotation.Text);
+                if (angle <= 360 && angle >= 0)
+                {
+                    Pixel[,] matriceBGR = image.MatriceBGR;
+                    Pixel[,] matriceBGRRotation = new Pixel[0, 0];
+                    if (angle == 90)
+                    {
+                        int longueur = matriceBGR.GetLength(1);
+                        longueur1 = longueur;
+                        int largeur = matriceBGR.GetLength(0);
+                        largeur1 = largeur;
+                        matriceBGRRotation = new Pixel[longueur, largeur];
+                        int cpt = 1;
+
+
+                        for (int j = largeur-1; j >=0; j--)
+                        {
+                            for (int i = 0; i<longueur; i++)
+                            {
+                                if (matriceBGR[Math.Abs(j - largeur + 1), i].PixelNoir != true)
+                                {
+                                    matriceBGRRotation[i, j] = matriceBGR[Math.Abs(j - largeur + 1), i];
+                                }
+                                cpt++;
+                            }
+                        }
+                    }
+                    image.Taille = image.Offset + longueur1 * largeur1 * 3;
+                    image.Largeur = largeur1;
+                    image.Hauteur = longueur1;
+                    byte[] largeur2 = image.Convertir_Int_To_Endian(largeur1, 4);
+                    byte[] taille2 = image.Convertir_Int_To_Endian(image.Taille, 4);
+                    byte[] hauteur2 = image.Convertir_Int_To_Endian(longueur1, 4);
+                    byte[] taille_image2 = image.Convertir_Int_To_Endian((largeur1 * longueur1 * 3), 4);
+                    byte[] header = image.Header;
+                    header[2] = taille2[0];
+                    header[3] = taille2[1];
+                    header[4] = taille2[2];
+                    header[5] = taille2[3];
+                    header[18] = largeur2[0];
+                    header[19] = largeur2[1];
+                    header[20] = largeur2[2];
+                    header[21] = largeur2[3];
+                    header[22] = hauteur2[0];
+                    header[23] = hauteur2[1];
+                    header[24] = hauteur2[2];
+                    header[25] = hauteur2[3];
+                    header[34] = taille_image2[0];
+                    header[35] = taille_image2[1];
+                    header[36] = taille_image2[2];
+                    header[37] = taille_image2[3];
+                    image.Header = header;
+
+
+                    image.MatriceBGR = matriceBGRRotation;
+                    image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
+                    this.bitmap = new BitmapImage();
+                    this.bitmap.BeginInit();
+                    this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
+                    this.bitmap.EndInit();
+                    ImageViewer.Source = this.bitmap;
+                    compteurDeModification++;
+                }
+            }
+            Thread.Sleep(250);
+            CheckBoxRotation.IsChecked = false;
         }
         #endregion
 
@@ -485,32 +584,6 @@ namespace WpfApp1
                 ImageViewer.Source = this.bitmap;
                 compteurDeModification++;
             }
-        }
-        public static void Rotation(MyImage image, int angle)
-        {
-            Pixel[,] matriceBGR = image.MatriceBGR;
-            double longueur = Math.Ceiling(Math.Cos(angle) * matriceBGR.GetLength(0) + Math.Cos(angle) * matriceBGR.GetLength(1));
-            double largeur = Math.Ceiling(Math.Sin(angle) * matriceBGR.GetLength(0) + Math.Sin(angle) * matriceBGR.GetLength(1));
-            Pixel[,] matriceBGRRotation = new Pixel[Convert.ToInt32(Math.Abs(longueur)), Convert.ToInt32(Math.Abs(largeur))];
-            for (int i = 0; i < matriceBGRRotation.GetLength(0); i++)
-            {
-                for (int j = 0; j < matriceBGRRotation.GetLength(1); j++)
-                {
-                    matriceBGRRotation[i, j] = new Pixel(0, 0, 0, true);
-                }
-            }
-            for (int i = 0; i < matriceBGR.GetLength(0); i++)
-            {
-                for (int j = 0; j < matriceBGR.GetLength(1); j++)
-                {
-                    if (matriceBGR[i, j].PixelNoir != true)
-                    {
-                        int rayon = Convert.ToInt32(Math.Ceiling(Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))));
-                        matriceBGRRotation[Convert.ToInt32(Math.Abs(Math.Floor(Math.Cos(angle) * i + Math.Cos(angle) * j))), Convert.ToInt32(Math.Abs(Math.Floor(Math.Sin(angle) * i + Math.Sin(angle) * j)))] = matriceBGR[i, j];
-                    }
-                }
-            }
-            image.MatriceBGR = matriceBGRRotation;
         }
         #endregion
         #endregion
