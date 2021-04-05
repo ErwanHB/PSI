@@ -455,109 +455,144 @@ namespace WpfApp1
                 int largeur1 = 0;
                 int longueur1 = 0;
                 int angle = Convert.ToInt32(coeffRotation.Text);
-                if (angle < 360 && angle > 0)
+
+                Pixel[,] matriceBGR = image.MatriceBGR;
+                Pixel[,] matriceBGRRotation = new Pixel[0, 0];
+
+                //methode pour un angle de 90°
+                if (angle == 90)
                 {
-                    Pixel[,] matriceBGR = image.MatriceBGR;
-                    Pixel[,] matriceBGRRotation = new Pixel[0, 0];
-
-                    //methode pour un angle de 90°
-                    if (angle == 90)
+                    int longueur = matriceBGR.GetLength(1);
+                    longueur1 = longueur;
+                    int largeur = matriceBGR.GetLength(0);
+                    largeur1 = largeur;
+                    matriceBGRRotation = new Pixel[longueur, largeur];
+                    for (int j = largeur - 1; j >= 0; j--)
                     {
-                        int longueur = matriceBGR.GetLength(1);
-                        longueur1 = longueur;
-                        int largeur = matriceBGR.GetLength(0);
-                        largeur1 = largeur;
-                        matriceBGRRotation = new Pixel[longueur, largeur];
-                        for (int j = largeur-1; j >=0; j--)
+                        for (int i = 0; i < longueur; i++)
                         {
-                            for (int i = 0; i<longueur; i++)
-                            {
-                                    matriceBGRRotation[i, j] = matriceBGR[Math.Abs(j - largeur + 1), i];
-                            }
+                            matriceBGRRotation[i, j] = matriceBGR[Math.Abs(j - largeur + 1), i];
                         }
                     }
-
-                    //methode pour un angle de 270°
-                    if (angle == 270)
-                    {
-                        int longueur = matriceBGR.GetLength(1);
-                        longueur1 = longueur;
-                        int largeur = matriceBGR.GetLength(0);
-                        largeur1 = largeur;
-                        matriceBGRRotation = new Pixel[longueur, largeur];
-                        for (int j = 0; j<largeur; j++)
-                        {
-                            for (int i = longueur-1;i>=0;i--)
-                            {
-                                matriceBGRRotation[i, j] = matriceBGR[j, Math.Abs(i - longueur + 1)];
-                            }
-                        }
-                    }
-
-                    //methode pour un angle de 180°
-                    if (angle == 180)
-                    {
-                        int largeur = matriceBGR.GetLength(1);
-                        largeur1 = largeur;
-                        int longueur = matriceBGR.GetLength(0);
-                        longueur1 = longueur;
-                        matriceBGRRotation = new Pixel[longueur, largeur];
-                        for (int j = largeur - 1; j >= 0; j--)
-                        {
-                            for (int i = longueur - 1; i >= 0; i--)
-                            {
-                                matriceBGRRotation[i, j] = matriceBGR[Math.Abs(i - longueur + 1), Math.Abs(j - largeur + 1)];
-                            }
-                        }
-                    }
-
-                    image.Taille = image.Offset + longueur1 * largeur1 * 3;
-                    image.Largeur = largeur1;
-                    image.Hauteur = longueur1;
-                    byte[] largeur2 = image.Convertir_Int_To_Endian(largeur1, 4);
-                    byte[] taille2 = image.Convertir_Int_To_Endian(image.Taille, 4);
-                    byte[] hauteur2 = image.Convertir_Int_To_Endian(longueur1, 4);
-                    byte[] taille_image2 = image.Convertir_Int_To_Endian((largeur1 * longueur1 * 3), 4);
-                    byte[] header = image.Header;
-                    header[2] = taille2[0];
-                    header[3] = taille2[1];
-                    header[4] = taille2[2];
-                    header[5] = taille2[3];
-                    header[18] = largeur2[0];
-                    header[19] = largeur2[1];
-                    header[20] = largeur2[2];
-                    header[21] = largeur2[3];
-                    header[22] = hauteur2[0];
-                    header[23] = hauteur2[1];
-                    header[24] = hauteur2[2];
-                    header[25] = hauteur2[3];
-                    header[34] = taille_image2[0];
-                    header[35] = taille_image2[1];
-                    header[36] = taille_image2[2];
-                    header[37] = taille_image2[3];
-                    image.Header = header;
-
-
-                    image.MatriceBGR = matriceBGRRotation;
-                    image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
-                    this.bitmap = new BitmapImage();
-                    this.bitmap.BeginInit();
-                    this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
-                    this.bitmap.EndInit();
-                    ImageViewer.Source = this.bitmap;
-                    compteurDeModification++;
                 }
+
+                //methode pour un angle de 270°
+                if (angle == 270)
+                {
+                    int longueur = matriceBGR.GetLength(1);
+                    longueur1 = longueur;
+                    int largeur = matriceBGR.GetLength(0);
+                    largeur1 = largeur;
+                    matriceBGRRotation = new Pixel[longueur, largeur];
+                    for (int j = 0; j < largeur; j++)
+                    {
+                        for (int i = longueur - 1; i >= 0; i--)
+                        {
+                            matriceBGRRotation[i, j] = matriceBGR[j, Math.Abs(i - longueur + 1)];
+                        }
+                    }
+                }
+
+                //methode pour un angle de 180°
+                if (angle == 180)
+                {
+                    int largeur = matriceBGR.GetLength(1);
+                    largeur1 = largeur;
+                    int longueur = matriceBGR.GetLength(0);
+                    longueur1 = longueur;
+                    matriceBGRRotation = new Pixel[longueur, largeur];
+                    for (int j = largeur - 1; j >= 0; j--)
+                    {
+                        for (int i = longueur - 1; i >= 0; i--)
+                        {
+                            matriceBGRRotation[i, j] = matriceBGR[Math.Abs(i - longueur + 1), Math.Abs(j - largeur + 1)];
+                        }
+                    }
+                }
+
                 //methode pour l'angle 0 et 360
-                if (angle==0||angle==360)
+                if (angle == 0 || angle == 360)
                 {
-                    image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
-                    this.bitmap = new BitmapImage();
-                    this.bitmap.BeginInit();
-                    this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
-                    this.bitmap.EndInit();
-                    ImageViewer.Source = this.bitmap;
-                    compteurDeModification++;
+                    matriceBGRRotation = matriceBGR;
+                    largeur1 = matriceBGR.GetLength(0);
+                    largeur1 = matriceBGR.GetLength(1);
                 }
+
+                //methode pour les angles compris entre 0° et 90° (non inclus)
+                if (angle > 0 && angle < 90)
+                {
+                    double largeur = matriceBGR.GetLength(0) * Math.Cos(angle) + matriceBGR.GetLength(1) * Math.Sin(angle);
+                    double longueur = matriceBGR.GetLength(0) * Math.Sin(angle) + matriceBGR.GetLength(1) * Math.Cos(angle);
+                    largeur1 = Convert.ToInt32(Math.Ceiling(largeur));
+                    longueur1 = Convert.ToInt32(Math.Ceiling(longueur));
+                    matriceBGRRotation = new Pixel[longueur1, largeur1];
+                    for (int j = 0; j < largeur1; j++)
+                    {
+                        for (int i = 0; i < longueur1; i++)
+                        {
+                            matriceBGRRotation[i, j] = new Pixel(0, 0, 0, true);
+                        }
+                    }
+                    int index1 = 0;
+                    int index2 = 0;
+                    int min1 =Math.Abs(Convert.ToInt32(Math.Ceiling(Math.Cos(angle + 90) * Math.Sqrt(Math.Pow(longueur1, 2)))));
+                    for (int j = 0; j < matriceBGR.GetLength(1); j++)
+                    {
+                        for (int i = 0; i < matriceBGR.GetLength(0); i++)
+                        {
+                            if (i == 0)
+                            {
+                                matriceBGRRotation[Convert.ToInt32(Math.Ceiling(Math.Cos(angle) * Math.Sqrt(Math.Pow(j, 2)))), Convert.ToInt32(Math.Ceiling(Math.Sin(angle) * Math.Sqrt(Math.Pow(j, 2))))] = matriceBGR[i, j];
+                                index1 = Convert.ToInt32(Math.Ceiling(Math.Sin(angle) * Math.Sqrt(Math.Pow(i, 2))));
+                                index2 = Convert.ToInt32(Math.Ceiling(Math.Cos(angle) * Math.Sqrt(Math.Pow(i, 2))));
+                            }
+                            else
+                            {
+                                index1 = min1+ Convert.ToInt32(Math.Ceiling(Math.Cos(angle + Math.Atan(j / i)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))));
+                                index2 = Convert.ToInt32(Math.Ceiling(Math.Sin(angle + Math.Atan(j / i)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))));
+                                matriceBGRRotation[min1+Convert.ToInt32(Math.Ceiling(Math.Cos(angle + Math.Atan(j / i)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2)))), Convert.ToInt32(Math.Ceiling(Math.Sin(angle + Math.Atan(j / i)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))))] = matriceBGR[i, j];
+
+                            }
+                        }
+                    }
+                }
+
+                image.Taille = image.Offset + longueur1 * largeur1 * 3;
+                image.Largeur = largeur1;
+                image.Hauteur = longueur1;
+                byte[] largeur2 = image.Convertir_Int_To_Endian(largeur1, 4);
+                byte[] taille2 = image.Convertir_Int_To_Endian(image.Taille, 4);
+                byte[] hauteur2 = image.Convertir_Int_To_Endian(longueur1, 4);
+                byte[] taille_image2 = image.Convertir_Int_To_Endian((largeur1 * longueur1 * 3), 4);
+                byte[] header = image.Header;
+                header[2] = taille2[0];
+                header[3] = taille2[1];
+                header[4] = taille2[2];
+                header[5] = taille2[3];
+                header[18] = largeur2[0];
+                header[19] = largeur2[1];
+                header[20] = largeur2[2];
+                header[21] = largeur2[3];
+                header[22] = hauteur2[0];
+                header[23] = hauteur2[1];
+                header[24] = hauteur2[2];
+                header[25] = hauteur2[3];
+                header[34] = taille_image2[0];
+                header[35] = taille_image2[1];
+                header[36] = taille_image2[2];
+                header[37] = taille_image2[3];
+                image.Header = header;
+
+
+                image.MatriceBGR = matriceBGRRotation;
+                image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
+                this.bitmap = new BitmapImage();
+                this.bitmap.BeginInit();
+                this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
+                this.bitmap.EndInit();
+                ImageViewer.Source = this.bitmap;
+                compteurDeModification++;
+
             }
             Thread.Sleep(250);
             CheckBoxRotation.IsChecked = false;
