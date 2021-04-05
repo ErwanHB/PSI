@@ -194,7 +194,7 @@ namespace WpfApp1
         public static MyImage EncodageStegano(MyImage basique, MyImage secret)
         {
             MyImage stegano = basique;
-           // byte[] info = new byte[];
+            //byte[] info = new byte[];
             return stegano;
         }
     }
