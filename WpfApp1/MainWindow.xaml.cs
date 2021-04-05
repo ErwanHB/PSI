@@ -450,6 +450,41 @@ namespace WpfApp1
             Thread.Sleep(250);
             CheckBoxAgrandir.IsChecked = false;
         }
+        private void Rotation(object sender, RoutedEventArgs e)
+        {
+            if (flag == true)
+            {
+                int angle = Convert.ToInt32(coeffRotation.Text);
+                Pixel[,] matriceBGR = image.MatriceBGR;
+                Pixel[,] matriceBGRRotation = new Pixel[0, 0];
+                if (angle == 90)
+                {
+                    int longueur = matriceBGR.GetLength(1);
+                    int largeur = matriceBGR.GetLength(0);
+                    matriceBGRRotation = new Pixel[longueur, largeur];
+                    for (int i = 0; i < longueur; i++)
+                    {
+                        for (int j = 0; j < largeur; j++)
+                        {
+                            if (matriceBGR[j, i].PixelNoir != true)
+                            {
+                                matriceBGRRotation[i, j] = matriceBGR[j, i];
+                            }
+                        }
+                    }
+                }
+                image.MatriceBGR = matriceBGRRotation;
+                image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
+                this.bitmap = new BitmapImage();
+                this.bitmap.BeginInit();
+                this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
+                this.bitmap.EndInit();
+                ImageViewer.Source = this.bitmap;
+                compteurDeModification++;
+            }
+            Thread.Sleep(250);
+            CheckBoxRotation.IsChecked = false;
+        }
         #endregion
 
         #region filtre
@@ -513,32 +548,6 @@ namespace WpfApp1
                 ImageViewer.Source = this.bitmap;
                 compteurDeModification++;
             }
-        }
-        public static void Rotation(MyImage image, int angle)
-        {
-            Pixel[,] matriceBGR = image.MatriceBGR;
-            double longueur = Math.Ceiling(Math.Cos(angle) * matriceBGR.GetLength(0) + Math.Cos(angle) * matriceBGR.GetLength(1));
-            double largeur = Math.Ceiling(Math.Sin(angle) * matriceBGR.GetLength(0) + Math.Sin(angle) * matriceBGR.GetLength(1));
-            Pixel[,] matriceBGRRotation = new Pixel[Convert.ToInt32(Math.Abs(longueur)), Convert.ToInt32(Math.Abs(largeur))];
-            for (int i = 0; i < matriceBGRRotation.GetLength(0); i++)
-            {
-                for (int j = 0; j < matriceBGRRotation.GetLength(1); j++)
-                {
-                    matriceBGRRotation[i, j] = new Pixel(0, 0, 0, true);
-                }
-            }
-            for (int i = 0; i < matriceBGR.GetLength(0); i++)
-            {
-                for (int j = 0; j < matriceBGR.GetLength(1); j++)
-                {
-                    if (matriceBGR[i, j].PixelNoir != true)
-                    {
-                        int rayon = Convert.ToInt32(Math.Ceiling(Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))));
-                        matriceBGRRotation[Convert.ToInt32(Math.Abs(Math.Floor(Math.Cos(angle) * i + Math.Cos(angle) * j))), Convert.ToInt32(Math.Abs(Math.Floor(Math.Sin(angle) * i + Math.Sin(angle) * j)))] = matriceBGR[i, j];
-                    }
-                }
-            }
-            image.MatriceBGR = matriceBGRRotation;
         }
         #endregion
         #endregion

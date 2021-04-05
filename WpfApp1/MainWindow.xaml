@@ -47,9 +47,13 @@
             <CheckBox x:Name="CheckBoxNoir" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Checked="NoirEtBlanc" Width="19" Height="15" RenderTransformOrigin="0.448,0.505"/>
             <ProgressBar HorizontalAlignment="Left" Height="3" VerticalAlignment="Top" Width="181" Background="Red" BorderBrush="{x:Null}" Foreground="{x:Null}" IsEnabled="False"/>
             <!--3 modules pour la fonction agrandir -->
-            <TextBox HorizontalAlignment="Left" Height="32" TextWrapping="Wrap" Text="Pour modifier la taille de votre image rentrez un nombre et cliquez sur le bouton :" VerticalAlignment="Top" Width="181" TextAlignment="Center" Background="Black" BorderBrush="Black" Foreground="White" FontStyle="Italic" Grid.Column="1" IsEnabled="False" FontSize="10" CaretBrush="Black" SelectionBrush="#FFFF0D02"/>
+            <TextBox HorizontalAlignment="Left" Height="43" TextWrapping="Wrap" Text="Pour modifier la taille de votre image rentrez un nombre et cliquez sur le bouton :" VerticalAlignment="Top" Width="181" TextAlignment="Center" Background="Black" BorderBrush="Black" Foreground="White" FontStyle="Italic" Grid.Column="1" IsEnabled="False" FontSize="10" CaretBrush="Black" SelectionBrush="#FFFF0D02"/>
             <TextBox x:Name="coefficient" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="1,5" VerticalAlignment="Top" Width="100" Grid.Column="1" Background="#FF0F0E0E" BorderBrush="Red" Foreground="White" Cursor="None" TextAlignment="Center"/>
             <CheckBox x:Name="CheckBoxAgrandir" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Checked="Agrandir" Width="19" Height="15" RenderTransformOrigin="0.448,0.505"/>
+            <!--3 modules pour la fonction rotation -->
+            <TextBox HorizontalAlignment="Left" Height="44" TextWrapping="Wrap" Text="Pour appliquer une rotation à votre image rentrez un angle et cliquez sur le bouton :" VerticalAlignment="Top" Width="181" TextAlignment="Center" Background="Black" BorderBrush="Black" Foreground="White" FontStyle="Italic" Grid.Column="1" IsEnabled="False" FontSize="10" CaretBrush="Black" SelectionBrush="#FFFF0D02"/>
+            <TextBox x:Name="coeffRotation" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="90" VerticalAlignment="Top" Width="100" Grid.Column="1" Background="#FF0F0E0E" BorderBrush="Red" Foreground="White" Cursor="None" TextAlignment="Center"/>
+            <CheckBox x:Name="CheckBoxRotation" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Checked="Rotation" Width="19" Height="15" RenderTransformOrigin="0.448,0.505"/>
         </ComboBox>
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Différentes modifications :" VerticalAlignment="Top" Height="22" Width="145" Margin="21,45,0,0" Grid.Column="1" IsEnabled="False"/>
         <!-- filtre a appliquer à une image -->
