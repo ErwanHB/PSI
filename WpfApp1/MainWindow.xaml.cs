@@ -515,7 +515,7 @@ namespace WpfApp1
                 {
                     matriceBGRRotation = matriceBGR;
                     largeur1 = matriceBGR.GetLength(0);
-                    largeur1 = matriceBGR.GetLength(1);
+                    longueur1 = matriceBGR.GetLength(1);
                 }
 
                 //methode pour les angles compris entre 0° et 90° (non inclus)
