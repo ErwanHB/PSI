@@ -15,53 +15,55 @@ namespace WpfApp1
 
             MyImage image = new MyImage(header);
 
-            int hauteur1 = 1024;
-            int largeur1 = 1280;
+            int hauteur = 1024;
+            int largeur = 1280;
 
-            //Modification du header
-            byte[] taille_octet = image.Convertir_Int_To_Endian(54 + largeur1*hauteur1*3, 4);
+            #region Modification du header
+            byte[] taille_octet = image.Convertir_Int_To_Endian(54 + largeur*hauteur*3, 4);
             header[2] = taille_octet[0];
             header[3] = taille_octet[1];
             header[4] = taille_octet[2];
             header[5] = taille_octet[3];
 
-            byte[] largeur = image.Convertir_Int_To_Endian(largeur1, 4);
-            header[18] = largeur[0];
-            header[19] = largeur[1];
-            header[20] = largeur[2];
-            header[21] = largeur[3];
+            byte[] largeur1 = image.Convertir_Int_To_Endian(largeur, 4);
+            header[18] = largeur1[0];
+            header[19] = largeur1[1];
+            header[20] = largeur1[2];
+            header[21] = largeur1[3];
 
-            byte[] hauteur = image.Convertir_Int_To_Endian(hauteur1, 4);
-            header[22] = hauteur[0];
-            header[23] = hauteur[1];
-            header[24] = hauteur[2];
-            header[25] = hauteur[3];
+            byte[] hauteur1 = image.Convertir_Int_To_Endian(hauteur, 4);
+            header[22] = hauteur1[0];
+            header[23] = hauteur1[1];
+            header[24] = hauteur1[2];
+            header[25] = hauteur1[3];
 
-            byte[] taille_image = image.Convertir_Int_To_Endian(largeur1*hauteur1*3, 4); //taille de la partie contenant les pixels
+            byte[] taille_image = image.Convertir_Int_To_Endian(largeur*hauteur*3, 4); //taille de la partie contenant les pixels
             header[34] = taille_image[0];
             header[35] = taille_image[1];
             header[36] = taille_image[2];
             header[37] = taille_image[3];
+            #endregion
 
             Complex C;
             Complex Z;
-            Pixel[,] fractale = new Pixel[1280, 1024];
+
+            Pixel[,] fractale = new Pixel[largeur, hauteur];
             int[] couleur = new int[3];
 
-            double i = -2; //correspond à x dans le plan
-            double j = -1; //correspond à y dans le plan
+            double x = -2;
+            double y = -1;
 
-            double iItération = 0.0029296875f; //permet de parcourir les x
-            double jItération = 0.00234375f; //permet de parcourir les y
+            double dx = 3/1024;
+            double dy = 2/1280;
 
             int cpt = 0; //compte le nombre d'itération
 
-            for (int index1 = 0; index1 < 1280; index1++)
+            for (int i = 0; i < largeur; i++)
             {
-                for (int index2 = 0; index2 < 1024; index2++)
+                for (int j = 0; j < hauteur; j++)
                 {
                     couleur = new int[3] { 0, 0, 0 };
-                    C = new Complex(i, j);
+                    C = new Complex(x, y);
                     Z = new Complex(0, 0);
                     
                     cpt = 0;
@@ -97,26 +99,27 @@ namespace WpfApp1
                     {
                         couleur[2] = 255;
                     }
-                    
 
-                    if (cpt >= 150){
+
+                    /*if (cpt >= 150){
                         couleur = new int[3] { 0, 0, 0 };
-                        fractale[index1, index2] = new Pixel(couleur);
+                        fractale[i, j] = new Pixel(couleur);
                     }
                     else
                     {
-                        
-                        fractale[index1, index2] = new Pixel(couleur);
-                    }
-                    i+=iItération;
+                        fractale[i, j] = new Pixel(couleur);
+                    }*/
+                    fractale[i, j] = new Pixel(couleur);
+                    x +=dx;
                 }
-                i = -2;
-                j+=jItération;
+                x = -2;
+                y+=dy;
             }
             image = new MyImage(header, fractale);
             return image;
             
         }
+
         public static MyImage Histogramme(MyImage image)
         {
             int[] hauteur_couleur = new int[256 * 3];
@@ -197,6 +200,5 @@ namespace WpfApp1
             MyImage newImage = new MyImage(header, histo);
             return newImage;
         }
-        
     }
 }
