@@ -521,8 +521,9 @@ namespace WpfApp1
                 //methode pour les angles compris entre 0° et 90° (non inclus)
                 if (angle > 0 && angle < 90)
                 {
-                    double largeur = matriceBGR.GetLength(0) * Math.Cos(angle) + matriceBGR.GetLength(1) * Math.Sin(angle);
-                    double longueur = matriceBGR.GetLength(0) * Math.Sin(angle) + matriceBGR.GetLength(1) * Math.Cos(angle);
+                    double radian = Math.PI / 180;
+                    double largeur = matriceBGR.GetLength(0) * Math.Sin(angle*radian) + matriceBGR.GetLength(1) * Math.Cos(angle* radian);
+                    double longueur = matriceBGR.GetLength(0) * Math.Cos(angle* radian) + matriceBGR.GetLength(1) * Math.Sin(angle* radian);
                     largeur1 = Convert.ToInt32(Math.Ceiling(largeur));
                     longueur1 = Convert.ToInt32(Math.Ceiling(longueur));
                     matriceBGRRotation = new Pixel[longueur1, largeur1];
@@ -535,23 +536,24 @@ namespace WpfApp1
                     }
                     int index1 = 0;
                     int index2 = 0;
-                    int min1 =Math.Abs(Convert.ToInt32(Math.Ceiling(Math.Cos(angle + 90) * Math.Sqrt(Math.Pow(longueur1, 2)))));
+                    int min1 =Math.Abs(Convert.ToInt32(Math.Ceiling(Math.Cos((angle + 90)* radian) * Math.Sqrt(Math.Pow(matriceBGR.GetLength(0), 2)))));
                     for (int j = 0; j < matriceBGR.GetLength(1); j++)
                     {
                         for (int i = 0; i < matriceBGR.GetLength(0); i++)
                         {
-                            if (i == 0)
+                            if (j == 0)
                             {
-                                matriceBGRRotation[Convert.ToInt32(Math.Ceiling(Math.Cos(angle) * Math.Sqrt(Math.Pow(j, 2)))), Convert.ToInt32(Math.Ceiling(Math.Sin(angle) * Math.Sqrt(Math.Pow(j, 2))))] = matriceBGR[i, j];
-                                index1 = Convert.ToInt32(Math.Ceiling(Math.Sin(angle) * Math.Sqrt(Math.Pow(i, 2))));
-                                index2 = Convert.ToInt32(Math.Ceiling(Math.Cos(angle) * Math.Sqrt(Math.Pow(i, 2))));
+                                matriceBGRRotation[min1 + Convert.ToInt32(Math.Truncate(Math.Cos(angle* radian+90*radian) * Math.Sqrt(Math.Pow(i, 2)))), Convert.ToInt32(Math.Truncate(Math.Sin(angle* radian+90 * radian) * Math.Sqrt(Math.Pow(i, 2))))] = matriceBGR[i, j];
+                                index1 = Convert.ToInt32(Math.Truncate(Math.Sin(angle* radian) * Math.Sqrt(Math.Pow(i, 2))));
+                                index2 = Convert.ToInt32(Math.Truncate(Math.Cos(angle* radian) * Math.Sqrt(Math.Pow(i, 2))));
                             }
                             else
                             {
-                                index1 = min1+ Convert.ToInt32(Math.Ceiling(Math.Cos(angle + Math.Atan(j / i)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))));
-                                index2 = Convert.ToInt32(Math.Ceiling(Math.Sin(angle + Math.Atan(j / i)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))));
-                                matriceBGRRotation[min1+Convert.ToInt32(Math.Ceiling(Math.Cos(angle + Math.Atan(j / i)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2)))), Convert.ToInt32(Math.Ceiling(Math.Sin(angle + Math.Atan(j / i)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))))] = matriceBGR[i, j];
+                                index1 = min1+ Convert.ToInt32(Math.Truncate(Math.Cos(angle*radian + Math.Atan(i / j)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))))-2;
+                                index2 = Convert.ToInt32(Math.Truncate(Math.Sin(angle* radian + Math.Atan(i / j)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))));
+                                matriceBGRRotation[min1+Convert.ToInt32(Math.Truncate(Math.Cos(angle* radian + Math.Atan(i / j)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))))-2, Convert.ToInt32(Math.Truncate(Math.Sin(angle* radian + Math.Atan(i / j)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))))] = matriceBGR[i, j];
 
+                            
                             }
                         }
                     }
