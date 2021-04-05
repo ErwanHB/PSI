@@ -30,9 +30,14 @@ namespace WpfApp1
         BitmapImage bitmap;
         MyImage image;
         int compteurDeModification;
-
         bool flag = false;
         string name;
+
+        BitmapImage steno1;
+        MyImage imageSteno1;
+        BitmapImage steno2;
+        MyImage imageSteno2;
+        bool flagStenographie = false;
         #endregion
 
         public MainWindow()
@@ -44,6 +49,9 @@ namespace WpfApp1
 
         private void Ouvrir(object sender, RoutedEventArgs e)
         {
+            ImageViewer.Visibility = Visibility.Visible;
+            ImageStenographie1.Visibility = Visibility.Hidden;
+            ImageStenographie2.Visibility = Visibility.Hidden;
             string filename = null;
 
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -684,6 +692,10 @@ namespace WpfApp1
 
         private void Fractale(object sender, RoutedEventArgs e)
         {
+            ImageViewer.Visibility = Visibility.Visible;
+            ImageStenographie1.Visibility = Visibility.Hidden;
+            ImageStenographie2.Visibility = Visibility.Hidden;
+
             this.name = Directory.GetCurrentDirectory();
             image = Creation.Fractale();
             image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
@@ -693,12 +705,70 @@ namespace WpfApp1
             this.bitmap.EndInit();
             ImageViewer.Source = this.bitmap;
             compteurDeModification++;
-            flag = true;
+            this.flag = true;
 
         }
-        #endregion
 
-    }
+        private void StenographieOuvrir(object sender, RoutedEventArgs e)
+        {
+            this.flag = false;
+            ImageViewer.Visibility = Visibility.Hidden;
+            ImageStenographie1.Visibility = Visibility.Visible;
+            ImageStenographie2.Visibility = Visibility.Visible;
+            string filename = null;
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                filename = dlg.FileName;
+
+            }
+            this.steno1 = new BitmapImage();
+            this.steno1.BeginInit();
+            this.steno1.UriSource = new Uri(filename);
+            this.steno1.EndInit();
+            ImageStenographie1.Source = this.steno1;
+            this.imageSteno1 = new MyImage(filename);
+            this.name = Directory.GetCurrentDirectory();
+
+            filename = null;
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                filename = dlg.FileName;
+
+            }
+            this.steno2 = new BitmapImage();
+            this.steno2.BeginInit();
+            this.steno2.UriSource = new Uri(filename);
+            this.steno2.EndInit();
+            ImageStenographie2.Source = this.steno2;
+            this.imageSteno2 = new MyImage(filename);
+            this.name = Directory.GetCurrentDirectory();
+            this.flagStenographie = true;
+        }
+        private void Stenographie(object sender, RoutedEventArgs e)
+        {
+            if (this.flagStenographie == true)
+            {
+
+                //***********
+                ImageViewer.Visibility = Visibility.Visible;
+                ImageStenographie1.Visibility = Visibility.Hidden;
+                ImageStenographie2.Visibility = Visibility.Hidden;
+
+                /*image.MatriceBGR = Nouvelle matrice;
+                image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
+                this.bitmap = new BitmapImage();
+                this.bitmap.BeginInit();
+                this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
+                this.bitmap.EndInit();
+                ImageViewer.Source = this.bitmap;
+                */
+            }
+            Thread.Sleep(250);
+            CheckBoxRotation.IsChecked = false;
+        }
+            #endregion
+
+        }
 }
     
 
