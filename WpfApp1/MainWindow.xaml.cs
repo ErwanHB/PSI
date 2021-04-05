@@ -455,10 +455,12 @@ namespace WpfApp1
                 int largeur1 = 0;
                 int longueur1 = 0;
                 int angle = Convert.ToInt32(coeffRotation.Text);
-                if (angle <= 360 && angle >= 0)
+                if (angle < 360 && angle > 0)
                 {
                     Pixel[,] matriceBGR = image.MatriceBGR;
                     Pixel[,] matriceBGRRotation = new Pixel[0, 0];
+
+                    //methode pour un angle de 90°
                     if (angle == 90)
                     {
                         int longueur = matriceBGR.GetLength(1);
@@ -466,21 +468,49 @@ namespace WpfApp1
                         int largeur = matriceBGR.GetLength(0);
                         largeur1 = largeur;
                         matriceBGRRotation = new Pixel[longueur, largeur];
-                        int cpt = 1;
-
-
                         for (int j = largeur-1; j >=0; j--)
                         {
                             for (int i = 0; i<longueur; i++)
                             {
-                                if (matriceBGR[Math.Abs(j - largeur + 1), i].PixelNoir != true)
-                                {
                                     matriceBGRRotation[i, j] = matriceBGR[Math.Abs(j - largeur + 1), i];
-                                }
-                                cpt++;
                             }
                         }
                     }
+
+                    //methode pour un angle de 270°
+                    if (angle == 270)
+                    {
+                        int longueur = matriceBGR.GetLength(1);
+                        longueur1 = longueur;
+                        int largeur = matriceBGR.GetLength(0);
+                        largeur1 = largeur;
+                        matriceBGRRotation = new Pixel[longueur, largeur];
+                        for (int j = 0; j<largeur; j++)
+                        {
+                            for (int i = longueur-1;i>=0;i--)
+                            {
+                                matriceBGRRotation[i, j] = matriceBGR[j, Math.Abs(i - longueur + 1)];
+                            }
+                        }
+                    }
+
+                    //methode pour un angle de 180°
+                    if (angle == 180)
+                    {
+                        int largeur = matriceBGR.GetLength(1);
+                        largeur1 = largeur;
+                        int longueur = matriceBGR.GetLength(0);
+                        longueur1 = longueur;
+                        matriceBGRRotation = new Pixel[longueur, largeur];
+                        for (int j = largeur - 1; j >= 0; j--)
+                        {
+                            for (int i = longueur - 1; i >= 0; i--)
+                            {
+                                matriceBGRRotation[i, j] = matriceBGR[Math.Abs(i - longueur + 1), Math.Abs(j - largeur + 1)];
+                            }
+                        }
+                    }
+
                     image.Taille = image.Offset + longueur1 * largeur1 * 3;
                     image.Largeur = largeur1;
                     image.Hauteur = longueur1;
@@ -509,6 +539,17 @@ namespace WpfApp1
 
 
                     image.MatriceBGR = matriceBGRRotation;
+                    image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
+                    this.bitmap = new BitmapImage();
+                    this.bitmap.BeginInit();
+                    this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
+                    this.bitmap.EndInit();
+                    ImageViewer.Source = this.bitmap;
+                    compteurDeModification++;
+                }
+                //methode pour l'angle 0 et 360
+                if (angle==0||angle==360)
+                {
                     image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
                     this.bitmap = new BitmapImage();
                     this.bitmap.BeginInit();
