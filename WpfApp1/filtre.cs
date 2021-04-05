@@ -15,13 +15,20 @@ namespace WpfApp1
             switch (effet)
             {
                 case 1: //detecction des contours
-                    matriceConvultion = new int[,] { { 0, 1, 0 }, { 1, -4, 1 }, { 0, 1, 0 } };
+                    matriceConvultion = new int[,] { { -1, -1, -1 }, { -1, 8, -1 }, { -1, -1, -1 } };
                     break;
                 case 2: //renforcement des bords
                     matriceConvultion = new int[,] { { 0, 0, 0 }, { -1, 1, 0 }, { 0, 0, 0 } };
                     break;
-                case 3: //flou
-                    matriceConvultion = new int[,] { { 0, 0, 0, 0, 0 }, { 0, 1, 1, 1, 0 }, { 0, 1, 1, 0, 0 }, { 0, 1, 1, 1, 0 }, { 0, 1, 1, 1, 0 } };
+                /* 
+				*****
+				*****
+				Essayer de faire une matrice qui fait la moyenne des adjacents
+				*****
+				*****
+				*/
+				case 3: //flou
+                    matriceConvultion = new int[,] { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } };
                     break;
                 case 4: //repoussage
                     matriceConvultion = new int[,] { { -2, -1, 0 }, { -1, 1, 1 }, { 0, 0, 0 } };
@@ -46,26 +53,19 @@ namespace WpfApp1
                             int ligneMatriceInitial = i + ligne2;
                             int colonneMatriceInitial = j + colonne2;
 
-                            if (ligneMatriceInitial < 0)
+                            if (ligneMatriceInitial >= 0 && ligneMatriceInitial < matrice.GetLength(0) && colonneMatriceInitial >= 0 && colonneMatriceInitial < matrice.GetLength(1))
                             {
-                                ligneMatriceInitial += matrice.GetLength(0);
-                            }
-                            else if (ligneMatriceInitial >= matrice.GetLength(0))
-                            {
-                                ligneMatriceInitial -= matrice.GetLength(0);
-                            }
-                            if (colonneMatriceInitial < 0)
-                            {
-                                colonneMatriceInitial += matrice.GetLength(1);
-                            }
-                            else if (colonneMatriceInitial >= matrice.GetLength(1))
-                            {
-                                colonneMatriceInitial -= matrice.GetLength(1);
-                            }
+                                nouvelleMatrice[i, j].B += matrice[ligneMatriceInitial, colonneMatriceInitial].B * matriceConvultion[ligneConvulsion, colonneConvulsion];
+                                nouvelleMatrice[i, j].V += matrice[ligneMatriceInitial, colonneMatriceInitial].V * matriceConvultion[ligneConvulsion, colonneConvulsion];
+                                nouvelleMatrice[i, j].R += matrice[ligneMatriceInitial, colonneMatriceInitial].R * matriceConvultion[ligneConvulsion, colonneConvulsion];
 
-                            nouvelleMatrice[i, j].B += matrice[ligneMatriceInitial, colonneMatriceInitial].B * matriceConvultion[ligneConvulsion, colonneConvulsion];
-                            nouvelleMatrice[i, j].V += matrice[ligneMatriceInitial, colonneMatriceInitial].V * matriceConvultion[ligneConvulsion, colonneConvulsion];
-                            nouvelleMatrice[i, j].R += matrice[ligneMatriceInitial, colonneMatriceInitial].R * matriceConvultion[ligneConvulsion, colonneConvulsion];
+                                if (effet == 3)
+                                {
+                                    nouvelleMatrice[i, j].B /= 9;
+                                    nouvelleMatrice[i, j].V /= 9;
+                                    nouvelleMatrice[i, j].R /= 9;
+                                }
+                            }
                             colonne2++;
                         }
                         colonne2 = -matriceConvultion.GetLength(1) / 2;
