@@ -47,39 +47,39 @@ namespace WpfApp1
             Complex C;
             Complex Z;
 
-            Pixel[,] fractale = new Pixel[largeur, hauteur];
+            Pixel[,] fractale = new Pixel[hauteur, largeur];
             int[] couleur = new int[3];
 
             double x = -2;
             double y = -1;
 
-            double dx = 3/1024;
-            double dy = 2/1280;
+            double dx = 3f/1280f;
+            double dy = 2f/1024f;
 
             int cpt = 0; //compte le nombre d'itération
 
-            for (int i = 0; i < largeur; i++)
+            for (int i = 0; i < hauteur; i++)
             {
-                for (int j = 0; j < hauteur; j++)
+                for (int j = 0; j < largeur; j++)
                 {
-                    couleur = new int[3] { 0, 0, 0 };
+                    couleur = new int[3] { 255, 255, 255 };
                     C = new Complex(x, y);
                     Z = new Complex(0, 0);
                     
                     cpt = 0;
                     do
                     {
-                        if (couleur[0] < 255)
+                        if (couleur[1] > 0)
                         {
-                            couleur[0]+=15;
+                            couleur[1]-=15;
                         }
-                        else if (couleur[1] < 255)
+                        else if (couleur[2] > 0)
                         {
-                            couleur[1]+=15;
+                            couleur[2]-=15;
                         }
-                        else if (couleur[2] < 255)
+                        else if (couleur[0] > 0)
                         {
-                            couleur[2]+=15;
+                            couleur[0]-=15;
                         }
                         
                         Z = Complex.Pow(Z, 2) + C;
@@ -87,37 +87,27 @@ namespace WpfApp1
 
                     } while (Z.Magnitude <= 2 && cpt <= 50);
 
-                    if (couleur[0] > 255)
+                    if (couleur[0] < 0)
                     {
-                        couleur[0] = 255;
+                        couleur[0] = 0;
                     }
-                    else if (couleur[1] > 255)
+                    else if (couleur[1] < 0)
                     {
-                        couleur[1] = 255;
+                        couleur[1] = 0;
                     }
-                    else if (couleur[2] > 255)
+                    else if (couleur[2] < 0)
                     {
-                        couleur[2] = 255;
+                        couleur[2] = 0;
                     }
 
-
-                    /*if (cpt >= 150){
-                        couleur = new int[3] { 0, 0, 0 };
-                        fractale[i, j] = new Pixel(couleur);
-                    }
-                    else
-                    {
-                        fractale[i, j] = new Pixel(couleur);
-                    }*/
                     fractale[i, j] = new Pixel(couleur);
-                    x +=dx;
+                    x += dx;
                 }
                 x = -2;
-                y+=dy;
+                y += dy;
             }
             image = new MyImage(header, fractale);
-            return image;
-            
+            return image;  
         }
 
         public static MyImage Histogramme(MyImage image)
@@ -199,6 +189,13 @@ namespace WpfApp1
 
             MyImage newImage = new MyImage(header, histo);
             return newImage;
+        }
+
+        public static MyImage EncodageStegano(MyImage basique, MyImage secret)
+        {
+            MyImage stegano = basique;
+            byte[] info = new byte[];
+            return stegano;
         }
     }
 }

@@ -197,7 +197,19 @@ namespace WpfApp1
         {
             int index = 0;
             int bourrage = (this.matriceBGR.GetLength(1) * 3) % 4;
-            byte[] bytes = new byte[this.taille + bourrage * this.largeur];
+            byte[] bytes = new byte[this.taille + bourrage * this.hauteur];
+
+            byte[] taille_octet = this.Convertir_Int_To_Endian(54 + this.largeur * this.hauteur * 3 + bourrage * this.hauteur, 4);
+            this.header[2] = taille_octet[0];
+            this.header[3] = taille_octet[1];
+            this.header[4] = taille_octet[2];
+            this.header[5] = taille_octet[3];
+
+            byte[] taille_image = this.Convertir_Int_To_Endian(this.largeur * this.hauteur * 3 + bourrage * this.hauteur, 4);
+            header[34] = taille_image[0];
+            header[35] = taille_image[1];
+            header[36] = taille_image[2];
+            header[37] = taille_image[3];
 
             for (int i = 0; i < this.offset; i++)
             {
