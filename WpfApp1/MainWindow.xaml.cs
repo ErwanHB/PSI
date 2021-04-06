@@ -37,7 +37,7 @@ namespace WpfApp1
         MyImage imageSteno1;
         BitmapImage steno2;
         MyImage imageSteno2;
-        bool flagSteganographie = false;
+        bool flagStenographie = false;
         #endregion
 
         public MainWindow()
@@ -50,8 +50,8 @@ namespace WpfApp1
         private void Ouvrir(object sender, RoutedEventArgs e)
         {
             ImageViewer.Visibility = Visibility.Visible;
-            ImageSteganographie1.Visibility = Visibility.Hidden;
-            ImageSteganographie2.Visibility = Visibility.Hidden;
+            ImageStenographie1.Visibility = Visibility.Hidden;
+            ImageStenographie2.Visibility = Visibility.Hidden;
             string filename = null;
 
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -86,6 +86,31 @@ namespace WpfApp1
             Thread.Sleep(250);
             CheckBoxNouveau.IsChecked = false;
         }
+
+        #region gestion de la fenetre
+        private void ModeQRCode(object sender, RoutedEventArgs e)
+        {
+            TextIntro.Visibility = Visibility.Hidden;
+            BoutonImage.Visibility = Visibility.Hidden;
+            BoutonQRcode.Visibility = Visibility.Hidden;
+        }
+        private void ModeImage(object sender, RoutedEventArgs e)
+        {
+            BoutonOuvrir.Visibility = Visibility.Visible;
+            ComboModif.Visibility = Visibility.Visible;
+            TextModif.Visibility = Visibility.Visible;
+            TextCreation.Visibility = Visibility.Visible;
+            ComboCreation.Visibility = Visibility.Visible;
+            ComboFiltre.Visibility = Visibility.Visible;
+            TextFiltre.Visibility = Visibility.Visible;
+            TextNouveau.Visibility = Visibility.Visible;
+            TextBoxNouveau.Visibility = Visibility.Visible;
+            CheckBoxNouveau.Visibility = Visibility.Visible;
+            TextIntro.Visibility = Visibility.Hidden;
+            BoutonImage.Visibility = Visibility.Hidden;
+            BoutonQRcode.Visibility = Visibility.Hidden;
+        }
+        #endregion
 
         #region Traitemement d'image (TD3)
 
@@ -693,8 +718,8 @@ namespace WpfApp1
         private void Fractale(object sender, RoutedEventArgs e)
         {
             ImageViewer.Visibility = Visibility.Visible;
-            ImageSteganographie1.Visibility = Visibility.Hidden;
-            ImageSteganographie2.Visibility = Visibility.Hidden;
+            ImageStenographie1.Visibility = Visibility.Hidden;
+            ImageStenographie2.Visibility = Visibility.Hidden;
 
             this.name = Directory.GetCurrentDirectory();
             image = Creation.Fractale();
@@ -709,12 +734,12 @@ namespace WpfApp1
 
         }
 
-        private void SteganographieOuvrir(object sender, RoutedEventArgs e)
+        private void StenographieOuvrir(object sender, RoutedEventArgs e)
         {
             this.flag = false;
             ImageViewer.Visibility = Visibility.Hidden;
-            ImageSteganographie1.Visibility = Visibility.Visible;
-            ImageSteganographie2.Visibility = Visibility.Visible;
+            ImageStenographie1.Visibility = Visibility.Visible;
+            ImageStenographie2.Visibility = Visibility.Visible;
             string filename = null;
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -725,7 +750,7 @@ namespace WpfApp1
             this.steno1.BeginInit();
             this.steno1.UriSource = new Uri(filename);
             this.steno1.EndInit();
-            ImageSteganographie1.Source = this.steno1;
+            ImageStenographie1.Source = this.steno1;
             this.imageSteno1 = new MyImage(filename);
             this.name = Directory.GetCurrentDirectory();
 
@@ -739,20 +764,20 @@ namespace WpfApp1
             this.steno2.BeginInit();
             this.steno2.UriSource = new Uri(filename);
             this.steno2.EndInit();
-            ImageSteganographie2.Source = this.steno2;
+            ImageStenographie2.Source = this.steno2;
             this.imageSteno2 = new MyImage(filename);
             this.name = Directory.GetCurrentDirectory();
-            this.flagSteganographie = true;
+            this.flagStenographie = true;
         }
-        private void Steganographie(object sender, RoutedEventArgs e)
+        private void Stenographie(object sender, RoutedEventArgs e)
         {
-            if (this.flagSteganographie == true)
+            if (this.flagStenographie == true)
             {
 
                 //***********
                 ImageViewer.Visibility = Visibility.Visible;
-                ImageSteganographie1.Visibility = Visibility.Hidden;
-                ImageSteganographie2.Visibility = Visibility.Hidden;
+                ImageStenographie1.Visibility = Visibility.Hidden;
+                ImageStenographie2.Visibility = Visibility.Hidden;
 
                 /*image.MatriceBGR = Nouvelle matrice;
                 image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
@@ -768,10 +793,6 @@ namespace WpfApp1
         }
         #endregion
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }
     
