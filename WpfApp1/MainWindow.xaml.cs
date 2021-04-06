@@ -87,6 +87,31 @@ namespace WpfApp1
             CheckBoxNouveau.IsChecked = false;
         }
 
+        #region gestion de la fenetre
+        private void ModeQRCode(object sender, RoutedEventArgs e)
+        {
+            TextIntro.Visibility = Visibility.Hidden;
+            BoutonImage.Visibility = Visibility.Hidden;
+            BoutonQRcode.Visibility = Visibility.Hidden;
+        }
+        private void ModeImage(object sender, RoutedEventArgs e)
+        {
+            BoutonOuvrir.Visibility = Visibility.Visible;
+            ComboModif.Visibility = Visibility.Visible;
+            TextModif.Visibility = Visibility.Visible;
+            TextCreation.Visibility = Visibility.Visible;
+            ComboCreation.Visibility = Visibility.Visible;
+            ComboFiltre.Visibility = Visibility.Visible;
+            TextFiltre.Visibility = Visibility.Visible;
+            TextNouveau.Visibility = Visibility.Visible;
+            TextBoxNouveau.Visibility = Visibility.Visible;
+            CheckBoxNouveau.Visibility = Visibility.Visible;
+            TextIntro.Visibility = Visibility.Hidden;
+            BoutonImage.Visibility = Visibility.Hidden;
+            BoutonQRcode.Visibility = Visibility.Hidden;
+        }
+        #endregion
+
         #region Traitemement d'image (TD3)
 
         #region modification
@@ -766,9 +791,9 @@ namespace WpfApp1
             Thread.Sleep(250);
             CheckBoxRotation.IsChecked = false;
         }
-            #endregion
+        #endregion
 
-        }
+    }
 }
     
 
