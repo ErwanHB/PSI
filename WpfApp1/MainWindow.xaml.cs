@@ -93,6 +93,15 @@ namespace WpfApp1
             TextIntro.Visibility = Visibility.Hidden;
             BoutonImage.Visibility = Visibility.Hidden;
             BoutonQRcode.Visibility = Visibility.Hidden;
+            QRcodeEspace1.Visibility= Visibility.Visible;
+            ExplicationGeneration.Visibility = Visibility.Visible;
+            TextBoxGenerateur.Visibility = Visibility.Visible;
+            QRcodeEspace2.Visibility = Visibility.Visible;
+            TexteOuvrir.Visibility = Visibility.Visible;
+            checkboxLecteur.Visibility = Visibility.Visible;
+            TextNouveau.Visibility = Visibility.Visible;
+            TextBoxNouveau.Visibility = Visibility.Visible;
+            CheckBoxNouveau.Visibility = Visibility.Visible;//a changer car pas de registre ou enregistrer
         }
         private void ModeImage(object sender, RoutedEventArgs e)
         {
