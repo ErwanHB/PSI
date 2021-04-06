@@ -11,14 +11,14 @@ namespace WpfApp1
         #region Filtre (TD4)
         public static MyImage Convolution(MyImage image, int effet)
         {
-            int[,] matriceConvultion = new int[3, 3];
+            int[,] matriceConvolution = new int[3, 3];
             switch (effet)
             {
                 case 1: //detecction des contours
-                    matriceConvultion = new int[,] { { -1, -1, -1 }, { -1, 8, -1 }, { -1, -1, -1 } };
+                    matriceConvolution = new int[,] { { -1, -1, -1 }, { -1, 8, -1 }, { -1, -1, -1 } };
                     break;
                 case 2: //renforcement des bords
-                    matriceConvultion = new int[,] { { 0, 0, 0 }, { -1, 1, 0 }, { 0, 0, 0 } };
+                    matriceConvolution = new int[,] { { 0, 0, 0 }, { -1, 1, 0 }, { 0, 0, 0 } };
                     break;
                 /* 
 				*****
@@ -28,36 +28,36 @@ namespace WpfApp1
 				*****
 				*/
 				case 3: //flou
-                    matriceConvultion = new int[,] { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } };
+                    matriceConvolution = new int[,] { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } };
                     break;
                 case 4: //repoussage
-                    matriceConvultion = new int[,] { { -2, -1, 0 }, { -1, 1, 1 }, { 0, 0, 0 } };
+                    matriceConvolution = new int[,] { { -2, -1, 0 }, { -1, 1, 1 }, { 0, 0, 0 } };
                     break;
             }
 
             Pixel[,] matrice = image.MatriceBGR;
 
             Pixel[,] nouvelleMatrice = new Pixel[matrice.GetLongLength(0), matrice.GetLongLength(1)];
-            int ligne2 = -matriceConvultion.GetLength(0) / 2;
-            int colonne2 = -matriceConvultion.GetLength(1) / 2;
+            int ligne2 = -matriceConvolution.GetLength(0) / 2;
+            int colonne2 = -matriceConvolution.GetLength(1) / 2;
 
             for (int i = 0; i < matrice.GetLength(0); i++)
             {
                 for (int j = 0; j < matrice.GetLength(1); j++)
                 {
                     nouvelleMatrice[i, j] = new Pixel(0, 0, 0);
-                    for (int colonneConvulsion = 0; colonneConvulsion < matriceConvultion.GetLength(0); colonneConvulsion++)
+                    for (int ligneConvolution = 0; ligneConvolution < matriceConvolution.GetLength(0); ligneConvolution++)
                     {
-                        for (int ligneConvulsion = 0; ligneConvulsion < matriceConvultion.GetLength(1); ligneConvulsion++)
+                        for (int colonneConvolution = 0; colonneConvolution < matriceConvolution.GetLength(1); colonneConvolution++)
                         {
                             int ligneMatriceInitial = i + ligne2;
                             int colonneMatriceInitial = j + colonne2;
 
                             if (ligneMatriceInitial >= 0 && ligneMatriceInitial < matrice.GetLength(0) && colonneMatriceInitial >= 0 && colonneMatriceInitial < matrice.GetLength(1))
                             {
-                                nouvelleMatrice[i, j].B += matrice[ligneMatriceInitial, colonneMatriceInitial].B * matriceConvultion[ligneConvulsion, colonneConvulsion];
-                                nouvelleMatrice[i, j].V += matrice[ligneMatriceInitial, colonneMatriceInitial].V * matriceConvultion[ligneConvulsion, colonneConvulsion];
-                                nouvelleMatrice[i, j].R += matrice[ligneMatriceInitial, colonneMatriceInitial].R * matriceConvultion[ligneConvulsion, colonneConvulsion];
+                                nouvelleMatrice[i, j].B += matrice[ligneMatriceInitial, colonneMatriceInitial].B * matriceConvolution[ligneConvolution, colonneConvolution];
+                                nouvelleMatrice[i, j].V += matrice[ligneMatriceInitial, colonneMatriceInitial].V * matriceConvolution[ligneConvolution, colonneConvolution];
+                                nouvelleMatrice[i, j].R += matrice[ligneMatriceInitial, colonneMatriceInitial].R * matriceConvolution[ligneConvolution, colonneConvolution];
 
                                 if (effet == 3)
                                 {
@@ -68,7 +68,7 @@ namespace WpfApp1
                             }
                             colonne2++;
                         }
-                        colonne2 = -matriceConvultion.GetLength(1) / 2;
+                        colonne2 = -matriceConvolution.GetLength(1) / 2;
                         ligne2++;
                     }
 
@@ -99,8 +99,8 @@ namespace WpfApp1
                         nouvelleMatrice[i, j].R = 255;
                     }
 
-                    ligne2 = -matriceConvultion.GetLength(0) / 2;
-                    colonne2 = -matriceConvultion.GetLength(1) / 2;
+                    ligne2 = -matriceConvolution.GetLength(0) / 2;
+                    colonne2 = -matriceConvolution.GetLength(1) / 2;
                 }
             }
             MyImage newImage = new MyImage(image.Header, nouvelleMatrice);

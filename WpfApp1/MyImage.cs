@@ -48,6 +48,7 @@ namespace WpfApp1
         int nombreBitsParPixel;
         Pixel[,] matriceBGR;
         byte[] header;
+        byte[] rawBytes; //utile seulement pour la stéganographie
 
         public int Largeur
         {
@@ -74,6 +75,10 @@ namespace WpfApp1
             set { this.offset = value; }
             get { return this.offset; }
         }
+        public byte[] RawBytes
+        {
+            get { return this.rawBytes; }
+        }
         #endregion
 
         #region Constructeur de la classe MyImage
@@ -87,6 +92,8 @@ namespace WpfApp1
 
             if (myfile[0] == 66 && myfile[1] == 77)
             {
+                this.rawBytes = myfile;
+
                 this.type = "BM";
 
                 this.taille = Convertir_Endian_To_Int(myfile, 2, 4);
@@ -111,6 +118,8 @@ namespace WpfApp1
                 int cpt = this.offset;
                 int[] rvb = new int[3];
 
+                int bourrage = (4 - ((this.matriceBGR.GetLength(1) * 3) % 4)) % 4;
+
                 for (int i = 0; i < this.hauteur; i++)
                 {
                     for (int j = 0; j < this.largeur; j++)
@@ -123,9 +132,9 @@ namespace WpfApp1
                         Pixel temp = new Pixel(rvb);
                         this.matriceBGR[i, j] = temp;
                     }
-                    if ((this.hauteur * 3) % 4 != 0)
+                    if (bourrage != 0)
                     {
-                        cpt += (this.hauteur * 3) % 4;
+                        cpt += bourrage;
                     }
                 }
             }
@@ -196,7 +205,7 @@ namespace WpfApp1
         public void From_Image_To_File(string file)
         {
             int index = 0;
-            int bourrage = 4 - ((this.matriceBGR.GetLength(1) * 3) % 4);
+            int bourrage = (4 - ((this.matriceBGR.GetLength(1) * 3) % 4))%4;
             byte[] bytes = new byte[this.taille + bourrage * this.hauteur];
 
             byte[] taille_octet = this.Convertir_Int_To_Endian(54 + this.largeur * this.hauteur * 3 + bourrage * this.hauteur, 4);

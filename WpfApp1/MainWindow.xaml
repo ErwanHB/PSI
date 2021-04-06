@@ -19,8 +19,8 @@
         </Grid.ColumnDefinitions>
         <!-- emplacement de l'image -->
         <Image HorizontalAlignment="Left" Height="513" Margin="10,3,0,0" VerticalAlignment="Top" Width="784" Name="ImageViewer" Grid.RowSpan="2" Grid.Row="1"/>
-        <Image HorizontalAlignment="Left" Height="256" Margin="0,2,0,0" VerticalAlignment="Top" Width="794" Name="ImageStenographie2" Grid.Row="2"/>
-        <Image HorizontalAlignment="Left" Height="255" Margin="0,3,0,0" VerticalAlignment="Top" Width="794" Name="ImageStenographie1" Grid.Row="1"/>
+        <Image HorizontalAlignment="Left" Height="256" Margin="0,2,0,0" VerticalAlignment="Top" Width="794" Name="ImageSteganographie2" Grid.Row="2"/>
+        <Image HorizontalAlignment="Left" Height="255" Margin="0,3,0,0" VerticalAlignment="Top" Width="794" Name="ImageSteganographie1" Grid.Row="1"/>
         <!-- ouverture d'une image -->
         <Button Content="Cliquez pour ouvrir une image : " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="176" Click="Ouvrir" Height="30" BorderBrush="Red" Foreground="White">
             <Button.Background>
@@ -81,7 +81,7 @@
         </ComboBox>
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="92" Margin="23,30,0,0" Grid.Column="1" IsEnabled="False" Focusable="True" Grid.Row="1"><Run Text="Diff"/><Run Text="é"/><Run Text="rents filt"/><Run Text="res"/><Run Text=" :"/></TextBlock>
         <!-- Creation de nouvelles images -->
-        <ComboBox VerticalAlignment="Top" Margin="9,57,1,0" Grid.Column="1" BorderBrush="Black" Foreground="Black" Background="Black" Height="22" Grid.Row="1">
+        <ComboBox VerticalAlignment="Top" Margin="9,57,1,0" Grid.Column="1" BorderBrush="Black" Foreground="Black" Background="Black" Height="22" Grid.Row="1" SelectionChanged="ComboBox_SelectionChanged">
             <ComboBox.OpacityMask>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black" Offset="0"/>
@@ -92,9 +92,9 @@
             <ProgressBar HorizontalAlignment="Left" Height="3" VerticalAlignment="Top" Width="181" Background="Red" BorderBrush="{x:Null}" Foreground="{x:Null}" IsEnabled="False"/>
             <Button Content="Fractale :" Width="110" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="Fractale"/>
             <ProgressBar HorizontalAlignment="Left" Height="3" VerticalAlignment="Top" Width="181" Background="Red" BorderBrush="{x:Null}" Foreground="{x:Null}" IsEnabled="False"/>
-            <TextBox HorizontalAlignment="Left" Height="71" TextWrapping="Wrap" Text="Pour la stenographie cliquez sur le bouton ouvrir pour choisir une premiere image à cacher dans une deuxieme. Puis cliquer sur la case pour lancer le programme." VerticalAlignment="Top" Width="181" TextAlignment="Center" Background="Black" BorderBrush="Black" Foreground="White" FontStyle="Italic" Grid.Column="1" IsEnabled="False" FontSize="10" CaretBrush="Black" SelectionBrush="#FFFF0D02"/>
-            <Button Content="Ouvrir" Width="47" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="StenographieOuvrir"/>
-            <CheckBox x:Name="CheckBoxStenographie" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Checked="Stenographie" Width="19" Height="15" RenderTransformOrigin="0.448,0.505"/>
+            <TextBox HorizontalAlignment="Left" Height="71" TextWrapping="Wrap" Text="Pour la steganographie cliquez sur le bouton ouvrir pour choisir une premiere image à cacher dans une deuxieme. Puis cliquer sur la case pour lancer le programme." VerticalAlignment="Top" Width="181" TextAlignment="Center" Background="Black" BorderBrush="Black" Foreground="White" FontStyle="Italic" Grid.Column="1" IsEnabled="False" FontSize="10" CaretBrush="Black" SelectionBrush="#FFFF0D02"/>
+            <Button Content="Ouvrir" Width="47" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="SteganographieOuvrir"/>
+            <CheckBox x:Name="CheckBoxSteganographie" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Checked="Steganographie" Width="19" Height="15" RenderTransformOrigin="0.448,0.505"/>
         </ComboBox>
         <!-- enregistration d'image -->
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="104" Margin="21,57,0,0" Grid.Column="1" IsEnabled="False" RenderTransformOrigin="0.699,0.534" Text="Creation d'image :" IsHitTestVisible="False" Focusable="True" Grid.Row="1"/>

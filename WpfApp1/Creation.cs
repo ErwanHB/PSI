@@ -194,7 +194,36 @@ namespace WpfApp1
         public static MyImage EncodageStegano(MyImage basique, MyImage secret)
         {
             MyImage stegano = basique;
-            //byte[] info = new byte[];
+            if(basique.Taille - 54 < secret.Taille + 16)
+            {
+                return stegano;
+            }
+            else
+            {
+                byte[] steg = { 5, 3, 5, 4, 4, 5, 4, 7 }; //se retranscrit en 'STEG' en ASCII
+                byte[] octet = new byte[8];               //8 octet représentant la taille du fichier caché
+                byte[] taille = secret.Convertir_Int_To_Endian(secret.Taille,4);
+                for(int i = 0; i< 4; i++)
+                {
+                    byte a = Convert.ToByte(Convert.ToInt32(taille[i]) % 16);
+                    octet[i + 1] = a;
+                    octet[i] = Convert.ToByte(Convert.ToInt32(taille[i] - a) / 16);
+                }
+
+                byte[] info = new byte[steg.Length + octet.Length + secret.Taille];
+                for (int i = 0; i < 4; i++)
+                {
+                    info[i] = steg[i];
+                }
+                for (int i = 4; i < 12; i++)
+                {
+                    info[i] = octet[i-4];
+                }
+                for (int i = 0; i < secret.Taille; i++)
+                {
+                    //info[i+12] = secret.[i];
+                }
+            }
             return stegano;
         }
     }
