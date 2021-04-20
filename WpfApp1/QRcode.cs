@@ -78,7 +78,8 @@ namespace WpfApp1
             //ReedSolomon
             Encoding u8 = Encoding.UTF8;
             byte[] bytesa = u8.GetBytes(this.message);
-            byte[] result = ReedSolomonAlgorithm.Encode(bytesa, 7, ErrorCorrectionCodeType.QRCode);
+            byte[] result = ReedSolomon.ReedSolomonAlgorithm.Encode(bytesa, 7, ReedSolomon.ErrorCorrectionCodeType.QRCode);
+            Convert.ToString(result, 2);
         }
     }
 }
