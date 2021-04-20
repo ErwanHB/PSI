@@ -93,7 +93,7 @@ namespace WpfApp1
             TextIntro.Visibility = Visibility.Hidden;
             BoutonImage.Visibility = Visibility.Hidden;
             BoutonQRcode.Visibility = Visibility.Hidden;
-            QRcodeEspace1.Visibility= Visibility.Visible;
+            QRcodeEspace1.Visibility = Visibility.Visible;
             ExplicationGeneration.Visibility = Visibility.Visible;
             TextBoxGenerateur.Visibility = Visibility.Visible;
             QRcodeEspace2.Visibility = Visibility.Visible;
@@ -218,9 +218,9 @@ namespace WpfApp1
                 Pixel[,] MatriceBGRnew = new Pixel[longueur, largeur];
                 Random rnd = new Random();
                 Pixel[,] MatriceBGRtemp = new Pixel[longueur, largeur];
-                for(int i=0;i<longueur;i++)
+                for (int i = 0; i < longueur; i++)
                 {
-                    for(int j=0;j<largeur;j++)
+                    for (int j = 0; j < largeur; j++)
                     {
                         MatriceBGRtemp[i, j] = new Pixel(0, 0, 0);
                         MatriceBGRnew[i, j] = new Pixel(0, 0, 0);
@@ -407,7 +407,7 @@ namespace WpfApp1
                             }
                             else
                             {
-                                for(int i=0;i< image.MatriceBGR.GetLength(0)*a;i++)
+                                for (int i = 0; i < image.MatriceBGR.GetLength(0) * a; i++)
                                 {
                                     if (j + cptLargeur < largeur)
                                     {
@@ -428,10 +428,10 @@ namespace WpfApp1
                                 {
                                     if (i + cptLongueur < longueur)
                                     {
-                                        MatriceBGRtemp[i+cptLongueur, j ] = MatriceBGRnew[i, j];
+                                        MatriceBGRtemp[i + cptLongueur, j] = MatriceBGRnew[i, j];
                                         if (i + 1 + cptLongueur < longueur)
                                         {
-                                            MatriceBGRtemp[i + 1 + cptLongueur, j ] = MatriceBGRnew[i, j];
+                                            MatriceBGRtemp[i + 1 + cptLongueur, j] = MatriceBGRnew[i, j];
                                         }
                                     }
                                 }
@@ -443,7 +443,7 @@ namespace WpfApp1
                                 {
                                     if (i + cptLongueur < longueur)
                                     {
-                                        MatriceBGRtemp[i + cptLongueur, j ] = MatriceBGRnew[i, j];
+                                        MatriceBGRtemp[i + cptLongueur, j] = MatriceBGRnew[i, j];
                                     }
                                 }
                             }
@@ -458,7 +458,7 @@ namespace WpfApp1
                 byte[] largeur2 = image.Convertir_Int_To_Endian(largeur, 4);
                 byte[] taille2 = image.Convertir_Int_To_Endian(image.Taille, 4);
                 byte[] hauteur2 = image.Convertir_Int_To_Endian(longueur, 4);
-                byte[] taille_image2 = image.Convertir_Int_To_Endian((largeur*longueur * 3), 4);
+                byte[] taille_image2 = image.Convertir_Int_To_Endian((largeur * longueur * 3), 4);
                 byte[] header = image.Header;
                 header[2] = taille2[0];
                 header[3] = taille2[1];
@@ -563,11 +563,20 @@ namespace WpfApp1
                 //methode pour les angles compris entre 0° et 90° (non inclus)
                 if (angle > 0 && angle < 90)
                 {
-                    double radian = Math.PI / 180;
-                    double largeur = matriceBGR.GetLength(0) * Math.Sin(angle*radian) + matriceBGR.GetLength(1) * Math.Cos(angle* radian);
-                    double longueur = matriceBGR.GetLength(0) * Math.Cos(angle* radian) + matriceBGR.GetLength(1) * Math.Sin(angle* radian);
-                    largeur1 = Convert.ToInt32(Math.Ceiling(largeur));
-                    longueur1 = Convert.ToInt32(Math.Ceiling(longueur));
+                    #region calculs des dimensions maximalles de la matrice et initialisation de la matrice
+                    //globalement ce que l'on fait c'est un rectangle qui contient toutes les matrices possibles apres rotation. 
+                    //on enlevera les lignes et colonnes inutiles à la fin.
+                    int max = matriceBGR.GetLength(1); //maximum des "negatifs" vers la gauche apres rotation
+                    if (matriceBGR.GetLength(0) > matriceBGR.GetLength(1))
+                    {
+                        largeur1 = matriceBGR.GetLength(0)+ max;
+                        longueur1 = matriceBGR.GetLength(0);
+                    }
+                    else
+                    {
+                        largeur1 = matriceBGR.GetLength(1)+ max;
+                        longueur1 = matriceBGR.GetLength(1);
+                    }
                     matriceBGRRotation = new Pixel[longueur1, largeur1];
                     for (int j = 0; j < largeur1; j++)
                     {
@@ -576,26 +585,26 @@ namespace WpfApp1
                             matriceBGRRotation[i, j] = new Pixel(0, 0, 0, true);
                         }
                     }
+                    #endregion
+
+                    double radian = Math.PI / 180;
                     int index1 = 0;
                     int index2 = 0;
-                    int min1 =Math.Abs(Convert.ToInt32(Math.Ceiling(Math.Cos((angle + 90)* radian) * Math.Sqrt(Math.Pow(matriceBGR.GetLength(0), 2)))));
                     for (int j = 0; j < matriceBGR.GetLength(1); j++)
                     {
                         for (int i = 0; i < matriceBGR.GetLength(0); i++)
                         {
                             if (j == 0)
                             {
-                                matriceBGRRotation[min1 + Convert.ToInt32(Math.Truncate(Math.Cos(angle* radian+90*radian) * Math.Sqrt(Math.Pow(i, 2)))), Convert.ToInt32(Math.Truncate(Math.Sin(angle* radian+90 * radian) * Math.Sqrt(Math.Pow(i, 2))))] = matriceBGR[i, j];
-                                index1 = Convert.ToInt32(Math.Truncate(Math.Sin(angle* radian) * Math.Sqrt(Math.Pow(i, 2))));
-                                index2 = Convert.ToInt32(Math.Truncate(Math.Cos(angle* radian) * Math.Sqrt(Math.Pow(i, 2))));
+                                index1 = Convert.ToInt32(Math.Truncate(Math.Cos(angle * radian + 90 * radian) * Math.Sqrt(Math.Pow(i, 2))));
+                                index2 = max + Convert.ToInt32(Math.Truncate(Math.Sin(angle * radian + 90 * radian) * Math.Sqrt(Math.Pow(i, 2))));
+                                matriceBGRRotation[Convert.ToInt32(Math.Truncate(Math.Cos(angle * radian + 90 * radian) * Math.Sqrt(Math.Pow(i, 2)))), max+ Convert.ToInt32(Math.Truncate(Math.Sin(angle * radian + 90 * radian) * Math.Sqrt(Math.Pow(i, 2))))] = matriceBGR[i, j];
                             }
                             else
                             {
-                                index1 = min1+ Convert.ToInt32(Math.Truncate(Math.Cos(angle*radian + Math.Atan(i / j)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))))-2;
-                                index2 = Convert.ToInt32(Math.Truncate(Math.Sin(angle* radian + Math.Atan(i / j)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))));
-                                matriceBGRRotation[min1+Convert.ToInt32(Math.Truncate(Math.Cos(angle* radian + Math.Atan(i / j)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))))-2, Convert.ToInt32(Math.Truncate(Math.Sin(angle* radian + Math.Atan(i / j)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))))] = matriceBGR[i, j];
-
-                            
+                                index1 = Convert.ToInt32(Math.Truncate(Math.Cos(angle * radian + Math.Atan(i / j)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2)))) - 2;
+                                index2 = max+Convert.ToInt32(Math.Truncate(Math.Sin(angle * radian + Math.Atan(i / j)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))));
+                                matriceBGRRotation[max + Convert.ToInt32(Math.Truncate(Math.Cos(angle * radian + Math.Atan(i / j)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2)))) - 2, Convert.ToInt32(Math.Truncate(Math.Sin(angle * radian + Math.Atan(i / j)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))))] = matriceBGR[i, j];
                             }
                         }
                     }
@@ -641,10 +650,46 @@ namespace WpfApp1
             Thread.Sleep(250);
             CheckBoxRotation.IsChecked = false;
         }
-        #endregion
+        private int[] Tourner(int[] A, double angle)
+        {
+            int xA = A[0];
+            int yA = A[1];
+            double x;
+            double y;
+            int[] O = new int[2] { 0, 0 };
+            angle = angle * Math.PI / 180;
+            x= xA * Math.Cos(angle) + yA * Math.Sin(angle);
+            y = -xA * Math.Sin(angle) + yA * Math.Cos(angle);
+            A[0] =Convert.ToInt32(Math.Truncate(x));
+            A[1] = Convert.ToInt32(Math.Truncate(y));
+            return (A);
+        }
+        private void RotationV2(object sender, RoutedEventArgs e)
+        {
+            int largeur1 = 0;
+            int longueur1 = 0;
+            int angle = Convert.ToInt32(coeffRotation.Text);
 
-        #region filtre
-        private void Flou(object sender, RoutedEventArgs e)
+            Pixel[,] matriceBGR = image.MatriceBGR;
+
+            double radian = Math.PI / 180;
+            double largeur = matriceBGR.GetLength(0) * Math.Sin(angle * radian) + matriceBGR.GetLength(1) * Math.Cos(angle * radian);
+            double longueur = matriceBGR.GetLength(0) * Math.Cos(angle * radian) + matriceBGR.GetLength(1) * Math.Sin(angle * radian);
+            largeur1 = Convert.ToInt32(Math.Ceiling(largeur));
+            longueur1 = Convert.ToInt32(Math.Ceiling(longueur));
+            Pixel[,] matriceBGRRotation = new Pixel[longueur1, largeur1];
+            for (int j = 0; j < matriceBGR.GetLength(1); j++)
+            {
+                for (int i = 0; i < matriceBGR.GetLength(0); i++)
+                {
+
+                }
+            }
+        }
+            #endregion
+
+            #region filtre
+            private void Flou(object sender, RoutedEventArgs e)
         {
             if (flag == true)
             {
