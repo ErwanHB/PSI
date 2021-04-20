@@ -605,8 +605,6 @@ namespace WpfApp1
                                 index1 = Convert.ToInt32(Math.Truncate(Math.Cos(angle * radian + Math.Atan(i / j)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2)))) - 2;
                                 index2 = max+Convert.ToInt32(Math.Truncate(Math.Sin(angle * radian + Math.Atan(i / j)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))));
                                 matriceBGRRotation[max + Convert.ToInt32(Math.Truncate(Math.Cos(angle * radian + Math.Atan(i / j)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2)))) - 2, Convert.ToInt32(Math.Truncate(Math.Sin(angle * radian + Math.Atan(i / j)) * Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2))))] = matriceBGR[i, j];
-
-
                             }
                         }
                     }
