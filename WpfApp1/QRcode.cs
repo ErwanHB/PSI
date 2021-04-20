@@ -9,46 +9,76 @@ namespace WpfApp1
 {
     class QRCode
     {
-        string[] alphabet = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "X", "Y", "Z", " ", "$", "%", "*", "+", "-", ".", "/", ":" };
+        public string alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVXYZ $%*+-./:";
         string message;
         int type;       //vaut 1 ou 2 en fonction du type de QRcode utilisé
        
         QRBloc[] mode = QRBloc.getTableau("0010");  //Indicateur de l'alphanumérique
         QRBloc[] nombreCaractere;      //codé sur 9 bits
-        QRBloc[] données;
+        QRBloc[] donnees;
         QRBloc[] correctionErreur;
         QRBloc[] masque = QRBloc.getTableau("111011111000100");  //chaine de bits définit dans les cahiers des charges
 
-        string Message
-        {
-            get { return this.message; }
+        string Message { 
+            get { return this.message; } 
+        }
+        int Type { 
+            get { return this.type; } 
         }
 
         public QRCode(string texte)
         {
-            string sa = "0123456789ABCDEFGHIJKLMNOPQRSTUVXYZ $% *+-./:";
-            sa.ToUpper();
-            Console.WriteLine(sa);
-
-            message = "Hello world"; //message = texte;
-            if (message.Length < 47)
+            this.message = "HELLO WORLD"; //message = texte.ToUpper;
+            if (this.message.Length < 47)
             {
-                if (message.Length <= 25)
+                if (this.message.Length <= 25)
                 {
-                    type = 1;
+                    this.type = 1;
                 }
-                else if (message.Length <= 47)
+                else if (this.message.Length <= 47)
                 {
-                    type = 2;
+                    this.type = 2;
                 }
-                string s = Convert.ToString(message.Length, 2);
-                nombreCaractere = QRBloc.getTableau(s);
+                string taille = Convert.ToString(this.message.Length, 2);
+                this.nombreCaractere = QRBloc.getTableau(taille,9);
+                Encodage();
             }
         }
 
         public void Encodage()
         {
-           
+            string[] decoupe = new string[(this.message.Length+1)/2];
+            int index = -1; //pour prendre le cas i=0 en compte
+
+            for (int i = 0; i < this.message.Length; i++)
+            {
+                if (i % 2 == 0) //découpe en string de 2 caracteres
+                {
+                    index++;
+                }
+                decoupe[index] += this.message[i];
+            }
+            
+            for (int i = 0; i < decoupe.Length; i++)
+            {
+                int poids = 0;
+                for (int j = 0; j < 2; j++)
+                {
+                    int code = alphabet.IndexOf(decoupe[i][j])+1;
+                    poids += Convert.ToInt32(code * Math.Pow(45, 1 - i));
+                }
+                QRBloc[] chaine = QRBloc.getTableau(Convert.ToString(poids,2),11);
+                if (i == 0)
+                {
+                    this.donnees = chaine;
+                }
+                this.donnees = QRBloc.somme(this.donnees, chaine);
+            }
+
+            //ReedSolomon
+            Encoding u8 = Encoding.UTF8;
+            byte[] bytesa = u8.GetBytes(this.message);
+            byte[] result = ReedSolomonAlgorithm.Encode(bytesa, 7, ErrorCorrectionCodeType.QRCode);
         }
     }
 }

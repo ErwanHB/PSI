@@ -75,5 +75,39 @@ namespace WpfApp1
             }
             return tab;
         }
+
+        public static QRBloc[] somme(QRBloc[] a, QRBloc[] b) //concatenne a et b
+        {
+            QRBloc[] somme = new QRBloc[a.Length + b.Length];
+            for(int i = 0; i < a.Length; i++)
+            {
+                somme[i] = a[i];
+            }
+            for (int i = a.Length; i < b.Length; i++)
+            {
+                somme[i] = b[i - a.Length];
+            }
+            return somme;
+        }
+        public static QRBloc[] somme(QRBloc a, QRBloc[] b) //concatenne a et b
+        {
+            QRBloc[] somme = new QRBloc[b.Length+1];
+            somme[0] = a;
+            for (int i = 1; i < b.Length; i++)
+            {
+                somme[i] = b[i-1];
+            }
+            return somme;
+        }
+        public static QRBloc[] somme(QRBloc[] a, QRBloc b) //concatenne a et b
+        {
+            QRBloc[] somme = new QRBloc[a.Length + 1];
+            somme[a.Length] = b;
+            for (int i = 0; i < a.Length; i++)
+            {
+                somme[i] = a[i];
+            }
+            return somme;
+        }
     }
 }
