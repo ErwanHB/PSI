@@ -124,6 +124,9 @@ namespace WpfApp1
         #region Traitemement d'image (TD3)
 
         #region modification
+        /// <summary>
+        /// Fonction qui fait la moyenne ddes couleurs des pixels d'une image pour passer l'image en nuance de gris
+        /// </summary>
         public void NuanceDeGris(object sender, RoutedEventArgs e)
         {
             if (this.flag == true)
