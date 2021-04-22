@@ -18,33 +18,33 @@ namespace WpfApp1
         {
             if(c == '1') 
             {
-                noir = true;
-                p = new Pixel(0, 0, 0);
+                this.noir = true;
+                this.p = new Pixel(0, 0, 0);
             }
             else if(c == '0')
             {
-                noir = false;
-                p = new Pixel(255, 255, 255);
+                this.noir = false;
+                this.p = new Pixel(255, 255, 255);
             }
         }
-        public QRBloc(int a)
+        public QRBloc(int i)
         {
-            if (a == 1)
+            if (i == 1)
             {
-                noir = true;
-                p = new Pixel(0, 0, 0);
+                this.noir = true;
+                this.p = new Pixel(0, 0, 0);
             }
-            else if (a == 0)
+            else if (i == 0)
             {
-                noir = false;
-                p = new Pixel(255, 255, 255);
+                this.noir = false;
+                this.p = new Pixel(255, 255, 255);
             }
         }
-        public QRBloc(bool b)
+        public QRBloc(bool noir)
         {
-            noir = b;
-            if (noir) p = new Pixel(0, 0, 0);
-            else p = new Pixel(255, 255, 255);
+            this.noir = noir;
+            if (this.noir) this.p = new Pixel(0, 0, 0);
+            else this.p = new Pixel(255, 255, 255);
         }
 
         public static QRBloc[] getTableau(string s, int length = 0)
@@ -59,7 +59,7 @@ namespace WpfApp1
             {
                 for (int i = 0; i < length - s.Length; i++)
                 {
-                    tab[i] = new QRBloc(false);
+                    tab[i] = new QRBloc(0);
                 }
                 for (int i = 0; i < s.Length; i++)
                 {
@@ -75,7 +75,7 @@ namespace WpfApp1
             }
             return tab;
         }
-
+        
         public static QRBloc[] somme(QRBloc[] a, QRBloc[] b) //concatenne a et b
         {
             QRBloc[] somme = new QRBloc[a.Length + b.Length];
@@ -83,7 +83,7 @@ namespace WpfApp1
             {
                 somme[i] = a[i];
             }
-            for (int i = a.Length; i < b.Length; i++)
+            for (int i = a.Length; i < somme.Length; i++)
             {
                 somme[i] = b[i - a.Length];
             }
@@ -108,6 +108,21 @@ namespace WpfApp1
                 somme[i] = a[i];
             }
             return somme;
+        }
+
+        public override string ToString()
+        {
+            if (noir) return "1";
+            else return "0";
+        }
+        public static string tabToString(QRBloc[] b)
+        {
+            string s = "";
+            foreach(QRBloc bloc in b)
+            {
+                s += bloc.ToString();
+            }
+            return s;
         }
     }
 }
