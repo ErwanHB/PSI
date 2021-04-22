@@ -122,6 +122,9 @@ namespace WpfApp1
             TextIntro.Visibility = Visibility.Hidden;
             BoutonImage.Visibility = Visibility.Hidden;
             BoutonQRcode.Visibility = Visibility.Hidden;
+
+            ImageQrcode.Visibility = Visibility.Visible;
+            passage21.Visibility = Visibility.Visible;
             QRcodeEspace1.Visibility = Visibility.Visible;
             ExplicationGeneration.Visibility = Visibility.Visible;
             TextBoxGenerateur.Visibility = Visibility.Visible;
@@ -149,6 +152,9 @@ namespace WpfApp1
             TextNouveau.Visibility = Visibility.Visible;
             TextBoxNouveau.Visibility = Visibility.Visible;
             CheckBoxNouveau.Visibility = Visibility.Visible;
+            passage12.Visibility = Visibility.Visible;
+            ImageViewer.Visibility = Visibility.Visible;
+
             TextIntro.Visibility = Visibility.Hidden;
             BoutonImage.Visibility = Visibility.Hidden;
             BoutonQRcode.Visibility = Visibility.Hidden;
@@ -191,6 +197,69 @@ namespace WpfApp1
             this.imageSteno2 = new MyImage(filename);
             this.name = Directory.GetCurrentDirectory();
             this.flagStenographie = true;
+        }
+
+        /// <summary>
+        /// Methode pourr passer du mode image au mode QR code
+        /// </summary>
+        private void PassageModeQRCode(object sender, RoutedEventArgs e)
+        {
+            BoutonOuvrir.Visibility = Visibility.Hidden;
+            ComboModif.Visibility = Visibility.Hidden;
+            TextModif.Visibility = Visibility.Hidden;
+            TextCreation.Visibility = Visibility.Hidden;
+            ComboCreation.Visibility = Visibility.Hidden;
+            ComboFiltre.Visibility = Visibility.Hidden;
+            TextFiltre.Visibility = Visibility.Hidden;
+            passage12.Visibility= Visibility.Hidden;
+            ImageViewer.Visibility = Visibility.Hidden;
+
+            ImageQrcode.Visibility = Visibility.Visible;
+            passage21.Visibility = Visibility.Visible;
+            QRcodeEspace1.Visibility = Visibility.Visible;
+            ExplicationGeneration.Visibility = Visibility.Visible;
+            TextBoxGenerateur.Visibility = Visibility.Visible;
+            QRcodeEspace2.Visibility = Visibility.Visible;
+            TexteOuvrir.Visibility = Visibility.Visible;
+            checkboxLecteur.Visibility = Visibility.Visible;
+        }
+
+        /// <summary>
+        /// Methode pourr passer du mode QR code au mode image
+        /// </summary>
+        private void PassageImage(object sender, RoutedEventArgs e)
+        {
+            BoutonOuvrir.Visibility = Visibility.Visible;
+            ComboModif.Visibility = Visibility.Visible;
+            TextModif.Visibility = Visibility.Visible;
+            TextCreation.Visibility = Visibility.Visible;
+            ComboCreation.Visibility = Visibility.Visible;
+            ComboFiltre.Visibility = Visibility.Visible;
+            TextFiltre.Visibility = Visibility.Visible;
+            TextNouveau.Visibility = Visibility.Visible;
+            TextBoxNouveau.Visibility = Visibility.Visible;
+            CheckBoxNouveau.Visibility = Visibility.Visible;
+            passage12.Visibility = Visibility.Visible;
+            ImageViewer.Visibility = Visibility.Visible;
+
+            Erreur.Visibility = Visibility.Hidden;
+            ImageQrcode.Visibility = Visibility.Hidden;
+            passage21.Visibility = Visibility.Hidden;
+            QRcodeEspace1.Visibility = Visibility.Hidden;
+            ExplicationGeneration.Visibility = Visibility.Hidden;
+            TextBoxGenerateur.Visibility = Visibility.Hidden;
+            QRcodeEspace2.Visibility = Visibility.Hidden;
+            TexteOuvrir.Visibility = Visibility.Hidden;
+            checkboxLecteur.Visibility = Visibility.Hidden;
+
+        }
+
+        /// <summary>
+        /// Methode pour enlever le message d'erreur du QR code
+        /// </summary>
+        private void ErreurQR(object sender, RoutedEventArgs e)
+        {
+            Erreur.Visibility = Visibility.Hidden;
         }
         #endregion
 
