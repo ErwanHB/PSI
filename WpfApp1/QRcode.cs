@@ -26,6 +26,7 @@ namespace WpfApp1
             get { return this.type; } 
         }
 
+        /* enleve par erwan
         public QRCode(string texte)
         {
             this.message = "HELLO WORLD"; //message = texte.ToUpper;
@@ -44,7 +45,6 @@ namespace WpfApp1
                 Encodage();
             }
         }
-
         public void Encodage()
         {
             string[] decoupe = new string[(this.message.Length+1)/2];
@@ -80,6 +80,6 @@ namespace WpfApp1
             byte[] bytesa = u8.GetBytes(this.message);
             byte[] result = ReedSolomon.ReedSolomonAlgorithm.Encode(bytesa, 7, ReedSolomon.ErrorCorrectionCodeType.QRCode);
             Convert.ToString(result, 2);
-        }
+        }*/
     }
 }

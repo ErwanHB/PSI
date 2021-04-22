@@ -8,6 +8,7 @@
         Title="MainWindow" Height="625" Width="1000">
 
     <Grid Background="Black">
+        <!--#region Initialisation de la fenetre-->
         <Grid.RowDefinitions>
             <RowDefinition Height="75*"/>
             <RowDefinition Height="250*"/>
@@ -17,10 +18,21 @@
             <ColumnDefinition Width="800*"/>
             <ColumnDefinition Width="200*"/>
         </Grid.ColumnDefinitions>
-        <!-- emplacement de l'image -->
+        <!--#endregion-->
+
+        <!--#region fenetre de base-->
+        <TextBlock x:Name="TextIntro" TextWrapping="Wrap" VerticalAlignment="Top" Height="239" Foreground="White" Margin="10,10.4,10.2,0" Grid.Row="1" FontSize="18"><Run Text="Bienvenu,&#xA;Ceci est le projet scolaire de Guillaume BOURG et Erwan-Henri BURLISSON en deuxieme année à l'ESILV.&#xA;Ce programme vise à permettre la modification et la creation d'image. Ainsi que la generation et lecture des QR code"/><Run Text="s"/><Run Text=" de generation 1 et 2. "/></TextBlock>
+        <Button x:Name="BoutonImage" Content="Ouvrir le mode modification et creation d'image :" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="ModeImage" Margin="10,193.2,0,0" Grid.Row="2" FontSize="14" HorizontalAlignment="Left" Width="320" Height="55" VerticalAlignment="Top"/>
+        <Button x:Name="BoutonQRcode" Content="Ouvrir le mode generation et lecture de QR codes :" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="ModeQRCode" Margin="0,192.2,10.2,0" Grid.Row="2" FontSize="14" HorizontalAlignment="Right" Width="320" Height="55" VerticalAlignment="Top"/>
+        <!--#endregion-->
+        
+        <!--#region emplacement de l'image-->
         <Image Margin="10,3.4,1.2,1.2" Name="ImageViewer" Grid.RowSpan="2" Grid.Row="1" Visibility="Hidden"/>
         <Image HorizontalAlignment="Left" Margin="0,2.2,0,0.2" Width="794" Name="ImageStenographie2" Grid.Row="2" Visibility="Hidden"/>
         <Image HorizontalAlignment="Left" Margin="0,3.4,0,0.8" Width="794" Name="ImageStenographie1" Grid.Row="1" Visibility="Hidden"/>
+        <!--#endregion-->
+
+        <!--#region elements de base : ouverture, enregistrement, sortie-->
         <!-- ouverture d'une image -->
         <Button x:Name="BoutonOuvrir" Content="Cliquez pour ouvrir une image : " Margin="10,10,615.2,9.6" Click="Ouvrir" BorderBrush="Red" Foreground="White" Visibility="Hidden">
             <Button.Background>
@@ -30,13 +42,20 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
+        
         <!-- sortie -->
         <Button Content="Exit" Margin="9.8,0,9.6,9.6" Click="Sortie" RenderTransformOrigin="5.64,-2.529" Foreground="White" BorderBrush="Red" Background="Black" Grid.Column="1" Height="58" VerticalAlignment="Bottom"/>
+        
         <!-- enregistration d'image -->
         <TextBox x:Name="TextBoxNouveau" TextWrapping="Wrap" Text="Nouveau" Margin="12.8,0,29.6,10.2" Grid.Column="1" Background="#FF0F0E0E" BorderBrush="Red" Foreground="White" Cursor="None" TextAlignment="Center" Grid.Row="2" Height="22" VerticalAlignment="Bottom" Visibility="Hidden"/>
         <TextBox x:Name="TextNouveau" TextWrapping="Wrap" Text="Pour enregistrer entrer un nom de fichier puis cliquez sur le bouton" Margin="5.8,0,1.6,37.2" TextAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" FontStyle="Italic" Grid.Column="1" IsEnabled="False" FontSize="11" Grid.Row="2" Height="34" VerticalAlignment="Bottom" Visibility="Hidden"/>
         <CheckBox x:Name="CheckBoxNouveau" Content="CheckBox" Grid.Column="1" Margin="173.8,0,5.6,16.2" Checked="Enregistrer" RenderTransformOrigin="0.448,0.505" Grid.Row="2" Height="14" VerticalAlignment="Bottom" Visibility="Hidden"/>
-        <!-- Modification d'image -->
+        <!--#endregion-->
+
+        <!--#region Mode Imgae-->
+
+        <!--#region Traitemement d'image-->
+        <!--#region modification-->
         <ComboBox x:Name="ComboModif" VerticalAlignment="Top" Margin="8.8,3.4,0.6,0" BorderBrush="Black" Foreground="Black" Background="Black" Height="22" Grid.Column="1" Grid.Row="1" Visibility="Hidden">
             <ComboBox.OpacityMask>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -63,7 +82,10 @@
             <CheckBox x:Name="CheckBoxRotation" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Checked="Rotation" Width="19" Height="15" RenderTransformOrigin="0.448,0.505"/>
         </ComboBox>
         <TextBlock x:Name="TextModif" TextWrapping="Wrap" Text="Différentes modifications :" VerticalAlignment="Top" Height="22" Margin="20.8,3.4,32.6,0" Grid.Column="1" IsEnabled="False" Grid.Row="1" Focusable="True" Visibility="Collapsed"/>
-        <!-- filtre a appliquer à une image -->
+        <!--#endregion-->
+        
+        <!--#region filtre-->
+        <!-- Menu deroulant -->
         <ComboBox x:Name="ComboFiltre" VerticalAlignment="Top" Margin="8.8,30.4,0.6,0" Grid.Column="1" BorderBrush="Black" Foreground="Black" Background="Black" Height="22" Grid.Row="1" Visibility="Hidden">
             <ComboBox.OpacityMask>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -71,16 +93,30 @@
                     <GradientStop Color="Black" Offset="1"/>
                 </LinearGradientBrush>
             </ComboBox.OpacityMask>
+            
+            <!-- Mthode flou -->
             <Button Content="Flou :" Width="110" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="Flou"/>
             <ProgressBar HorizontalAlignment="Left" Height="3" VerticalAlignment="Top" Width="181" Background="Red" BorderBrush="{x:Null}" Foreground="{x:Null}" IsEnabled="False"/>
+            
+            <!-- Methode renfort des bords -->
             <Button Content="Renfort des bords :" Width="110" Background="Black" BorderBrush="Red" Foreground="White" Click="RenfortBord"/>
             <ProgressBar HorizontalAlignment="Left" Height="3" VerticalAlignment="Top" Width="181" Background="Red" BorderBrush="{x:Null}" Foreground="{x:Null}" IsEnabled="False"/>
+            
+            <!-- Methode pour faire ressortir les contours -->
             <Button Content="Faire ressortir&#xD;&#xA; les contours :" Width="110" Height="46" BorderBrush="#FFFB0A0A" Foreground="#FFF9F8F8" Background="Black" Click="RessortirContour"/>
             <ProgressBar HorizontalAlignment="Left" Height="3" VerticalAlignment="Top" Width="181" Background="Red" BorderBrush="{x:Null}" Foreground="{x:Null}" IsEnabled="False"/>
+            
+            <!-- Methode pour le repoussage -->
             <Button Content="Repoussage" Width="110" Foreground="#FFFDFDFD" BorderBrush="#FFFB0202" Background="Black" Click="Repoussage"/>
+            
         </ComboBox>
         <TextBlock x:Name="TextFiltre" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Margin="22.8,30.4,83.6,0" Grid.Column="1" IsEnabled="False" Focusable="True" Grid.Row="1" Visibility="Hidden"><Run Text="Diff"/><Run Text="é"/><Run Text="rents filt"/><Run Text="res"/><Run Text=" :"/></TextBlock>
-        <!-- Creation de nouvelles images -->
+        <!--#endregion-->
+        <!--#endregion-->
+
+        <!--#region Creation d'image -->
+        <TextBlock x:Name="TextCreation" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Margin="20.8,57.4,73.6,0" Grid.Column="1" IsEnabled="False" RenderTransformOrigin="0.699,0.534" Text="Creation d'image :" IsHitTestVisible="False" Focusable="True" Grid.Row="1" Visibility="Hidden"/>
+        <!-- Menu deroulant -->
         <ComboBox x:Name="ComboCreation" VerticalAlignment="Top" Margin="8.8,57.4,0.6,0" Grid.Column="1" BorderBrush="Black" Foreground="Black" Background="Black" Height="22" Grid.Row="1" Visibility="Hidden">
             <ComboBox.OpacityMask>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -88,27 +124,31 @@
                     <GradientStop Color="Black" Offset="1"/>
                 </LinearGradientBrush>
             </ComboBox.OpacityMask>
+            
+            <!-- Methode Histogramme -->
             <Button Content="Histogramme :" Width="110" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="Histo"/>
             <ProgressBar HorizontalAlignment="Left" Height="3" VerticalAlignment="Top" Width="181" Background="Red" BorderBrush="{x:Null}" Foreground="{x:Null}" IsEnabled="False"/>
+
+            <!-- Methode Fractale -->
             <Button Content="Fractale :" Width="110" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="Fractale"/>
             <ProgressBar HorizontalAlignment="Left" Height="3" VerticalAlignment="Top" Width="181" Background="Red" BorderBrush="{x:Null}" Foreground="{x:Null}" IsEnabled="False"/>
+
+            <!-- Methode CheckBoxStenographie -->
             <TextBox HorizontalAlignment="Left" Height="71" TextWrapping="Wrap" Text="Pour la stenographie cliquez sur le bouton ouvrir pour choisir une premiere image à cacher dans une deuxieme. Puis cliquer sur la case pour lancer le programme." VerticalAlignment="Top" Width="181" TextAlignment="Center" Background="Black" BorderBrush="Black" Foreground="White" FontStyle="Italic" Grid.Column="1" IsEnabled="False" FontSize="10" CaretBrush="Black" SelectionBrush="#FFFF0D02"/>
             <Button Content="Ouvrir" Width="47" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="StenographieOuvrir"/>
             <CheckBox x:Name="CheckBoxStenographie" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Checked="Stenographie" Width="19" Height="15" RenderTransformOrigin="0.448,0.505"/>
         </ComboBox>
-        <!-- enregistration d'image -->
-        <TextBlock x:Name="TextCreation" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Margin="20.8,57.4,73.6,0" Grid.Column="1" IsEnabled="False" RenderTransformOrigin="0.699,0.534" Text="Creation d'image :" IsHitTestVisible="False" Focusable="True" Grid.Row="1" Visibility="Hidden"/>
-        <!-- fenetre de base-->
-        <TextBlock x:Name="TextIntro" TextWrapping="Wrap" VerticalAlignment="Top" Height="239" Foreground="White" Margin="10,10.4,10.2,0" Grid.Row="1" FontSize="18"><Run Text="Bienvenu,&#xA;Ceci est le projet scolaire de Guillaume BOURG et Erwan-Henri BURLISSON en deuxieme année à l'ESILV.&#xA;Ce programme vise à permettre la modification et la creation d'image. Ainsi que la generation et lecture des QR code"/><Run Text="s"/><Run Text=" de generation 1 et 2. "/></TextBlock>
-        <Button x:Name="BoutonImage" Content="Ouvrir le mode modification et creation d'image :" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="ModeImage" Margin="10,193.2,0,0" Grid.Row="2" FontSize="14" HorizontalAlignment="Left" Width="320" Height="55" VerticalAlignment="Top"/>
-        <Button x:Name="BoutonQRcode" Content="Ouvrir le mode generation et lecture de QR codes :" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="ModeQRCode" Margin="0,192.2,10.2,0" Grid.Row="2" FontSize="14" HorizontalAlignment="Right" Width="320" Height="55" VerticalAlignment="Top"/>
-        <!-- Qrcode-->
+        <!--#endregion-->
+        <!--#endregion-->
+
+        <!--#region Qr code-->
         <TextBlock x:Name="QRcodeEspace1" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="0,9.4,5.6,0" Grid.Row="1" Height="21" Width="187" Foreground="#FFFAFAFA" FontSize="14" Visibility="Hidden"><Run Text="Generation de Q"/><Run Text="R"/><Run Text=" code :"/></TextBlock>
         <TextBlock x:Name="QRcodeEspace2" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="12.8,10.2,0,0" Grid.Row="2" Height="22" Foreground="#FFFAFAFA" FontSize="14" HorizontalAlignment="Left" Width="176" Visibility="Hidden"><Run Text="Lecture de Q"/><Run Text="R"/><Run Text=" code :"/></TextBlock>
         <TextBox x:Name="TexteOuvrir" Height="36" TextWrapping="Wrap" Text="Cliquez pour choisir un QR code de génération 1 ou 2 à lire :" VerticalAlignment="Top" Grid.Column="1" Margin="8.8,37.2,9.6,0" Grid.Row="2" Background="Black" BorderBrush="#FFFC1200" Foreground="White" FontSize="10" IsEnabled="False" Visibility="Hidden"/>
         <TextBlock x:Name="ExplicationGeneration" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="8.8,35.4,3.6,0" Grid.Row="1" Foreground="#FFFFFDFD" FontStyle="Italic" Height="118" Visibility="Hidden"><Run Text="Nous allons generer un QR code a partir du tex"/><Run Text="t"/><Run Text="e"/><Run Text=" que vous rentrerez en dessous. "/><Run Text="E"/><Run Text="n f"/><Run Text="o"/><Run Text="nction du nombre de caractere cela generera un QR code de generation 1 (de x à y caracteres)  ou de generation 2 (de x à y caracteres)."/></TextBlock>
         <TextBox x:Name="TextBoxGenerateur" Height="91" TextWrapping="Wrap" Text="Texte..." VerticalAlignment="Top" Grid.Column="1" Margin="5.8,158.4,9.6,0" Grid.Row="1" Background="Black" BorderBrush="#FFFC1200" Foreground="White" FontSize="10" Visibility="Hidden"/>
         <CheckBox x:Name="checkboxLecteur"  VerticalAlignment="Top" Margin="173.8,58.2,11.6,0" Grid.Column="1" Grid.Row="2" Visibility="Hidden"/>
+        <!--#endregion-->
 
     </Grid>
 </Window>

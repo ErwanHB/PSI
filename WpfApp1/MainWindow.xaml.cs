@@ -26,17 +26,29 @@ namespace WpfApp1
     public partial class MainWindow : Window
     {
         #region variable
-        OpenFileDialog dlg;
+        //variable necessaire pour l'ouverture des images avec wpf
+        OpenFileDialog dlg; 
         BitmapImage bitmap;
+
+        //variable qui stocke notre variable
         MyImage image;
+
+        //compteur qui stocke le nombre de modification que l'on a effectuée sur l'image 
         int compteurDeModification;
+
+        //variable qui garde en memoire si on a ouvert une image ou non
         bool flag = false;
+
+        //nom de l'endroit d'ou vient notre image
         string name;
 
+        //variable necessaire pour l'ouverture des deux images en stenographie et pour le stockage de la methode
         BitmapImage steno1;
         MyImage imageSteno1;
         BitmapImage steno2;
         MyImage imageSteno2;
+
+        //variable cardant en memoire si on a bien ouvert deux images
         bool flagStenographie = false;
         #endregion
 
@@ -47,6 +59,10 @@ namespace WpfApp1
             dlg.Filter = "Image files (*.bmp)|*.bmp";
         }
 
+        #region elements de base : ouverture, enregistrement, sortie
+        /// <summary>
+        /// Methode pour ouvrir une nouvelle image a modifier
+        /// </summary>
         private void Ouvrir(object sender, RoutedEventArgs e)
         {
             ImageViewer.Visibility = Visibility.Visible;
@@ -68,6 +84,10 @@ namespace WpfApp1
             this.flag = true;
             this.name = Directory.GetCurrentDirectory();
         }
+
+        /// <summary>
+        /// Methode pour sortir du logiciel et detruire la majoeité des fichiers temporaires que l'on a crée
+        /// </summary>
         public void Sortie(object sender, RoutedEventArgs e)
         {
             // Close this window
@@ -77,6 +97,10 @@ namespace WpfApp1
                 File.Delete(name + "\\temp" + i + ".bmp");
             }
         }
+
+        /// <summary>
+        /// Methode pour enregistrer notre nouvelle image
+        /// </summary>
         private void Enregistrer(object sender, RoutedEventArgs e)
         {
             if (this.flag == true)
@@ -86,8 +110,13 @@ namespace WpfApp1
             Thread.Sleep(250);
             CheckBoxNouveau.IsChecked = false;
         }
+        #endregion
 
         #region gestion de la fenetre
+        /// <summary>
+        /// methode pour passer au mode QR code du logiciel
+        /// </summary>
+        /// on passe en visible les elements necessaire pour l'utilisation du mode QR code du logiciel et on cache les autres
         private void ModeQRCode(object sender, RoutedEventArgs e)
         {
             TextIntro.Visibility = Visibility.Hidden;
@@ -103,6 +132,11 @@ namespace WpfApp1
             TextBoxNouveau.Visibility = Visibility.Visible;
             CheckBoxNouveau.Visibility = Visibility.Visible;//a changer car pas de registre ou enregistrer
         }
+
+        /// <summary>
+        /// methode pour passer au mode creation et transformation d'image du logiciel
+        /// </summary>
+        /// on passe en visible les elements necessaire pour l'utilisation du mode creation et transformation d'image du logiciel et on cache les autres
         private void ModeImage(object sender, RoutedEventArgs e)
         {
             BoutonOuvrir.Visibility = Visibility.Visible;
@@ -119,13 +153,52 @@ namespace WpfApp1
             BoutonImage.Visibility = Visibility.Hidden;
             BoutonQRcode.Visibility = Visibility.Hidden;
         }
+
+        /// <summary>
+        /// Methode pour passer du traitement d'image à la stenographie
+        /// </summary>
+        private void StenographieOuvrir(object sender, RoutedEventArgs e)
+        {
+            this.flag = false;
+            ImageViewer.Visibility = Visibility.Hidden;
+            ImageStenographie1.Visibility = Visibility.Visible;
+            ImageStenographie2.Visibility = Visibility.Visible;
+            string filename = null;
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                filename = dlg.FileName;
+
+            }
+            this.steno1 = new BitmapImage();
+            this.steno1.BeginInit();
+            this.steno1.UriSource = new Uri(filename);
+            this.steno1.EndInit();
+            ImageStenographie1.Source = this.steno1;
+            this.imageSteno1 = new MyImage(filename);
+            this.name = Directory.GetCurrentDirectory();
+
+            filename = null;
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                filename = dlg.FileName;
+
+            }
+            this.steno2 = new BitmapImage();
+            this.steno2.BeginInit();
+            this.steno2.UriSource = new Uri(filename);
+            this.steno2.EndInit();
+            ImageStenographie2.Source = this.steno2;
+            this.imageSteno2 = new MyImage(filename);
+            this.name = Directory.GetCurrentDirectory();
+            this.flagStenographie = true;
+        }
         #endregion
 
-        #region Traitemement d'image (TD3)
+        #region Traitemement d'image
 
         #region modification
         /// <summary>
-        /// Fonction qui fait la moyenne ddes couleurs des pixels d'une image pour passer l'image en nuance de gris
+        /// Fonction qui fait la moyenne des couleurs des pixels d'une image pour passer l'image en nuance de gris
         /// </summary>
         public void NuanceDeGris(object sender, RoutedEventArgs e)
         {
@@ -144,6 +217,7 @@ namespace WpfApp1
                         moyenne = 0;
                     }
                 }
+                #region enregistrement, apparition de la nouvelle image 
                 image.MatriceBGR = matriceBGR;
                 image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
                 this.bitmap = new BitmapImage();
@@ -152,8 +226,14 @@ namespace WpfApp1
                 this.bitmap.EndInit();
                 ImageViewer.Source = this.bitmap;
                 compteurDeModification++;
+                #endregion
             }
         }
+
+        /// <summary>
+        /// Methode pour passer l'image en Noir et Blanc
+        /// </summary>
+        /// La fonction fait la moyenne des valeurs RGB des pixels puis la compare à la valeur seuil, 128 par defaut, pour voir si c'est noir ou blanc
         public void NoirEtBlanc(object sender, RoutedEventArgs e)
         {
             if (this.flag == true)
@@ -173,6 +253,7 @@ namespace WpfApp1
                         matriceBGR[i, j].B = moyenne;
                     }
                 }
+                #region enregistrement, apparition de la nouvelle image 
                 image.MatriceBGR = matriceBGR;
 
                 image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
@@ -182,10 +263,15 @@ namespace WpfApp1
                 this.bitmap.EndInit();
                 ImageViewer.Source = this.bitmap;
                 compteurDeModification++;
+                #endregion
             }
             Thread.Sleep(250);
             CheckBoxNoir.IsChecked = false;
         }
+
+        /// <summary>
+        /// Fonction qui permet d'appliquer un effet mirroir à notre image
+        /// </summary>
         public void Miroir(object sender, RoutedEventArgs e)
         {
             if (this.flag == true)
@@ -199,6 +285,7 @@ namespace WpfApp1
                         matriceBGRMiroir[i, j] = matriceBGR[i, matriceBGR.GetLength(1) - 1 - j];
                     }
                 }
+                #region enregistrement, apparition de la nouvelle image 
                 image.MatriceBGR = matriceBGRMiroir;
                 image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
                 this.bitmap = new BitmapImage();
@@ -207,8 +294,13 @@ namespace WpfApp1
                 this.bitmap.EndInit();
                 ImageViewer.Source = this.bitmap;
                 compteurDeModification++;
+                #endregion
             }
         }
+
+        /// <summary>
+        /// Fonction qui permet d'agrancir ou retrecir notre image
+        /// </summary>
         private void Agrandir(object sender, RoutedEventArgs e)
         {
             if (this.flag == true)
@@ -454,6 +546,8 @@ namespace WpfApp1
                         #endregion
                     }
                 }
+
+                #region enregistrement, apparition de la nouvelle image 
                 image.MatriceBGR = MatriceBGRtemp;
                 image.Taille = image.Offset + longueur * largeur * 3;
                 image.Largeur = largeur;
@@ -488,11 +582,16 @@ namespace WpfApp1
                 this.bitmap.EndInit();
                 ImageViewer.Source = this.bitmap;
                 compteurDeModification++;
+                #endregion
 
             }
             Thread.Sleep(250);
             CheckBoxAgrandir.IsChecked = false;
         }
+
+        /// <summary>
+        /// Fonction qui permet d'appliquer une rotation à notre image 
+        /// </summary>
         private void Rotation(object sender, RoutedEventArgs e)
         {
             if (flag == true)
@@ -613,6 +712,7 @@ namespace WpfApp1
                     }
                 }
 
+                #region enregistrement, apparition de la nouvelle image 
                 image.Taille = image.Offset + longueur1 * largeur1 * 3;
                 image.Largeur = largeur1;
                 image.Hauteur = longueur1;
@@ -648,11 +748,13 @@ namespace WpfApp1
                 this.bitmap.EndInit();
                 ImageViewer.Source = this.bitmap;
                 compteurDeModification++;
+                #endregion
 
             }
             Thread.Sleep(250);
             CheckBoxRotation.IsChecked = false;
         }
+        /*
         private int[] Tourner(int[] A, double angle)
         {
             int xA = A[0];
@@ -689,6 +791,7 @@ namespace WpfApp1
                 }
             }
         }
+        */
             #endregion
 
             #region filtre
@@ -775,7 +878,7 @@ namespace WpfApp1
         private void Fractale(object sender, RoutedEventArgs e)
         {
             //Enlevé quand QRcode fini
-            QRCode q = new QRCode("a");
+            // enleve par erwan QRCode q = new QRCode("a");
 
             ImageViewer.Visibility = Visibility.Visible;
             ImageStenographie1.Visibility = Visibility.Hidden;
@@ -794,41 +897,6 @@ namespace WpfApp1
 
         }
 
-        private void StenographieOuvrir(object sender, RoutedEventArgs e)
-        {
-            this.flag = false;
-            ImageViewer.Visibility = Visibility.Hidden;
-            ImageStenographie1.Visibility = Visibility.Visible;
-            ImageStenographie2.Visibility = Visibility.Visible;
-            string filename = null;
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                filename = dlg.FileName;
-
-            }
-            this.steno1 = new BitmapImage();
-            this.steno1.BeginInit();
-            this.steno1.UriSource = new Uri(filename);
-            this.steno1.EndInit();
-            ImageStenographie1.Source = this.steno1;
-            this.imageSteno1 = new MyImage(filename);
-            this.name = Directory.GetCurrentDirectory();
-
-            filename = null;
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                filename = dlg.FileName;
-
-            }
-            this.steno2 = new BitmapImage();
-            this.steno2.BeginInit();
-            this.steno2.UriSource = new Uri(filename);
-            this.steno2.EndInit();
-            ImageStenographie2.Source = this.steno2;
-            this.imageSteno2 = new MyImage(filename);
-            this.name = Directory.GetCurrentDirectory();
-            this.flagStenographie = true;
-        }
         private void Stenographie(object sender, RoutedEventArgs e)
         {
             if (this.flagStenographie == true)
