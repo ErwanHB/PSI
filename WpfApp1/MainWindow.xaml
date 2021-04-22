@@ -22,10 +22,9 @@
 
         <!--#region fenetre de base-->
         <!-- logo -->
-        <Image Margin="242,0,0,2" Source="logo_small.png" Stretch="Fill" HorizontalAlignment="Left" Width="340" Height="74" VerticalAlignment="Bottom" />
+        <Image Margin="242,0,0,2" Source="logo_small.png" Stretch="Fill" HorizontalAlignment="Left" Width="340" Height="74" VerticalAlignment="Bottom"  />
         <!-- page d'accueil -->
         <TextBlock x:Name="TextIntro" TextWrapping="Wrap" VerticalAlignment="Top" Height="239" Foreground="White" Margin="10,10.4,10.2,0" Grid.Row="1" FontSize="18"><Run Text="Bienvenu"/><Run Text=" sur P"/><Run Text="hotocol"/><Run Text="e"/><Run Text=",&#xA;Ceci est le projet scolaire de Guillaume BOURG et Erwan-Henri BURLISSON en deuxieme année à l'ESILV.&#xA;Ce programme vise à permettre la modification et la creation d'image. Ainsi que la generation et lecture des QR code"/><Run Text="s"/><Run Text=" de generation 1 et 2. "/><InlineUIContainer>
-                <Image Height="142" Source="logo.bmp" Stretch="Fill" Width="500"/>
             </InlineUIContainer></TextBlock>
         <Button x:Name="BoutonImage" Content="Ouvrir le mode modification et creation d'image :" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="ModeImage" Margin="10,193.2,0,0" Grid.Row="2" FontSize="14" HorizontalAlignment="Left" Width="320" Height="55" VerticalAlignment="Top"/>
         <Button x:Name="BoutonQRcode" Content="Ouvrir le mode generation et lecture de QR codes :" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="ModeQRCode" Margin="0,192.2,10.2,0" Grid.Row="2" FontSize="14" HorizontalAlignment="Right" Width="320" Height="55" VerticalAlignment="Top"/>
