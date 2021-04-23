@@ -60,7 +60,7 @@
     <Compile Include="GenericGF.cs" />
     <Compile Include="GenericGFPoly.cs" />
     <Compile Include="QRBloc.cs" />
-    <Compile Include="QRcode.cs" />
+    <Compile Include="QRCode.cs" />
     <Compile Include="ReedSolomonAlgorithm.cs" />
     <Compile Include="ReedSolomonDecoder.cs" />
     <Compile Include="ReedSolomonEncoder.cs" />

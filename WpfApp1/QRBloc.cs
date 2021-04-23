@@ -11,8 +11,8 @@ namespace WpfApp1
         bool noir; //false = blanc, true = noir
         Pixel p;
         
-        bool Noir { get { return this.noir; } }
-        Pixel P { get { return this.p; } }
+        public bool Noir { get { return this.noir; } }
+        public Pixel P { get { return this.p; } }
 
         public QRBloc(char c)
         {
@@ -112,7 +112,7 @@ namespace WpfApp1
 
         public override string ToString()
         {
-            if (noir) return "1";
+            if (this.noir) return "1";
             else return "0";
         }
         public static string tabToString(QRBloc[] b)

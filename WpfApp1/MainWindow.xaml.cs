@@ -947,7 +947,7 @@ namespace WpfApp1
         private void Fractale(object sender, RoutedEventArgs e)
         {
             //Enlevé quand QRcode fini
-            // enleve par erwan QRCode q = new QRCode("a");
+            QRCode q = new QRCode("a",10);
 
             ImageViewer.Visibility = Visibility.Visible;
             ImageStenographie1.Visibility = Visibility.Hidden;
