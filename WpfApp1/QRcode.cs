@@ -27,21 +27,22 @@ namespace WpfApp1
 
         QRBloc[,] qrcode; //matrice representant tout le qrcode
 
-        string Message { 
+        public string Message { 
             get { return this.message; } 
         }
-        int Type { 
+        public int Type { 
             get { return this.type; } 
         }
+        public bool Erreur { get { return this.erreur; } }
 
         /// <summary>
         /// Cree un QRcode à partir d'un message de l'utilisateur
         /// </summary>
         /// <param name="texte">message à encoder dans le QRcode</param>
         /// <param name="pixelParBloc">lors de la creation de l'image, représente le taille d'un bloc (un bit de données) en pixel</param>
-        public QRCode(string texte,int pixelParBloc = 2)
+        public QRCode(string texte,int pixelParBloc = 10)
         {
-            this.message = "HELLO WORLD"; //message = texte.ToUpper;
+            this.message = texte.ToUpper();
             this.pixelParBloc = pixelParBloc;
             this.chaine = mode;
 
