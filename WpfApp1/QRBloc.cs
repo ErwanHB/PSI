@@ -10,9 +10,11 @@ namespace WpfApp1
     {
         bool noir; //false = blanc, true = noir
         Pixel p;
+        int valeur;
         
         public bool Noir { get { return this.noir; } }
         public Pixel P { get { return this.p; } }
+        public int Valeur { get { return this.valeur; } }
 
         public QRBloc(char c)
         {
@@ -20,15 +22,18 @@ namespace WpfApp1
             {
                 this.noir = true;
                 this.p = new Pixel(0, 0, 0);
+                this.valeur = 1;
             }
             else if(c == '0')
             {
                 this.noir = false;
                 this.p = new Pixel(255, 255, 255);
+                this.valeur = 0;
             }
         }
         public QRBloc(int i)
         {
+            this.valeur = i;
             if (i == 1)
             {
                 this.noir = true;
@@ -43,8 +48,31 @@ namespace WpfApp1
         public QRBloc(bool noir)
         {
             this.noir = noir;
-            if (this.noir) this.p = new Pixel(0, 0, 0);
-            else this.p = new Pixel(255, 255, 255);
+            if (this.noir)
+            {
+                this.p = new Pixel(0, 0, 0);
+                this.valeur = 1;
+            }
+            else
+            {
+                this.p = new Pixel(255, 255, 255);
+                this.valeur = 0;
+            }
+        }
+        public QRBloc(Pixel p)
+        {
+            if(p.R == 0 && p.V == 0 && p.B == 0)
+            {
+                this.noir = true;
+                this.p = p;
+                this.valeur = 1;
+            }
+            if (p.R == 255 && p.V == 255 && p.B == 255)
+            {
+                this.noir = false;
+                this.p = p;
+                this.valeur = 0;
+            }
         }
 
         public static QRBloc[] getTableau(string s, int length = 0)

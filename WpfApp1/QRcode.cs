@@ -14,7 +14,7 @@ namespace WpfApp1
         string message;
         int type;       //vaut 1 ou 2 en fonction du type de QRcode utilisé
         int pixelParBloc;
-        int taille; //taille du qrcode en nombre de blocs
+        int taille;     //taille du qrcode en nombre de blocs
        
         QRBloc[] mode = QRBloc.getTableau("0010");  //Indicateur de l'alphanumérique
         QRBloc[] nombreCaractere;      //codé sur 9 bits
@@ -34,10 +34,15 @@ namespace WpfApp1
             get { return this.type; } 
         }
 
+        /// <summary>
+        /// Cree un QRcode à partir d'un message de l'utilisateur
+        /// </summary>
+        /// <param name="texte">message à encoder dans le QRcode</param>
+        /// <param name="pixelParBloc">lors de la creation de l'image, représente le taille d'un bloc (un bit de données) en pixel</param>
         public QRCode(string texte,int pixelParBloc = 2)
         {
-            this.pixelParBloc = pixelParBloc;
             this.message = "HELLO WORLD"; //message = texte.ToUpper;
+            this.pixelParBloc = pixelParBloc;
             this.chaine = mode;
 
             if (this.message.Length < 47) //taille max du message
@@ -58,7 +63,7 @@ namespace WpfApp1
                     else if (this.message.Length <= 47) 
                     {
                         this.type = 2;
-                        this.taille = 24;
+                        this.taille = 25;
                         this.EC = new QRBloc[10*8]; //EC fait 10 octet donc 10*8 bits
                     }
                     string taille = Convert.ToString(this.message.Length, 2); //transforme en binaire la taille
@@ -70,7 +75,6 @@ namespace WpfApp1
 
                     this.chaine = QRBloc.somme(this.chaine, this.EC);
 
-                    creationQRCode();
                 }
                 else
                 {
@@ -81,6 +85,125 @@ namespace WpfApp1
             {
                 this.erreur = true;
             }
+        }
+        
+        /// <summary>
+        /// Crée un instance QRCode à partir d'une image,
+        /// </summary>
+        /// <param name="image">image contenant uniquement le qrcode qui sera décodé pour récupere le qrcode</param>
+        public QRCode(MyImage image)
+        {
+            #region verif de la taille de l'image
+            if (image.Hauteur != image.Largeur || image.Hauteur < 21)
+            {
+                this.erreur = true;
+                return;
+            }
+            if(image.Hauteur % 21 != 0 && image.Hauteur % 25 != 0)
+            {
+                this.erreur = true;
+                return;
+            }
+            else if (image.Hauteur % 21 == 0 && image.Hauteur % 25 == 0)
+            {
+                //Determination de la largeur d'un finder patern, en pixel
+                //pour trouver le nombre de PixelParBloc
+                int index = 0;
+                int largeurFinderPattern = 0;
+                while (image.MatriceBGR[0, index].R == 0)
+                {
+                    largeurFinderPattern++;
+                    index++;
+                }
+
+                this.pixelParBloc = largeurFinderPattern / 7;
+                if(image.Largeur/this.pixelParBloc == 21)
+                {
+                    this.type = 1;
+                }
+                else
+                {
+                    this.type = 2;
+                }
+            }
+            else
+            {
+                if (image.Hauteur % 21 == 0)
+                {
+                    this.type = 1;
+                }
+                else if (image.Hauteur % 25 == 0)
+                {
+                    this.type = 2;
+                }
+            }
+            if (this.type == 1)
+            {
+                this.taille = 21;
+                this.pixelParBloc = image.Hauteur / 21;
+                this.chaine = new QRBloc[208];
+                this.nombreCaractere = new QRBloc[9];
+                this.donnees = new QRBloc[152];
+                this.EC = new QRBloc[7 * 8];
+            }
+            else if (this.type == 2)
+            {
+                this.taille = 25;
+                this.pixelParBloc = image.Hauteur / 25;
+                this.chaine = new QRBloc[359];
+                this.nombreCaractere = new QRBloc[9];
+                this.donnees = new QRBloc[272];
+                this.EC = new QRBloc[10 * 8];
+            }
+            #endregion
+            # region lecture des bits à partir de l'image
+            this.qrcode = new QRBloc[this.taille, this.taille];
+            int ligne = image.Hauteur - 1;
+            int colonne = 0;
+            for (int i = 0; i < this.taille; i++)
+            {
+                for (int j = 0; j < this.taille; j++)
+                {
+                    this.qrcode[i, j] = new QRBloc(image.MatriceBGR[ligne, colonne]);
+                    colonne += this.pixelParBloc;
+                }
+                ligne -= this.pixelParBloc;
+                colonne = 0;
+            }
+            #endregion
+            #region verification qu'on a un qr code
+            bool verif;
+            int len = this.taille;
+
+            //Coin haut gauche
+            verif = iscarree(-1, -1, 9, 0, true);
+            verif = iscarree(0, 0, 7, 1);
+            verif = iscarree(1, 1, 5, 0);
+            verif = iscarree(2, 2, 3, 1);
+            verif = this.qrcode[3, 3].Noir;
+
+            //coin haut droite
+            verif = iscarree(-1, len - 8, 9, 0, true);
+            verif = iscarree(0, len - 7, 7, 1);
+            verif = iscarree(1, len - 6, 5, 0);
+            verif = iscarree(2, len - 5, 3, 1);
+            verif = this.qrcode[3, len - 4].Noir;
+
+            //coin bas gauche
+            verif = iscarree(len - 8, -1, 9, 0, true);
+            verif = iscarree(len - 7, 0, 7, 1);
+            verif = iscarree(len - 6, 1, 5, 0);
+            verif = iscarree(len - 5, 2, 3, 1);
+            verif = this.qrcode[len - 4, 3].Noir;
+
+            if (!verif)
+            {
+                this.erreur = true;
+                return;
+            }
+            #endregion
+            decodage();
+            Console.WriteLine(this.message);
         }
 
         /// <summary>
@@ -233,7 +356,7 @@ namespace WpfApp1
         /// ATTENTION ne prend pas en compte le format BMP
         /// crée la matrice avec le 0,0 en haut à gauche
         /// </summary>
-        public void creationQRCode()
+        public MyImage creationQRCode()
         {
             this.qrcode = new QRBloc[this.taille, this.taille];
 
@@ -269,7 +392,7 @@ namespace WpfApp1
                 //alignement parten tjr à la meme place pour le type 2
                 carree(16, 16, 5, 1);
                 carree(17, 17, 3, 0);
-                this.qrcode[18, 18] = new QRBloc(0);
+                this.qrcode[18, 18] = new QRBloc(1);
             }
 
             //timing patterns
@@ -283,7 +406,7 @@ namespace WpfApp1
             }
 
             //Dark module
-            this.qrcode[(4 * this.type) + 9, 8] = new QRBloc(1);
+            this.qrcode[this.taille-8, 8] = new QRBloc(1);
 
             #region ajout du masque
             //les 2 lignes à coté des paterns bas gauche et haut droit
@@ -312,7 +435,7 @@ namespace WpfApp1
             int x = this.taille-1;
             int index = 0;
             int sens = -1; //vaut -1 ou 1 pour indiquer le sens d'écriture (haut vers bas ou inverse)
-            while (index < this.chaine.Length)
+            while (index < this.chaine.Length+7*(this.type-1))
             {
                 for (int i = 0; i < 2; i++)
                 {
@@ -320,9 +443,18 @@ namespace WpfApp1
                     {
                         //aplication du masque 0, qui correspond à une matrice cadrillé
                         //on applique un XOR entre la valeur de la matrice masque et notre matrice
-                        bool xor = this.chaine[index].Noir ^ ((y + x - i)%2 == 0);
-                        this.qrcode[y, x - i] = new QRBloc(xor);
-
+                        if (index >= this.chaine.Length) //Une qrcode de version à 359 case de données disponibles
+                                                         // Mais on a 352 bits de données à rentrer donc on rempli la fin de zéros (ca s'appelle redondance)
+                                                         // auquel on applique le masque
+                        {
+                            bool xor = false ^ ((y + x - i) % 2 == 0);
+                            this.qrcode[y, x - i] = new QRBloc(xor);
+                        }
+                        else
+                        {
+                            bool xor = this.chaine[index].Noir ^ ((y + x - i) % 2 == 0);
+                            this.qrcode[y, x - i] = new QRBloc(xor);
+                        }
                         index++;
                     }
                 }
@@ -407,7 +539,7 @@ namespace WpfApp1
             #endregion
 
             image = new MyImage(header,matriceBGR);
-            image.From_Image_To_File("qrcode.bmp");
+            return image;
         }
 
         /// <summary>
@@ -418,11 +550,13 @@ namespace WpfApp1
         /// <param name="taille">taille en QRBloc du carrée</param>
         /// <param name="valeur">valeur du bloc, 1 = noir; 0 = blanc </param>
         /// <param name="bande">pour faire les separateur blancs autour des coins </param>
-        public void carree(int l0, int c0, int taille, int valeur, bool bande = false)
+        /// <param name="remove">utiliser seulement dans decodage et utiliser pour supprimer les coins</param>
+        public void carree(int l0, int c0, int taille, int valeur, bool bande = false, bool remove = false)
         {
             if(taille == 1)
             {
-                this.qrcode[l0, c0] = new QRBloc(valeur);
+                if (remove) this.qrcode[l0, c0] = null;
+                else this.qrcode[l0, c0] = new QRBloc(valeur);
             }
             else
             {
@@ -430,24 +564,346 @@ namespace WpfApp1
                 {
                     for (int colonne = 0; colonne < taille; colonne++)
                     {
-                        if (bande)
+                        if(ligne == 0 || colonne == 0 || ligne == taille-1 || colonne == taille-1)
                         {
-                            try
+                            if (bande)
                             {
-                                this.qrcode[l0 + ligne, c0 + colonne] = new QRBloc(valeur);
+                                try
+                                {
+                                    if (remove) this.qrcode[l0 + ligne, c0 + colonne] = null;
+                                    else this.qrcode[l0 + ligne, c0 + colonne] = new QRBloc(valeur);
+                                }
+                                catch (IndexOutOfRangeException e)
+                                {
+                                    Console.WriteLine("Erreur par design", e);
+                                }
                             }
-                            catch(IndexOutOfRangeException e){
-                                Console.WriteLine("Erreur par design", e);
+                            else
+                            {
+                                if (remove) this.qrcode[l0 + ligne, c0 + colonne] = null;
+                                else this.qrcode[l0 + ligne, c0 + colonne] = new QRBloc(valeur);
                             }
-                        }
-                        else
-                        {
-                            this.qrcode[l0 + ligne, c0 + colonne] = new QRBloc(valeur);
                         }
                     }
                 }
             }
         }
 
+        public void decodage()
+        {
+            #region Suppression des finder parterns
+            int len = this.taille;
+
+            //Coin haut gauche
+            carree(-1, -1, 9, 0, true,remove:true);
+            carree(0, 0, 7, 1,remove:true);
+            carree(1, 1, 5, 0,remove: true);
+            carree(2, 2, 3, 1,remove: true);
+            this.qrcode[3, 3] = null;
+
+            //coin haut droite
+            carree(-1, len - 8, 9, 0, true, remove: true);
+            carree(0, len - 7, 7, 1, remove: true);
+            carree(1, len - 6, 5, 0, remove: true);
+            carree(2, len - 5, 3, 1, remove: true);
+            this.qrcode[3, len - 4] = null;
+
+            //coin bas gauche
+            carree(len - 8, -1, 9, 0, true, remove: true);
+            carree(len - 7, 0, 7, 1, remove: true);
+            carree(len - 6, 1, 5, 0, remove: true);
+            carree(len - 5, 2, 3, 1, remove: true);
+            this.qrcode[len - 4, 3] = null;
+
+            //Pour le allignement Pattern
+            if (this.type == 2)
+            {
+                carree(16, 16, 5, 1, remove: true);
+                carree(17, 17, 3, 0, remove: true);
+                this.qrcode[18, 18] = null;
+            }
+            #endregion
+            #region Suppression info masque et EC
+            //les 2 lignes à coté des paterns bas gauche et haut droit
+            for (int i = 0; i < 7; i++)
+            {
+                this.qrcode[this.taille - 1 - i, 8] = null;
+            }
+            for (int i = 0; i < 8; i++)
+            {
+                this.qrcode[8, this.taille - 8 + i] = null;
+            }
+            //le coin haut gauche
+            for (int i = 0; i < 6; i++)
+            {
+                this.qrcode[8, i] = null;
+                this.qrcode[5 - i, 8] = null;
+            }
+            //3 bit dans le coin
+            this.qrcode[7, 8] = null;
+            this.qrcode[8, 8] = null;
+            this.qrcode[8, 7] = null;
+            #endregion
+            #region Suppresion des motifs de synchro et dark module
+            int l1 = 8;
+            int c1 = 6;
+            while (this.qrcode[l1, c1] != null)
+            {
+                this.qrcode[l1, c1] = null;
+                this.qrcode[c1, l1] = null;
+                l1++;
+            }
+
+            //Dark module
+            this.qrcode[this.taille - 8, 8] = null;
+            #endregion
+            #region Lecture et demasquage des données
+            int y = this.taille - 1;
+            int x = this.taille - 1;
+            int index = 0;
+            int sens = -1; //vaut -1 ou 1 pour indiquer le sens d'écriture (haut vers bas ou inverse)
+            while (x>0)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    if (this.qrcode[y, x - i] != null)
+                    {
+                        //Pour demasquer un masque 0,
+                        //on reaplique un XOR entre la valeur de la matrice masque et notre matrice
+                        bool xor =  this.qrcode[y, x - i].Noir ^ ((y + x - i) % 2 == 0);
+                        this.chaine[index] = new QRBloc(xor);
+                        index++;
+                    }
+                }
+
+                y += sens;
+                if (y < 0)
+                {
+                    x -= 2;
+                    y = 0;
+                    sens = 1;
+                }
+                if (y >= this.taille)
+                {
+                    x -= 2;
+                    y = this.taille - 1;
+                    sens = -1;
+                }
+                //Pour eviter le timing pattern vertical, on saute 1 plus loin
+                if (x == 6)
+                {
+                    x--;
+                }
+            }
+            #endregion
+            #region Decoupage de la chaine
+            int cpt = 0;
+            int indexEC = 0;
+            while (cpt < this.chaine.Length)
+            {
+                if(cpt >= 4 && cpt < 13)
+                {
+                    this.nombreCaractere[cpt - 4] = this.chaine[cpt];
+                }
+                if (cpt < 272 * (this.type - 1) + 152 * (this.type % 2)) //On lit toute la chaine de données car besoin pour reedsolomon
+                {
+                    this.donnees[cpt] = this.chaine[cpt];
+                }
+                else if (cpt < 272 * (this.type - 1) + 152 * (this.type % 2) + this.EC.Length)
+                {
+                    this.EC[indexEC] = this.chaine[cpt];
+                    indexEC++;
+                }
+                else
+                {
+                    //On ne fait rien, 
+                    //ce cas arrive seulement dans le cas QRcode type 2 car bourrage à la fin
+                }
+                cpt++;
+            }
+            #endregion
+            #region Verification ReedSolomon
+            //on transforme en string binaire les donnees
+            string stringDonnee = QRBloc.tabToString(this.donnees);
+            stringDonnee = stringDonnee.Substring(0, stringDonnee.Length); //on ne prend pas les 7 bits de redondance si de type 2
+            string[] csub = new string[stringDonnee.Length / 8];
+            byte[] byteDonnees = new byte[stringDonnee.Length / 8];
+            //puis le string en tableau de byte
+            for (int i = 0; i < csub.Length; i++)
+            {
+                csub[i] = stringDonnee.Substring(0 + i * 8, 8);
+                byteDonnees[i] = Convert.ToByte(csub[i], 2);
+            }
+
+            //de meme pour l'erreur correction
+            string stringEC = QRBloc.tabToString(this.EC);
+            string[] sub = new string[stringEC.Length / 8];
+            byte[] byteEC = new byte[stringEC.Length / 8];
+            for (int i = 0; i < sub.Length; i++)
+            {
+                sub[i] = stringEC.Substring(0 + i * 8, 8);
+                byteEC[i] = Convert.ToByte(sub[i], 2);
+            }
+
+            byteDonnees = ReedSolomon.ReedSolomonAlgorithm.Decode(byteDonnees, byteEC, ReedSolomon.ErrorCorrectionCodeType.QRCode);
+            if (byteDonnees == null)
+            {
+                this.erreur = true;
+                return;    //On sort de la fonction si ReedSolomon retournz null (cad qu'il n'a pas réussi à décoder)
+            }
+            #endregion
+            #region nettoyage de la chaine ReedSolomon
+            //Decodage du nombre de caractere du message
+            int nombreDeCaractere = Convert.ToInt32(QRBloc.tabToString(this.nombreCaractere), 2);
+
+            //Extraction de données correspondant au message de ReedSolomon
+            //On remet la chaine de byte de ReedSolomon sous un seule string
+            string sDonnees = "";
+            string bits;
+            for (int i = 0; i < byteDonnees.Length; i++)
+            {
+                bits = Convert.ToString(byteDonnees[i], 2);  //Convert.ToString ne donne pas forcement un octet,
+                if (bits.Length < 8)                         //Donc on ajoute des zéros à gauche
+                {
+                    string zeros = new string('0', 8 - bits.Length);
+                    bits = zeros + bits;
+                }
+                sDonnees += bits;
+            }
+
+            int longueur = 0; //nombre de bits dans lequel sont encodé le message
+            longueur = ((nombreDeCaractere + 1 * (nombreDeCaractere%2)) * 11) / 2;
+
+            sDonnees = sDonnees.Substring(13, longueur);  //on récupere toutes les donnees sans prendre en compte le mode et le nombre de caractere
+            #endregion
+            #region Decodage des donnes en message
+            //Decoupage en string de 11 bits
+            string[] s = new string[sDonnees.Length / 11]; ;
+            for (int i = 0; i < s.Length; i++)
+            {
+                if(nombreDeCaractere%2 == 1 && i == s.Length - 1) //si on  un nombre impaire de caractere, la derniere chaine de bits fait seulement 6 bits
+                {
+                    s[i] = sDonnees.Substring(0 + i * 11, 6);
+                }
+                else
+                {
+                    s[i] = sDonnees.Substring(0 + i * 11, 11);
+                }
+            }
+
+            char[] message = new char[nombreDeCaractere];
+            int indexMessage = 0;
+            for(int i = 0; i < s.Length; i++)
+            {
+                int poids = Convert.ToInt32(s[i], 2);
+                if(poids < 45)
+                {
+                    message[indexMessage] = alphabet[poids];
+                    indexMessage++;
+                }
+                else
+                {
+                    int lettre2 = poids % 45;  //index de l'alphabet de la 2eme lettre du mot de 2 lettre
+                    poids -= lettre2;
+                    int lettre1 = poids / 45; //index de la 1er lettre
+                    message[indexMessage] = alphabet[lettre1];
+                    indexMessage++;
+                    message[indexMessage] = alphabet[lettre2];
+                    indexMessage++;
+                }
+            }
+            #endregion
+            this.message = new string(message); //message final recrée à partir du tableau de caractère
+        }
+
+        /// <summary>
+        /// verifie si il y a une carré de blocs à l'emplacement précisé
+        /// </summary>
+        /// Pour les paramètres, cf la fonction carree
+        /// <returns></returns>
+        public bool iscarree(int l0, int c0, int taille, int valeur, bool bande = false)
+        {
+            int verif = 0;
+            if (taille == 1)
+            {
+                if(this.qrcode[l0, c0].Valeur == valeur)
+                {
+                    verif ++;
+                }
+            }
+            else
+            {
+                for (int ligne = 0; ligne < taille; ligne++)
+                {
+                    for (int colonne = 0; colonne < taille; colonne++)
+                    {
+                        if(ligne == 0 || colonne == 0)
+                        {
+                            if (bande)
+                            {
+                                try
+                                {
+                                    bool test = (this.qrcode[l0, c0].Valeur == valeur);
+                                    if (test)
+                                    {
+                                        verif++;
+                                    }
+                                }
+                                catch (IndexOutOfRangeException e)
+                                {
+                                    Console.WriteLine("Erreur par design", e);
+                                }
+                                catch (NullReferenceException e)
+                                {
+                                    Console.WriteLine("Erreur par design", e);
+                                }
+                            }
+                            else
+                            {
+                                if (this.qrcode[l0, c0].Valeur == valeur)
+                                {
+                                    verif++;
+                                }
+                            }
+                        }
+                        
+                    }
+                }
+            }
+            bool resultat;
+            if(!bande && verif == taille*4 - 4)
+            {
+                resultat = true;
+            }
+            else if(bande && verif == taille*2 -1)
+            {
+                resultat = true;
+            }
+            else{
+                resultat = false;
+            }
+            return resultat;
+        }
+
+        public void afficheMatrice()
+        {
+            for (int a = 0; a < this.taille; a++)
+            {
+                for (int b = 0; b < this.taille; b++)
+                {
+                    if(this.qrcode[a,b] == null)
+                    {
+                        Console.Write(". ");
+                    }
+                    else
+                    {
+                        Console.Write(this.qrcode[a, b].ToString() + " ");
+                    } 
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+        }
     }
 }
