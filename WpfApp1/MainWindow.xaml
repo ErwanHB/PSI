@@ -120,7 +120,6 @@
         <!--#endregion-->
 
         <!--#region Creation d'image -->
-        <TextBlock x:Name="TextCreation" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Margin="20.8,57.4,73.6,0" Grid.Column="1" IsEnabled="False" RenderTransformOrigin="0.699,0.534" Text="Creation d'image :" IsHitTestVisible="False" Focusable="True" Grid.Row="1" Visibility="Hidden"/>
         <!-- Menu deroulant -->
         <ComboBox x:Name="ComboCreation" VerticalAlignment="Top" Margin="8.8,57.4,0.6,0" Grid.Column="1" BorderBrush="Black" Foreground="Black" Background="Black" Height="22" Grid.Row="1" Visibility="Hidden">
             <ComboBox.OpacityMask>
@@ -143,6 +142,7 @@
             <Button Content="Ouvrir" Width="47" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="StenographieOuvrir"/>
             <CheckBox x:Name="CheckBoxStenographie" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Checked="Stenographie" Width="19" Height="15" RenderTransformOrigin="0.448,0.505"/>
         </ComboBox>
+        <TextBlock x:Name="TextCreation" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Margin="20.8,57.4,73.6,0" Grid.Column="1" IsEnabled="False" RenderTransformOrigin="0.699,0.534" Text="Creation d'image :" IsHitTestVisible="False" Focusable="True" Grid.Row="1" Visibility="Hidden"/>
         <!--#endregion-->
 
         <!-- passage au mode QR codes -->
