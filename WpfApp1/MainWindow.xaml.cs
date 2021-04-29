@@ -986,7 +986,6 @@ namespace WpfApp1
             CheckBoxRotation.IsChecked = false;
         }
         #endregion
-
     }
 }
     
