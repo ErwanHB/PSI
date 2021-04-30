@@ -973,8 +973,6 @@ namespace WpfApp1
                 ImageStenographie1.Visibility = Visibility.Hidden;
                 ImageStenographie2.Visibility = Visibility.Hidden;
 
-                Creation.EncodageStegano(imageSteno2, imageSteno1);
-
                 /*image.MatriceBGR = Nouvelle matrice;
                 image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
                 this.bitmap = new BitmapImage();
@@ -988,47 +986,6 @@ namespace WpfApp1
             CheckBoxRotation.IsChecked = false;
         }
         #endregion
-
-        #region QRCode
-        private void CreationQRCode(object sender, RoutedEventArgs e)
-        {
-            string message = TextBoxGenerateur.Text; //message saisit par l'utilisateur
-            int resolutionImage = 10; //nombre choisit par l'utilisateur,, definit la taille en pixel d'un bloc du QRCode
-                                      //10 comme choix de base est bien
-            QRCode q = new QRCode(message, resolutionImage);
-            if (q.Erreur) //q.Erreur est true si on a pas reussi à encoder le message
-            {
-                Erreur.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                image = q.creationQRCode(); //Cree l'image représentant le qrcode
-                image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
-                this.bitmap = new BitmapImage();
-                this.bitmap.BeginInit();
-                this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
-                this.bitmap.EndInit();
-                ImageViewer.Source = this.bitmap;
-                compteurDeModification++;
-            }
-        }
-        private void LectureQRCode(object sender, RoutedEventArgs e)
-        {
-            if (this.flag)
-            {
-                QRCode q = new QRCode(image);
-                if (q.Erreur) //Erreur est true si on a pas pu lire un qrcode dans l'image 
-                {
-                    Erreur.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    string resultat = q.Message; //message décodé à partir de l'image
-                }
-            }
-        }
-        #endregion
-
     }
 }
     
