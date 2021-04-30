@@ -194,36 +194,43 @@ namespace WpfApp1
         public static MyImage EncodageStegano(MyImage basique, MyImage secret)
         {
             MyImage stegano = basique;
-            if(basique.Taille - 54 < secret.Taille + 16)
+            char[] steg = { '5', '3', '5', '4', '4', '5', '4', '7' }; //se retranscrit en 'STEG' en ASCII
+            char[] info = new char[steg.Length + 8 + secret.Taille]; //représente la chaine de bytes à encoder dans basique (8 c'est le nombre de d'octet, donc de lettre en hexa pour la taille de l'image
+
+            if (basique.Taille - 54 < secret.Taille + 16) //On n'encode pas dans le header de basique mais on encode le header de secret d'ou le - 54 + 16
             {
                 return stegano;
             }
             else
             {
-                byte[] steg = { 5, 3, 5, 4, 4, 5, 4, 7 }; //se retranscrit en 'STEG' en ASCII
-                byte[] octet = new byte[8];               //8 octet représentant la taille du fichier caché
-                byte[] taille = secret.Convertir_Int_To_Endian(secret.Taille,4);
-                for(int i = 0; i< 4; i++)
-                {
-                    byte a = Convert.ToByte(Convert.ToInt32(taille[i]) % 16);
-                    octet[i + 1] = a;
-                    octet[i] = Convert.ToByte(Convert.ToInt32(taille[i] - a) / 16);
-                }
+                string bits = Convert.ToString(secret.Taille, 16); //on convertit chaque valeur en hexadécimal pour récupéré facilement chaque bits
+                string bourrageDe8 = new string('0', 8 - bits.Length); //chaine de 0  pour avoir un string de 8 caractere
+                bits = bourrageDe8 + bits;
 
-                byte[] info = new byte[steg.Length + octet.Length + secret.Taille];
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 8; i++)
                 {
                     info[i] = steg[i];
                 }
-                for (int i = 4; i < 12; i++)
+                for (int i = 8; i < 16; i++)
                 {
-                    info[i] = octet[i-4];
+                    info[i] = bits[i - 8];
                 }
                 for (int i = 0; i < secret.Taille; i++)
                 {
-                    //info[i+12] = secret.[i];
+                    bits = Convert.ToString(secret.RawBytes[i], 16); //on convertit chaque valeur en hexadécimal pour récupéré facilement le bit de poids fort
+                    char poidsFort;                                  //Va contenir le bit de poids fort de chaque bytes
+                    if(bits.Length == 1)                             //Pour une valeur de rawBytes < 16 le bit de poids fort est 0
+                    {
+                        poidsFort = '0';
+                    }
+                    else
+                    {
+                        poidsFort = bits[0];
+                    }
+                    info[i + 16] = poidsFort;
                 }
             }
+
             return stegano;
         }
     }

@@ -973,6 +973,8 @@ namespace WpfApp1
                 ImageStenographie1.Visibility = Visibility.Hidden;
                 ImageStenographie2.Visibility = Visibility.Hidden;
 
+                Creation.EncodageStegano(imageSteno2, imageSteno1);
+
                 /*image.MatriceBGR = Nouvelle matrice;
                 image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
                 this.bitmap = new BitmapImage();
@@ -990,7 +992,7 @@ namespace WpfApp1
         #region QRCode
         private void CreationQRCode(object sender, RoutedEventArgs e)
         {
-            string message = ""; //message saisit par l'utilisateur
+            string message = TextBoxGenerateur.Text; //message saisit par l'utilisateur
             int resolutionImage = 10; //nombre choisit par l'utilisateur,, definit la taille en pixel d'un bloc du QRCode
                                       //10 comme choix de base est bien
             QRCode q = new QRCode(message, resolutionImage);
