@@ -65,7 +65,8 @@ namespace WpfApp1
         /// </summary>
         private void Ouvrir(object sender, RoutedEventArgs e)
         {
-            ImageViewer.Visibility = Visibility.Visible;
+            
+            //ImageViewer.Visibility = Visibility.Visible;
             ImageStenographie1.Visibility = Visibility.Hidden;
             ImageStenographie2.Visibility = Visibility.Hidden;
             string filename = null;
@@ -79,7 +80,16 @@ namespace WpfApp1
             this.bitmap.BeginInit();
             this.bitmap.UriSource = new Uri(filename);
             this.bitmap.EndInit();
-            ImageViewer.Source = this.bitmap;
+            if (ImageQrcode.Visibility == Visibility.Visible)
+            {
+                ImageQrcode.Source = this.bitmap;
+                FondBlanc.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ImageViewer.Source = this.bitmap;
+            }
+           
             this.image = new MyImage(filename);
             this.flag = true;
             this.name = Directory.GetCurrentDirectory();
@@ -123,14 +133,19 @@ namespace WpfApp1
             BoutonImage.Visibility = Visibility.Hidden;
             BoutonQRcode.Visibility = Visibility.Hidden;
 
+            BoutonOuvrir.Visibility = Visibility.Visible;
             ImageQrcode.Visibility = Visibility.Visible;
             passage21.Visibility = Visibility.Visible;
             QRcodeEspace1.Visibility = Visibility.Visible;
             ExplicationGeneration.Visibility = Visibility.Visible;
             TextBoxGenerateur.Visibility = Visibility.Visible;
+            ExplicationGeneration2.Visibility = Visibility.Visible;
+            TextBoxGenerateur2.Visibility = Visibility.Visible;
+            checkboxGenerateur.Visibility = Visibility.Visible;
             QRcodeEspace2.Visibility = Visibility.Visible;
             TexteOuvrir.Visibility = Visibility.Visible;
             checkboxLecteur.Visibility = Visibility.Visible;
+            ExplicationLecteur2.Visibility = Visibility.Visible;
             TextNouveau.Visibility = Visibility.Visible;
             TextBoxNouveau.Visibility = Visibility.Visible;
             CheckBoxNouveau.Visibility = Visibility.Visible;//a changer car pas de registre ou enregistrer
@@ -142,6 +157,7 @@ namespace WpfApp1
         /// on passe en visible les elements necessaire pour l'utilisation du mode creation et transformation d'image du logiciel et on cache les autres
         private void ModeImage(object sender, RoutedEventArgs e)
         {
+            ImageViewer.Visibility = Visibility.Visible;
             BoutonOuvrir.Visibility = Visibility.Visible;
             ComboModif.Visibility = Visibility.Visible;
             TextModif.Visibility = Visibility.Visible;
@@ -155,6 +171,7 @@ namespace WpfApp1
             passage12.Visibility = Visibility.Visible;
             ImageViewer.Visibility = Visibility.Visible;
 
+            ImageQrcode.Visibility = Visibility.Hidden;
             TextIntro.Visibility = Visibility.Hidden;
             BoutonImage.Visibility = Visibility.Hidden;
             BoutonQRcode.Visibility = Visibility.Hidden;
@@ -204,7 +221,6 @@ namespace WpfApp1
         /// </summary>
         private void PassageModeQRCode(object sender, RoutedEventArgs e)
         {
-            BoutonOuvrir.Visibility = Visibility.Hidden;
             ComboModif.Visibility = Visibility.Hidden;
             TextModif.Visibility = Visibility.Hidden;
             TextCreation.Visibility = Visibility.Hidden;
@@ -219,9 +235,13 @@ namespace WpfApp1
             QRcodeEspace1.Visibility = Visibility.Visible;
             ExplicationGeneration.Visibility = Visibility.Visible;
             TextBoxGenerateur.Visibility = Visibility.Visible;
+            ExplicationGeneration2.Visibility = Visibility.Visible;
+            TextBoxGenerateur2.Visibility = Visibility.Visible;
+            checkboxGenerateur.Visibility = Visibility.Visible;
             QRcodeEspace2.Visibility = Visibility.Visible;
             TexteOuvrir.Visibility = Visibility.Visible;
             checkboxLecteur.Visibility = Visibility.Visible;
+            ExplicationLecteur2.Visibility = Visibility.Visible;
         }
 
         /// <summary>
@@ -229,7 +249,6 @@ namespace WpfApp1
         /// </summary>
         private void PassageImage(object sender, RoutedEventArgs e)
         {
-            BoutonOuvrir.Visibility = Visibility.Visible;
             ComboModif.Visibility = Visibility.Visible;
             TextModif.Visibility = Visibility.Visible;
             TextCreation.Visibility = Visibility.Visible;
@@ -242,15 +261,19 @@ namespace WpfApp1
             passage12.Visibility = Visibility.Visible;
             ImageViewer.Visibility = Visibility.Visible;
 
-            Erreur.Visibility = Visibility.Hidden;
+            FondBlanc.Visibility = Visibility.Hidden;
             ImageQrcode.Visibility = Visibility.Hidden;
             passage21.Visibility = Visibility.Hidden;
             QRcodeEspace1.Visibility = Visibility.Hidden;
             ExplicationGeneration.Visibility = Visibility.Hidden;
             TextBoxGenerateur.Visibility = Visibility.Hidden;
+            ExplicationGeneration2.Visibility = Visibility.Hidden;
+            TextBoxGenerateur2.Visibility = Visibility.Hidden;
+            checkboxGenerateur.Visibility = Visibility.Hidden;
             QRcodeEspace2.Visibility = Visibility.Hidden;
             TexteOuvrir.Visibility = Visibility.Hidden;
             checkboxLecteur.Visibility = Visibility.Hidden;
+            ExplicationLecteur2.Visibility = Visibility.Hidden;
 
         }
 
@@ -984,6 +1007,53 @@ namespace WpfApp1
             }
             Thread.Sleep(250);
             CheckBoxRotation.IsChecked = false;
+        }
+        #endregion
+
+        #region QRCode
+        private void CreationQRCode(object sender, RoutedEventArgs e)
+        {
+            string texte = TextBoxGenerateur.Text;
+            int pixelParBloc = Convert.ToInt32(TextBoxGenerateur2.Text);
+            QRCode q = new QRCode(texte,pixelParBloc);
+            if (q.Erreur)
+            {
+                Erreur.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                this.name = Directory.GetCurrentDirectory();
+                image = q.creationQRCode();
+                image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
+                this.bitmap = new BitmapImage();
+                this.bitmap.BeginInit();
+                this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
+                this.bitmap.EndInit();
+                FondBlanc.Visibility = Visibility.Visible;
+                ImageQrcode.Visibility = Visibility.Visible;
+                ImageQrcode.Source = this.bitmap;
+                compteurDeModification++;
+            }
+            Thread.Sleep(250);
+            checkboxGenerateur.IsChecked = false;
+        }
+
+        private void LectureQRCode(object sender, RoutedEventArgs e)
+        {
+            if (this.flag)
+            {
+                QRCode q = new QRCode(image);
+                if (q.Erreur)
+                {
+                    Erreur.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    ExplicationLecteur2.Text = q.Message;
+                }
+            }
+            Thread.Sleep(250);
+            checkboxLecteur.IsChecked = false;
         }
         #endregion
     }

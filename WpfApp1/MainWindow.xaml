@@ -32,7 +32,9 @@
 
         <!--#region emplacement de l'image-->
         <Image Margin="10,3.4,1.2,1.2" Name="ImageViewer" Grid.RowSpan="2" Grid.Row="1" Visibility="Hidden"/>
-        <Image Margin="10,3.4,1.2,1.2" Name="ImageQrcode" Grid.RowSpan="2" Grid.Row="1" Visibility="Hidden"/>
+        <Border Name="FondBlanc" Margin="10,3,1,1" Background="white" RenderTransformOrigin="0.433,4.58" Grid.RowSpan="2" Grid.Row="1" Visibility="Hidden">
+            <Image Margin="10,3.4,1.2,1.2" Name="ImageQrcode" Grid.RowSpan="2" Grid.Row="1" Visibility="Visible"/>
+        </Border>
         <Image HorizontalAlignment="Left" Margin="0,2.2,0,0.2" Width="794" Name="ImageStenographie2" Grid.Row="2" Visibility="Hidden"/>
         <Image HorizontalAlignment="Left" Margin="0,3.4,0,0.8" Width="794" Name="ImageStenographie1" Grid.Row="1" Visibility="Hidden"/>
         <!--#endregion-->
@@ -54,7 +56,7 @@
         <!-- enregistration d'image -->
         <TextBox x:Name="TextBoxNouveau" TextWrapping="Wrap" Text="Nouveau" Margin="12.8,0,29.6,10.2" Grid.Column="1" Background="#FF0F0E0E" BorderBrush="Red" Foreground="White" Cursor="None" TextAlignment="Center" Grid.Row="2" Height="22" VerticalAlignment="Bottom" Visibility="Hidden"/>
         <TextBox x:Name="TextNouveau" TextWrapping="Wrap" Text="Pour enregistrer entrer un nom de fichier puis cliquez sur le bouton" Margin="5.8,0,1.6,37.2" TextAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" FontStyle="Italic" Grid.Column="1" IsEnabled="False" FontSize="11" Grid.Row="2" Height="34" VerticalAlignment="Bottom" Visibility="Hidden"/>
-        <CheckBox x:Name="CheckBoxNouveau" Content="CheckBox" Grid.Column="1" Margin="173.8,0,5.6,16.2" Checked="Enregistrer" RenderTransformOrigin="0.448,0.505" Grid.Row="2" Height="14" VerticalAlignment="Bottom" Visibility="Hidden"/>
+        <CheckBox x:Name="CheckBoxNouveau" Content="CheckBox" Grid.Column="1" Margin="173,0,10,16" Checked="Enregistrer" RenderTransformOrigin="0.448,0.505" Grid.Row="2" Height="14" VerticalAlignment="Bottom" Visibility="Hidden"/>
         <!--#endregion-->
 
         <!--#region Mode Imgae-->
@@ -152,20 +154,20 @@
 
         <!--#region Qr code-->
         <!--#region Generateur de QR code-->
-        <TextBlock x:Name="QRcodeEspace1" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="0,9.4,5.6,0" Grid.Row="1" Height="21" Width="187" Foreground="#FFFAFAFA" FontSize="14" Visibility="Visible"><Run Text="Generation de Q"/><Run Text="R"/><Run Text=" code :"/></TextBlock>
-        <TextBlock x:Name="ExplicationGeneration" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="8.8,35.4,3.6,0" Grid.Row="1" Foreground="#FFFFFDFD" FontStyle="Italic" Height="118" Visibility="Visible"><Run Text="Nous allons generer un QR code a partir du tex"/><Run Text="t"/><Run Text="e"/><Run Text=" que vous rentrerez en dessous. "/><Run Text="E"/><Run Text="n f"/><Run Text="o"/><Run Text="nction du nombre de caractere cela generera un QR code de generation 1 (de x à y caracteres)  ou de generation 2 (de x à y caracteres)."/></TextBlock>
-        <TextBox x:Name="TextBoxGenerateur" Height="25" TextWrapping="Wrap" Text="Texte..." VerticalAlignment="Top" Grid.Column="1" Margin="5.8,158.4,9.6,0" Grid.Row="1" Background="Black" BorderBrush="#FFFC1200" Foreground="White" FontSize="10" Visibility="Visible"/>
-        <TextBlock x:Name="ExplicationGeneration2" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="5.8,183.4,6.6,0" Grid.Row="1" Foreground="#FFFFFDFD" FontStyle="Italic" Height="39" Visibility="Visible" RenderTransformOrigin="0.391,3.497"><Run Text="Generation de Q"/><Run Text="R"/><Run Text="                           code :"/></TextBlock>
-        <TextBox x:Name="TextBoxGenerateur2" Height="18" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Grid.Column="1" Margin="8.8,222.4,154.6,0" Grid.Row="1" Background="Black" BorderBrush="#FFFC1200" Foreground="White" FontSize="10" Visibility="Visible"/>
-        <CheckBox x:Name="checkboxGenerateur"  VerticalAlignment="Top" Margin="173.8,227.4,11.6,0" Grid.Column="1" Grid.Row="1" Visibility="Visible"/>
+        <TextBlock x:Name="QRcodeEspace1" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="0,9.4,5.6,0" Grid.Row="1" Height="21" Width="187" Foreground="#FFFAFAFA" FontSize="14" Visibility="Hidden"><Run Text="Generation de Q"/><Run Text="R"/><Run Text=" code :"/></TextBlock>
+        <TextBlock x:Name="ExplicationGeneration" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="8.8,35.4,3.6,0" Grid.Row="1" Foreground="#FFFFFDFD" FontStyle="Italic" Height="118" Visibility="Hidden"><Run Text="Nous allons g"/><Run Text="é"/><Run Text="n"/><Run Text="é"/><Run Text="rer un QR code "/><Run Text="à"/><Run Text=" partir du tex"/><Run Text="t"/><Run Text="e"/><Run Text=" que vous rentrerez en dessous. "/><Run Text="E"/><Run Text="n f"/><Run Text="o"/><Run Text="nction du nombre de caractere cela g"/><Run Text="é"/><Run Text="n"/><Run Text="è"/><Run Text="rera un QR code de generation 1 (de "/><Run Text="1"/><Run Text=" à "/><Run Text="25"/><Run Text=" caracteres)  ou de g"/><Run Text="é"/><Run Text="n"/><Run Text="é"/><Run Text="ration 2 (de "/><Run Text="26"/><Run Text=" à "/><Run Text="47"/><Run Text=" caract"/><Run Text="è"/><Run Text="res)."/></TextBlock>
+        <TextBox x:Name="TextBoxGenerateur" Height="25" TextWrapping="Wrap" Text="Texte" VerticalAlignment="Top" Grid.Column="1" Margin="5.8,158.4,9.6,0" Grid.Row="1" Background="Black" BorderBrush="#FFFC1200" Foreground="White" FontSize="10" Visibility="Hidden"/>
+        <TextBlock x:Name="ExplicationGeneration2" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="6,183,7,0" Grid.Row="1" Foreground="#FFFFFDFD" FontStyle="Italic" Height="47" Visibility="Hidden" RenderTransformOrigin="0.391,3.497"><Run Text="Vous pouvez choisir ci-dessous la taille en pixel d'un carrée du QR code "/><Run Text="("/><Run Text="influence "/><Run Text="la résolution)"/></TextBlock>
+        <TextBox x:Name="TextBoxGenerateur2" Height="18" TextWrapping="Wrap" Text="20" VerticalAlignment="Top" Grid.Column="1" Margin="9,235,154,0" Grid.Row="1" Background="Black" BorderBrush="#FFFC1200" Foreground="White" FontSize="10" Visibility="Hidden"/>
+        <CheckBox x:Name="checkboxGenerateur"  VerticalAlignment="Top" Margin="173,235,10,0" Grid.Column="1" Grid.Row="1" Visibility="Hidden" Checked="CreationQRCode" RenderTransformOrigin="-0.154,0.4"/>
         <!--#endregion-->
 
         <!--#region Lecteur de QR code-->
-        <TextBlock x:Name="QRcodeEspace2" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="12.8,10.2,0,0" Grid.Row="2" Height="22" Foreground="#FFFAFAFA" FontSize="14" HorizontalAlignment="Left" Width="176" Visibility="Visible"><Run Text="Lecture de Q"/><Run Text="R"/><Run Text=" code :"/></TextBlock>
-        <TextBox x:Name="TexteOuvrir" Height="36" TextWrapping="Wrap" Text="Cliquez pour choisir un QR code de génération 1 ou 2 à lire :" VerticalAlignment="Top" Grid.Column="1" Margin="8.8,37.2,9.6,0" Grid.Row="2" Background="Black" BorderBrush="#FFFC1200" Foreground="White" FontSize="10" IsEnabled="False" Visibility="Visible"/>
-        <CheckBox x:Name="checkboxLecteur"  VerticalAlignment="Top" Margin="173.8,58.2,11.6,0" Grid.Column="1" Grid.Row="2" Visibility="Visible"/>
-        <TextBlock x:Name="ExplicationLecteur2" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="3.8,97.2,8.6,0" Grid.Row="2" Foreground="#FFFFFDFD" FontStyle="Italic" Height="39" Visibility="Visible" RenderTransformOrigin="0.391,3.497"><Run Text="Generation de Q"/><Run Text="R"/><Run Text="                           code :"/></TextBlock>
-           <!--#endregion-->
+        <TextBlock x:Name="QRcodeEspace2" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="12.8,10.2,0,0" Grid.Row="2" Height="22" Foreground="#FFFAFAFA" FontSize="14" HorizontalAlignment="Left" Width="176" Visibility="Hidden"><Run Text="Lecture de Q"/><Run Text="R"/><Run Text=" code :"/></TextBlock>
+        <TextBox x:Name="TexteOuvrir" Height="49" TextWrapping="Wrap" Text="Choisissez un QRCode de version 1 ou 2 puis cliquez sur le bouton pour le décoder" VerticalAlignment="Top" Grid.Column="1" Margin="6,37,10,0" Grid.Row="2" Background="Black" BorderBrush="#FFFC1200" Foreground="White" FontSize="10" IsEnabled="False" Visibility="Hidden"/>
+        <CheckBox x:Name="checkboxLecteur"  VerticalAlignment="Top" Margin="170,68,13,0" Grid.Column="1" Grid.Row="2" Visibility="Hidden" Checked="LectureQRCode" RenderTransformOrigin="0.542,0.6"/>
+        <TextBlock x:Name="ExplicationLecteur2" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="3.8,97.2,8.6,0" Grid.Row="2" Foreground="#FFFFFDFD" FontStyle="Italic" Height="39" Visibility="Hidden" RenderTransformOrigin="0.391,3.497"><Run Text="Le message "/><Run Text="décodé"/><Run Text=" apparaitra ici"/></TextBlock>
+        <!--#endregion-->
 
         <!-- passage au mode image -->
         <Button x:Name="Erreur" Content="Message d'erreur :&#xA;&#xA;-Si vous etiez dans la generation&#xA;de QR code. Ce message s'affiche&#xA;si la texte entré est trop long.&#xA;&#xA;-Si vous etiez dans la lecture&#xA;de QR code. Ce message s'affiche&#xA;si la photo entrée n'est pas un QR&#xA;code de genration 1 ou 2,ou que&#xA;la degradation du Qr code est &#xA;supperieure à X%" Margin="4,10,6,0" Click="ErreurQR" RenderTransformOrigin="5.64,-2.529" Foreground="White" BorderBrush="Red" Background="Black" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Height="495" VerticalAlignment="Top" Visibility="Hidden" />
