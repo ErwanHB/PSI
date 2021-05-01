@@ -86,9 +86,9 @@
             <!--3 modules pour la fonction rotation -->
             <TextBox HorizontalAlignment="Left" Height="44" TextWrapping="Wrap" Text="Pour appliquer une rotation à votre image rentrez un angle et cliquez sur le bouton :" VerticalAlignment="Top" Width="181" TextAlignment="Center" Background="Black" BorderBrush="Black" Foreground="White" FontStyle="Italic" Grid.Column="1" IsEnabled="False" FontSize="10" CaretBrush="Black" SelectionBrush="#FFFF0D02"/>
             <TextBox x:Name="coeffRotation" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="90" VerticalAlignment="Top" Width="100" Grid.Column="1" Background="#FF0F0E0E" BorderBrush="Red" Foreground="White" Cursor="None" TextAlignment="Center"/>
-            <CheckBox x:Name="CheckBoxRotation" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Checked="Rotation" Width="19" Height="15" RenderTransformOrigin="0.448,0.505"/>
+            <CheckBox x:Name="CheckBoxRotation" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Checked="Rotation2" Width="19" Height="15" RenderTransformOrigin="0.448,0.505"/>
         </ComboBox>
-        <TextBlock x:Name="TextModif" TextWrapping="Wrap" Text="Différentes modifications :" VerticalAlignment="Top" Height="22" Margin="20.8,3.4,32.6,0" Grid.Column="1" IsEnabled="False" Grid.Row="1" Focusable="True" Visibility="Collapsed"/>
+        <TextBlock x:Name="TextModif" TextWrapping="Wrap" Text="Différentes modifications :" VerticalAlignment="Top" Height="22" Margin="20.8,3.4,32.6,0" Grid.Column="1" IsEnabled="False" Grid.Row="1" Visibility="Collapsed" IsHitTestVisible="False"/>
         <!--#endregion-->
 
         <!--#region filtre-->
@@ -114,10 +114,10 @@
             <ProgressBar HorizontalAlignment="Left" Height="3" VerticalAlignment="Top" Width="181" Background="Red" BorderBrush="{x:Null}" Foreground="{x:Null}" IsEnabled="False"/>
 
             <!-- Methode pour le repoussage -->
-            <Button Content="Repoussage" Width="110" Foreground="#FFFDFDFD" BorderBrush="#FFFB0202" Background="Black" Click="Repoussage"/>
+            <Button Content="Repoussage :" Width="110" Foreground="#FFFDFDFD" BorderBrush="#FFFB0202" Background="Black" Click="Repoussage"/>
 
         </ComboBox>
-        <TextBlock x:Name="TextFiltre" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Margin="22.8,30.4,83.6,0" Grid.Column="1" IsEnabled="False" Focusable="True" Grid.Row="1" Visibility="Hidden"><Run Text="Diff"/><Run Text="é"/><Run Text="rents filt"/><Run Text="res"/><Run Text=" :"/></TextBlock>
+        <TextBlock x:Name="TextFiltre" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Margin="22.8,30.4,83.6,0" Grid.Column="1" Grid.Row="1" Visibility="Hidden" Focusable="False" IsHitTestVisible="False" IsEnabled="False" Text="Différents filtres :"/>
         <!--#endregion-->
         <!--#endregion-->
 
@@ -144,7 +144,7 @@
             <Button Content="Ouvrir" Width="47" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="StenographieOuvrir"/>
             <CheckBox x:Name="CheckBoxStenographie" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Checked="Stenographie" Width="19" Height="15" RenderTransformOrigin="0.448,0.505"/>
         </ComboBox>
-        <TextBlock x:Name="TextCreation" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Margin="20.8,57.4,73.6,0" Grid.Column="1" IsEnabled="False" RenderTransformOrigin="0.699,0.534" Text="Creation d'image :" IsHitTestVisible="False" Focusable="True" Grid.Row="1" Visibility="Hidden"/>
+        <TextBlock x:Name="TextCreation" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Margin="20.8,57.4,73.6,0" Grid.Column="1" RenderTransformOrigin="0.699,0.534" Text="Creation d'image :" Grid.Row="1" Visibility="Hidden" IsHitTestVisible="False" IsEnabled="False"/>
         <!--#endregion-->
 
         <!-- passage au mode QR codes -->
