@@ -1096,6 +1096,7 @@ namespace WpfApp1
                 this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
                 this.bitmap.EndInit();
                 ImageViewer.Source = this.bitmap;
+                compteurDeModification++;
             }
             Thread.Sleep(250);
             CheckBoxStenographie.IsChecked = false;

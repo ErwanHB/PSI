@@ -250,7 +250,7 @@ namespace WpfApp1
                     indexInfo++;
                 }
 
-                int bourrage = (4 - ((secret.MatriceBGR.GetLength(0) * 3) % 4)) % 4;
+                int bourrage = (4 - ((secret.MatriceBGR.GetLength(1) * 3) % 4)) % 4;
                 indexInfo = 0;
                 for (int i = 0; i < stegano.MatriceBGR.GetLength(0); i++)
                 {
@@ -315,19 +315,34 @@ namespace WpfApp1
 
         public static MyImage DecodageStegano(MyImage image)
         {
-            byte[] donnees = image.RawBytes;
+            string[] donnees = new string[image.MatriceBGR.Length *3];
+            int indexDonnees = 0;
+            for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
+            {
+                for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
+                {
+                    donnees[indexDonnees] = Convert.ToString(image.MatriceBGR[i, j].B,16);
+                    indexDonnees++;
+                    donnees[indexDonnees] = Convert.ToString(image.MatriceBGR[i, j].V,16);
+                    indexDonnees++;
+                    donnees[indexDonnees] = Convert.ToString(image.MatriceBGR[i, j].R,16);
+                    indexDonnees++;
+                }
+            }
+            
             string[] infos;
             char[] steg = { '5', '3', '5', '4', '4', '5', '4', '7' };
             char[] charTaille = new char[8];
             int taille;
+            indexDonnees = 0;
             bool verif = true;
             MyImage decoder = image;
 
             for (int i = 0; i < 8; i++)
             {
-                string hexadecimal = Convert.ToString(donnees[i + 54], 16);  //On transforme chaque bit en hexadecimal (base 16)
-                char poidsFaible = hexadecimal[hexadecimal.Length - 1];      //on récupère le bit de poids faible donc la derniere lettre
-                if(poidsFaible != steg[i])
+                char poidsFaible = donnees[indexDonnees].Last();      //on récupère le bit de poids faible donc la derniere lettre
+                indexDonnees++;
+                if (poidsFaible != steg[i])
                 {
                     verif = false;
                 }
@@ -337,17 +352,19 @@ namespace WpfApp1
                 //Si on a bien le mot STEG caché dans l'image
                 for(int i = 0; i < 8; i++)
                 {
-                    string hexadecimal = Convert.ToString(donnees[i + 54 + 8], 16);  //On récup l'info sur la taille
-                    charTaille[i] = hexadecimal[hexadecimal.Length - 1];             //
+                    charTaille[i] = donnees[indexDonnees].Last();
+                    indexDonnees++;
                 }
+
                 string temp = new string(charTaille);
                 taille = Convert.ToInt32(temp,16);
                 infos = new string[taille];
-                for(int i = 0; i < taille; i++)
+
+                for (int i = 0; i < taille; i++)
                 {
-                    string hexadecimal = Convert.ToString(donnees[i + 54 + 8 + 8], 16);  //On transforme chaque bit en hexadecimal (base 16)
-                    string poidsFaible = Convert.ToString(hexadecimal[hexadecimal.Length - 1]);      //on récupère le bit de poids faible donc la derniere lettre
-                    infos[i] = poidsFaible;
+                    char poidsFaible = donnees[indexDonnees].Last();      //on récupère le bit de poids faible donc la derniere lettre
+                    infos[i] = Convert.ToString(poidsFaible);
+                    indexDonnees++;
                 }
 
                 byte[] header = new byte[54];
@@ -360,8 +377,6 @@ namespace WpfApp1
 
                 decoder = new MyImage(header);
 
-                int bourrage = (4 - ((decoder.MatriceBGR.GetLength(0) * 3) % 4)) % 4;
-
                 for (int i = 0; i < decoder.MatriceBGR.GetLength(0); i++)
                 {
                     for (int j = 0; j < decoder.MatriceBGR.GetLength(1); j++)
@@ -371,10 +386,6 @@ namespace WpfApp1
                         int R = Convert.ToInt32(infos[indexInfo + 2] + "0", 16);
                         decoder.MatriceBGR[i, j] = new Pixel(R, V, B);
                         indexInfo += 3;
-                    }
-                    if (bourrage != 0)
-                    {
-                        indexInfo += bourrage;
                     }
                 }
             }
