@@ -69,17 +69,17 @@ namespace WpfApp1
                     cpt = 0;
                     do
                     {
-                        if (couleur[1] > 0)
+                        if (     couleur[1] > 0)
                         {
-                            couleur[1]-=15;
+                                 couleur[1]-=15;
                         }
                         else if (couleur[2] > 0)
                         {
-                            couleur[2]-=15;
+                                 couleur[2]-=15;
                         }
                         else if (couleur[0] > 0)
                         {
-                            couleur[0]-=15;
+                                 couleur[0]-=15;
                         }
                         
                         Z = Complex.Pow(Z, 2) + C;

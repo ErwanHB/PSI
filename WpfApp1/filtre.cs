@@ -20,15 +20,8 @@ namespace WpfApp1
                 case 2: //renforcement des bords
                     matriceConvolution = new int[,] { { 0, 0, 0 }, { -1, 1, 0 }, { 0, 0, 0 } };
                     break;
-                /* 
-				*****
-				*****
-				Essayer de faire une matrice qui fait la moyenne des adjacents
-				*****
-				*****
-				*/
 				case 3: //flou
-                    matriceConvolution = new int[,] { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } };
+                    matriceConvolution = new int[,] { { 2, 4, 5, 4, 2 }, { 4, 9, 12, 9, 4 }, { 5, 12, 15, 12, 5 }, { 4, 9, 12, 9, 4 }, { 2, 4, 5, 4, 2 } };
                     break;
                 case 4: //repoussage
                     matriceConvolution = new int[,] { { -2, -1, 0 }, { -1, 1, 1 }, { 0, 0, 0 } };
@@ -61,9 +54,9 @@ namespace WpfApp1
 
                                 if (effet == 3)
                                 {
-                                    nouvelleMatrice[i, j].B /= 9;
-                                    nouvelleMatrice[i, j].V /= 9;
-                                    nouvelleMatrice[i, j].R /= 9;
+                                    nouvelleMatrice[i, j].B /= 20;
+                                    nouvelleMatrice[i, j].V /= 20;
+                                    nouvelleMatrice[i, j].R /= 20;
                                 }
                             }
                             colonne2++;
