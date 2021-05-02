@@ -70,19 +70,19 @@
                     <GradientStop Color="Black" Offset="1"/>
                 </LinearGradientBrush>
             </ComboBox.OpacityMask>
-            <Button Content="Nuance de gris :" Width="181" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="NuanceDeGris"/>
+            <Button Content="Nuance de gris :" Width="181" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="NuanceDeGris" Height="22"/>
             <ProgressBar HorizontalAlignment="Left" Height="3" VerticalAlignment="Top" Width="181" Background="Red" BorderBrush="{x:Null}" Foreground="{x:Null}" IsEnabled="False"/>
-            <Button Content="Miroir :" Width="181" Background="Black" BorderBrush="Red" Foreground="White" Click="Miroir"/>
+            <Button Content="Miroir :" Width="181" Background="Black" BorderBrush="Red" Foreground="White" Click="Miroir" Height="20"/>
             <ProgressBar HorizontalAlignment="Left" Height="3" VerticalAlignment="Top" Width="181" Background="Red" BorderBrush="{x:Null}" Foreground="{x:Null}" IsEnabled="False"/>
             <!--3 modules pour la fonction blanc et noir -->
             <TextBox HorizontalAlignment="Left" Height="41" TextWrapping="Wrap" Text="Pour passer à une image en noir entrez le seuil (par defaut 128) et cliquez sur le bouton :" VerticalAlignment="Top" Width="181" TextAlignment="Center" Background="Black" BorderBrush="Black" Foreground="White" FontStyle="Italic" Grid.Column="1" IsEnabled="False" FontSize="10" CaretBrush="Black" SelectionBrush="#FFFF0D02"/>
             <TextBox x:Name="seuil" Text="128" Width="100" Height="22" BorderBrush="#FFFB0A0A" Foreground="#FFF9F8F8" Background="Black"/>
-            <CheckBox x:Name="CheckBoxNoir" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Checked="NoirEtBlanc" Width="19" Height="15" RenderTransformOrigin="0.448,0.505"/>
+            <CheckBox x:Name="CheckBoxNoir" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Checked="NoirEtBlanc" Width="16" Height="15" RenderTransformOrigin="0.448,0.505"/>
             <ProgressBar HorizontalAlignment="Left" Height="3" VerticalAlignment="Top" Width="181" Background="Red" BorderBrush="{x:Null}" Foreground="{x:Null}" IsEnabled="False"/>
             <!--3 modules pour la fonction agrandir -->
             <TextBox HorizontalAlignment="Left" Height="43" TextWrapping="Wrap" Text="Pour modifier la taille de votre image rentrez un nombre et cliquez sur le bouton :" VerticalAlignment="Top" Width="181" TextAlignment="Center" Background="Black" BorderBrush="Black" Foreground="White" FontStyle="Italic" Grid.Column="1" IsEnabled="False" FontSize="10" CaretBrush="Black" SelectionBrush="#FFFF0D02"/>
             <TextBox x:Name="coefficient" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="1,5" VerticalAlignment="Top" Width="100" Grid.Column="1" Background="#FF0F0E0E" BorderBrush="Red" Foreground="White" Cursor="None" TextAlignment="Center"/>
-            <CheckBox x:Name="CheckBoxAgrandir" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Checked="Agrandir" Width="19" Height="15" RenderTransformOrigin="0.448,0.505"/>
+            <CheckBox x:Name="CheckBoxAgrandir" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Checked="Agrandir" Width="16" Height="15" RenderTransformOrigin="0.448,0.505"/>
             <!--3 modules pour la fonction rotation -->
             <TextBox HorizontalAlignment="Left" Height="44" TextWrapping="Wrap" Text="Pour appliquer une rotation à votre image rentrez un angle et cliquez sur le bouton :" VerticalAlignment="Top" Width="181" TextAlignment="Center" Background="Black" BorderBrush="Black" Foreground="White" FontStyle="Italic" Grid.Column="1" IsEnabled="False" FontSize="10" CaretBrush="Black" SelectionBrush="#FFFF0D02"/>
             <TextBox x:Name="coeffRotation" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="90" VerticalAlignment="Top" Width="100" Grid.Column="1" Background="#FF0F0E0E" BorderBrush="Red" Foreground="White" Cursor="None" TextAlignment="Center"/>
@@ -132,17 +132,19 @@
             </ComboBox.OpacityMask>
 
             <!-- Methode Histogramme -->
-            <Button Content="Histogramme :" Width="110" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="Histo"/>
+            <Button Content="Histogramme :" Width="110" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="Histo" Height="20"/>
             <ProgressBar HorizontalAlignment="Left" Height="3" VerticalAlignment="Top" Width="181" Background="Red" BorderBrush="{x:Null}" Foreground="{x:Null}" IsEnabled="False"/>
 
             <!-- Methode Fractale -->
-            <Button Content="Fractale :" Width="110" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="Fractale"/>
+            <Button Content="Fractale :" Width="110" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="Fractale" Height="20"/>
             <ProgressBar HorizontalAlignment="Left" Height="3" VerticalAlignment="Top" Width="181" Background="Red" BorderBrush="{x:Null}" Foreground="{x:Null}" IsEnabled="False"/>
 
             <!-- Methode CheckBoxStenographie -->
             <TextBox HorizontalAlignment="Left" Height="71" TextWrapping="Wrap" Text="Pour la stenographie cliquez sur le bouton ouvrir pour choisir une premiere image à cacher dans une deuxieme. Puis cliquer sur la case pour lancer le programme." VerticalAlignment="Top" Width="181" TextAlignment="Center" Background="Black" BorderBrush="Black" Foreground="White" FontStyle="Italic" Grid.Column="1" IsEnabled="False" FontSize="10" CaretBrush="Black" SelectionBrush="#FFFF0D02"/>
-            <Button Content="Ouvrir" Width="47" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="StenographieOuvrir"/>
-            <CheckBox x:Name="CheckBoxStenographie" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Checked="Stenographie" Width="19" Height="15" RenderTransformOrigin="0.448,0.505"/>
+            <Button Content="Ouvrir" Width="47" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="StenographieOuvrir" Height="20"/>
+            <CheckBox x:Name="CheckBoxStenographie" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Checked="Stenographie" Width="14" Height="15" RenderTransformOrigin="0.448,0.505"/>
+            <TextBox HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" Text="Pour décoder une image cacher, ouvrez l'image et cliquez le bouton" VerticalAlignment="Top" Width="181" TextAlignment="Center" Background="Black" BorderBrush="Black" Foreground="White" FontStyle="Italic" IsEnabled="False" FontSize="10" CaretBrush="Black" SelectionBrush="#FFFF0D02"/>
+            <CheckBox x:Name="CheckBoxDecodageStenographie" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="DecodageSteganographie" Width="14" Height="15" RenderTransformOrigin="0.448,0.505"/>
         </ComboBox>
         <TextBlock x:Name="TextCreation" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Margin="20.8,57.4,73.6,0" Grid.Column="1" IsEnabled="False" RenderTransformOrigin="0.699,0.534" Text="Creation d'image :" IsHitTestVisible="False" Focusable="True" Grid.Row="1" Visibility="Hidden"/>
         <!--#endregion-->

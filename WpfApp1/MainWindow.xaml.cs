@@ -74,25 +74,26 @@ namespace WpfApp1
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 filename = dlg.FileName;
-
             }
-            this.bitmap = new BitmapImage();
-            this.bitmap.BeginInit();
-            this.bitmap.UriSource = new Uri(filename);
-            this.bitmap.EndInit();
-            if (ImageQrcode.Visibility == Visibility.Visible)
+            if(filename != null)
             {
-                ImageQrcode.Source = this.bitmap;
-                FondBlanc.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ImageViewer.Source = this.bitmap;
-            }
-           
-            this.image = new MyImage(filename);
-            this.flag = true;
-            this.name = Directory.GetCurrentDirectory();
+                this.bitmap = new BitmapImage();
+                this.bitmap.BeginInit();
+                this.bitmap.UriSource = new Uri(filename);
+                this.bitmap.EndInit();
+                if (ImageQrcode.Visibility == Visibility.Visible)
+                {
+                    ImageQrcode.Source = this.bitmap;
+                    FondBlanc.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    ImageViewer.Source = this.bitmap;
+                }
+                this.image = new MyImage(filename);
+                this.flag = true;
+                this.name = Directory.GetCurrentDirectory();
+            } 
         }
 
         /// <summary>
@@ -190,30 +191,34 @@ namespace WpfApp1
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 filename = dlg.FileName;
-
             }
-            this.steno1 = new BitmapImage();
-            this.steno1.BeginInit();
-            this.steno1.UriSource = new Uri(filename);
-            this.steno1.EndInit();
-            ImageStenographie1.Source = this.steno1;
-            this.imageSteno1 = new MyImage(filename);
-            this.name = Directory.GetCurrentDirectory();
-
-            filename = null;
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if(filename != null)
             {
-                filename = dlg.FileName;
-
+                this.steno1 = new BitmapImage();
+                this.steno1.BeginInit();
+                this.steno1.UriSource = new Uri(filename);
+                this.steno1.EndInit();
+                ImageStenographie1.Source = this.steno1;
+                this.imageSteno1 = new MyImage(filename);
+                this.name = Directory.GetCurrentDirectory();
+            
+                filename = null;
+                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    filename = dlg.FileName;
+                }
+                if (filename != null)
+                {
+                    this.steno2 = new BitmapImage();
+                    this.steno2.BeginInit();
+                    this.steno2.UriSource = new Uri(filename);
+                    this.steno2.EndInit();
+                    ImageStenographie2.Source = this.steno2;
+                    this.imageSteno2 = new MyImage(filename);
+                    this.name = Directory.GetCurrentDirectory();
+                    this.flagStenographie = true;
+                }   
             }
-            this.steno2 = new BitmapImage();
-            this.steno2.BeginInit();
-            this.steno2.UriSource = new Uri(filename);
-            this.steno2.EndInit();
-            ImageStenographie2.Source = this.steno2;
-            this.imageSteno2 = new MyImage(filename);
-            this.name = Directory.GetCurrentDirectory();
-            this.flagStenographie = true;
         }
 
         /// <summary>
@@ -990,23 +995,38 @@ namespace WpfApp1
         {
             if (this.flagStenographie == true)
             {
-
-                //***********
                 ImageViewer.Visibility = Visibility.Visible;
                 ImageStenographie1.Visibility = Visibility.Hidden;
                 ImageStenographie2.Visibility = Visibility.Hidden;
 
-                /*image.MatriceBGR = Nouvelle matrice;
+                image = Creation.EncodageStegano(imageSteno2,imageSteno1);
+                image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
+                this.flag = true;
+                this.bitmap = new BitmapImage();
+                this.bitmap.BeginInit();
+                this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
+                this.bitmap.EndInit();
+                ImageViewer.Source = this.bitmap;
+            }
+            Thread.Sleep(250);
+            CheckBoxStenographie.IsChecked = false;
+        }
+        
+        private void DecodageSteganographie(object sender, RoutedEventArgs e)
+        {
+            if (this.flag == true)
+            {
+                image = Creation.DecodageStegano(image);
                 image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
                 this.bitmap = new BitmapImage();
                 this.bitmap.BeginInit();
                 this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
                 this.bitmap.EndInit();
                 ImageViewer.Source = this.bitmap;
-                */
+                compteurDeModification++;
             }
             Thread.Sleep(250);
-            CheckBoxRotation.IsChecked = false;
+            CheckBoxStenographie.IsChecked = false;
         }
         #endregion
 

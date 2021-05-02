@@ -80,6 +80,13 @@ namespace WpfApp1
             set { this.noir = value; }
         }
         #endregion
+        public override string ToString()
+        {
+            string r = Convert.ToString(this.r, 16);
+            string v = Convert.ToString(this.v, 16);
+            string b = Convert.ToString(this.b, 16);
+            return "r=" + r + " v=" + v + " b=" + b;
+        }
         #endregion
     }
 }

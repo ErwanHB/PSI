@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -78,6 +78,11 @@ namespace WpfApp1
         public byte[] RawBytes
         {
             get { return this.rawBytes; }
+        }
+        public Pixel[,] MatriceBGR
+        {
+            get { return this.matriceBGR; }
+            set { this.matriceBGR = value; }
         }
         #endregion
 
@@ -229,7 +234,6 @@ namespace WpfApp1
             {
                 for (int j = 0; j < this.matriceBGR.GetLength(1); j++)
                 {
-                    
                     bytes[index] = Convert.ToByte(this.matriceBGR[i, j].B);
                     index++;
                     bytes[index] = Convert.ToByte(this.matriceBGR[i, j].V);
@@ -287,12 +291,6 @@ namespace WpfApp1
             } while (taille > 0);
 
             return tab;
-        }
-
-        public Pixel[,] MatriceBGR
-        {
-            get { return this.matriceBGR; }
-            set { this.matriceBGR = value; }
         }
 
         #endregion
