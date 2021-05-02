@@ -210,7 +210,7 @@ namespace WpfApp1
         public void From_Image_To_File(string file)
         {
             int index = 0;
-            int bourrage = (4 - ((this.matriceBGR.GetLength(1) * 3) % 4))%4;
+            int bourrage = (4 - ((this.matriceBGR.GetLength(0) * 3) % 4))%4;
             byte[] bytes = new byte[this.taille + bourrage * this.hauteur];
 
             byte[] taille_octet = this.Convertir_Int_To_Endian(54 + this.largeur * this.hauteur * 3 + bourrage * this.hauteur, 4);

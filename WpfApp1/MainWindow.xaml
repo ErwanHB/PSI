@@ -24,10 +24,9 @@
         <!-- logo -->
         <Image Margin="242,0,0,2" Source="logo_small.png" Stretch="Fill" HorizontalAlignment="Left" Width="340" Height="74" VerticalAlignment="Bottom"  />
         <!-- page d'accueil -->
-        <TextBlock x:Name="TextIntro" TextWrapping="Wrap" VerticalAlignment="Top" Height="239" Foreground="White" Margin="10,10.4,10.2,0" Grid.Row="1" FontSize="18"><Run Text="Bienvenu"/><Run Text=" sur P"/><Run Text="hotocol"/><Run Text="e"/><Run Text=",&#xA;Ceci est le projet scolaire de Guillaume BOURG et Erwan-Henri BURLISSON en deuxieme année à l'ESILV.&#xA;Ce programme vise à permettre la modification et la creation d'image. Ainsi que la generation et lecture des QR code"/><Run Text="s"/><Run Text=" de generation 1 et 2. "/><InlineUIContainer>
-            </InlineUIContainer></TextBlock>
-        <Button x:Name="BoutonImage" Content="Ouvrir le mode modification et creation d'image :" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="ModeImage" Margin="10,193.2,0,0" Grid.Row="2" FontSize="14" HorizontalAlignment="Left" Width="320" Height="55" VerticalAlignment="Top"/>
-        <Button x:Name="BoutonQRcode" Content="Ouvrir le mode generation et lecture de QR codes :" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="ModeQRCode" Margin="0,192.2,10.2,0" Grid.Row="2" FontSize="14" HorizontalAlignment="Right" Width="320" Height="55" VerticalAlignment="Top"/>
+        <TextBlock x:Name="TextIntro" TextWrapping="Wrap" VerticalAlignment="Top" Height="239" Foreground="White" Margin="10,10.4,10.2,0" Grid.Row="1" FontSize="18"><Run Text="Bienvenu"/><Run Text="e"/><Run Text=" sur P"/><Run Text="hotocol"/><Run Text="e"/><Run Text=",&#xA;Ceci est le projet scolaire de Guillaume BOURG et Erwan-Henri BURLISSON en deuxi"/><Run Text="è"/><Run Text="me année à l'ESILV.&#xA;Ce programme vise à permettre la modification et la cr"/><Run Text="é"/><Run Text="ation d'image. Ainsi que la g"/><Run Text="é"/><Run Text="n"/><Run Text="é"/><Run Text="ration et lecture des QR code"/><Run Text="s"/><Run Text=" de g"/><Run Text="é"/><Run Text="n"/><Run Text="é"/><Run Text="ration 1 et 2. "/><InlineUIContainer/></TextBlock>
+        <Button x:Name="BoutonImage" Content="Ouvrir le mode modification et création d'image :" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="ModeImage" Margin="10,193.2,0,0" Grid.Row="2" FontSize="14" HorizontalAlignment="Left" Width="320" Height="55" VerticalAlignment="Top"/>
+        <Button x:Name="BoutonQRcode" Content="Ouvrir le mode génération et lecture de QR codes :" Background="Black" BorderBrush="#FFFD0303" Foreground="#FFFDFDFD" Click="ModeQRCode" Margin="0,192.2,10.2,0" Grid.Row="2" FontSize="14" HorizontalAlignment="Right" Width="320" Height="55" VerticalAlignment="Top"/>
         <!--#endregion-->
 
         <!--#region emplacement de l'image-->
@@ -171,8 +170,8 @@
         <TextBlock x:Name="ExplicationLecteur2" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="3.8,97.2,8.6,0" Grid.Row="2" Foreground="#FFFFFDFD" FontStyle="Italic" Height="39" Visibility="Hidden" RenderTransformOrigin="0.391,3.497"><Run Text="Le message "/><Run Text="décodé"/><Run Text=" apparaitra ici"/></TextBlock>
         <!--#endregion-->
 
-        <!-- passage au mode image -->
-        <Button x:Name="Erreur" Content="Message d'erreur :&#xA;&#xA;-Si vous etiez dans la generation&#xA;de QR code. Ce message s'affiche&#xA;si la texte entré est trop long.&#xA;&#xA;-Si vous etiez dans la lecture&#xA;de QR code. Ce message s'affiche&#xA;si la photo entrée n'est pas un QR&#xA;code de genration 1 ou 2,ou que&#xA;la degradation du Qr code est &#xA;supperieure à X%" Margin="4,10,6,0" Click="ErreurQR" RenderTransformOrigin="5.64,-2.529" Foreground="White" BorderBrush="Red" Background="Black" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Height="495" VerticalAlignment="Top" Visibility="Hidden" />
+        <!-- Message d'erreur -->
+        <Button x:Name="Erreur" Content="Message d'erreur :&#xA;&#xA;-Si vous étiez dans la génération&#xA;de QR code. Ce message s'affiche&#xA;si la texte entré est trop long.&#xA;&#xA;-Si vous étiez dans la lecture&#xA;de QR code. Ce message s'affiche&#xA;si la photo entrée n'est pas un QR&#xA;code de génération 1 ou 2 ou que&#xA;la dégradation du Qr code est &#xA;supérieure à 7%" Margin="4,10,6,0" Click="ErreurQR" RenderTransformOrigin="5.64,-2.529" Foreground="White" BorderBrush="Red" Background="Black" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Height="495" VerticalAlignment="Top" Visibility="Hidden" />
 
         <!-- passage au mode image -->
         <Button x:Name="passage21" Content="Passer au mode image " Margin="0,0,10,10" Click="PassageImage" RenderTransformOrigin="5.64,-2.529" Foreground="White" BorderBrush="Red" Background="Black" Height="58" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="179" Visibility="Hidden"/>

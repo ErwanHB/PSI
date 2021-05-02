@@ -250,7 +250,7 @@ namespace WpfApp1
                     indexInfo++;
                 }
 
-                int bourrage = (4 - ((stegano.MatriceBGR.GetLength(1) * 3) % 4)) % 4;
+                int bourrage = (4 - ((secret.MatriceBGR.GetLength(0) * 3) % 4)) % 4;
                 indexInfo = 0;
                 for (int i = 0; i < stegano.MatriceBGR.GetLength(0); i++)
                 {
@@ -360,15 +360,21 @@ namespace WpfApp1
 
                 decoder = new MyImage(header);
 
-                for(int i = 0; i < decoder.MatriceBGR.GetLength(0); i++)
+                int bourrage = (4 - ((decoder.MatriceBGR.GetLength(0) * 3) % 4)) % 4;
+
+                for (int i = 0; i < decoder.MatriceBGR.GetLength(0); i++)
                 {
                     for (int j = 0; j < decoder.MatriceBGR.GetLength(1); j++)
                     {
-                        int R = Convert.ToInt32(infos[indexInfo] + "0", 16);     //la valeur de chaque couleur est de la forme "bit de poids fort" "0" en hexa decimal
+                        int B = Convert.ToInt32(infos[indexInfo] + "0", 16);     //la valeur de chaque couleur est de la forme "bit de poids fort" "0" en hexa decimal
                         int V = Convert.ToInt32(infos[indexInfo + 1] + "0", 16);
-                        int B = Convert.ToInt32(infos[indexInfo + 2] + "0", 16);
+                        int R = Convert.ToInt32(infos[indexInfo + 2] + "0", 16);
                         decoder.MatriceBGR[i, j] = new Pixel(R, V, B);
                         indexInfo += 3;
+                    }
+                    if (bourrage != 0)
+                    {
+                        indexInfo += bourrage;
                     }
                 }
             }
