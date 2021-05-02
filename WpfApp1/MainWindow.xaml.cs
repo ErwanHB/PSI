@@ -134,6 +134,7 @@ namespace WpfApp1
             BoutonImage.Visibility = Visibility.Hidden;
             BoutonQRcode.Visibility = Visibility.Hidden;
 
+            barre.Visibility = Visibility.Visible;
             BoutonOuvrir.Visibility = Visibility.Visible;
             ImageQrcode.Visibility = Visibility.Visible;
             passage21.Visibility = Visibility.Visible;
@@ -235,6 +236,7 @@ namespace WpfApp1
             passage12.Visibility= Visibility.Hidden;
             ImageViewer.Visibility = Visibility.Hidden;
 
+            barre.Visibility = Visibility.Visible;
             ImageQrcode.Visibility = Visibility.Visible;
             passage21.Visibility = Visibility.Visible;
             QRcodeEspace1.Visibility = Visibility.Visible;
@@ -266,6 +268,7 @@ namespace WpfApp1
             passage12.Visibility = Visibility.Visible;
             ImageViewer.Visibility = Visibility.Visible;
 
+            barre.Visibility = Visibility.Hidden;
             FondBlanc.Visibility = Visibility.Hidden;
             ImageQrcode.Visibility = Visibility.Hidden;
             passage21.Visibility = Visibility.Hidden;
@@ -288,6 +291,13 @@ namespace WpfApp1
         private void ErreurQR(object sender, RoutedEventArgs e)
         {
             Erreur.Visibility = Visibility.Hidden;
+        }
+        /// <summary>
+        /// Methode pour enlever le message d'erreur de l'image
+        /// </summary>
+        private void ErreurImage(object sender, RoutedEventArgs e)
+        {
+            Erreur2.Visibility = Visibility.Hidden;
         }
         #endregion
 
@@ -333,34 +343,38 @@ namespace WpfApp1
         /// La fonction fait la moyenne des valeurs RGB des pixels puis la compare à la valeur seuil, 128 par defaut, pour voir si c'est noir ou blanc
         public void NoirEtBlanc(object sender, RoutedEventArgs e)
         {
-            if (this.flag == true)
+            int valeur = Convert.ToInt32(seuil.Text);
+            if (valeur < 0) valeur = 0;
+            else
             {
-                int valeur = Convert.ToInt32(seuil.Text);
-                Pixel[,] matriceBGR = image.MatriceBGR;
-                int moyenne = 0;
-                for (int i = 0; i < matriceBGR.GetLength(0); i++)
+                if (this.flag == true)
                 {
-                    for (int j = 0; j < matriceBGR.GetLength(1); j++)
+                    Pixel[,] matriceBGR = image.MatriceBGR;
+                    int moyenne = 0;
+                    for (int i = 0; i < matriceBGR.GetLength(0); i++)
                     {
-                        moyenne = (matriceBGR[i, j].R + matriceBGR[i, j].V + matriceBGR[i, j].B) / 3;
-                        if (moyenne < valeur) moyenne = 0;
-                        else moyenne = 255;
-                        matriceBGR[i, j].R = moyenne;
-                        matriceBGR[i, j].V = moyenne;
-                        matriceBGR[i, j].B = moyenne;
+                        for (int j = 0; j < matriceBGR.GetLength(1); j++)
+                        {
+                            moyenne = (matriceBGR[i, j].R + matriceBGR[i, j].V + matriceBGR[i, j].B) / 3;
+                            if (moyenne < valeur) moyenne = 0;
+                            else moyenne = 255;
+                            matriceBGR[i, j].R = moyenne;
+                            matriceBGR[i, j].V = moyenne;
+                            matriceBGR[i, j].B = moyenne;
+                        }
                     }
-                }
-                #region enregistrement, apparition de la nouvelle image 
-                image.MatriceBGR = matriceBGR;
+                    #region enregistrement, apparition de la nouvelle image 
+                    image.MatriceBGR = matriceBGR;
 
-                image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
-                this.bitmap = new BitmapImage();
-                this.bitmap.BeginInit();
-                this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
-                this.bitmap.EndInit();
-                ImageViewer.Source = this.bitmap;
-                compteurDeModification++;
-                #endregion
+                    image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
+                    this.bitmap = new BitmapImage();
+                    this.bitmap.BeginInit();
+                    this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
+                    this.bitmap.EndInit();
+                    ImageViewer.Source = this.bitmap;
+                    compteurDeModification++;
+                    #endregion
+                }
             }
             Thread.Sleep(250);
             CheckBoxNoir.IsChecked = false;
@@ -400,287 +414,291 @@ namespace WpfApp1
         /// </summary>
         private void Agrandir(object sender, RoutedEventArgs e)
         {
-            if (this.flag == true)
+            decimal agrandis = Convert.ToDecimal(coefficient.Text);
+            if (agrandis <= 0 || agrandis >= 2) Erreur2.Visibility = Visibility.Visible;
+            else
             {
-
-                int a = 0;
-                decimal agrandis = Convert.ToDecimal(coefficient.Text);
-                int longueur = Convert.ToInt32(Math.Truncate(image.MatriceBGR.GetLength(0) * agrandis));
-                int largeur = Convert.ToInt32(Math.Truncate(image.MatriceBGR.GetLength(1) * agrandis));
-                Pixel[,] MatriceBGRnew = new Pixel[longueur, largeur];
-                Random rnd = new Random();
-                Pixel[,] MatriceBGRtemp = new Pixel[longueur, largeur];
-                for (int i = 0; i < longueur; i++)
+                if (this.flag == true)
                 {
-                    for (int j = 0; j < largeur; j++)
+                    int a = 0;
+                    int longueur = Convert.ToInt32(Math.Truncate(image.MatriceBGR.GetLength(0) * agrandis));
+                    int largeur = Convert.ToInt32(Math.Truncate(image.MatriceBGR.GetLength(1) * agrandis));
+                    Pixel[,] MatriceBGRnew = new Pixel[longueur, largeur];
+                    Random rnd = new Random();
+                    Pixel[,] MatriceBGRtemp = new Pixel[longueur, largeur];
+                    for (int i = 0; i < longueur; i++)
                     {
-                        MatriceBGRtemp[i, j] = new Pixel(0, 0, 0);
-                        MatriceBGRnew[i, j] = new Pixel(0, 0, 0);
-                    }
-                }
-
-                // initialisation de la nouvelle matrice
-                for (int i = 0; i < longueur; i++)
-                {
-                    for (int j = 0; j < largeur; j++)
-                    {
-                        MatriceBGRnew[i, j] = new Pixel(0, 0, 0);
-                    }
-                }
-
-                //facteur d'aggrandissement =1
-                if (largeur - image.MatriceBGR.GetLength(1) == 0)
-                {
-                    for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
+                        for (int j = 0; j < largeur; j++)
                         {
-                            MatriceBGRnew[i, j] = image.MatriceBGR[i, j];
+                            MatriceBGRtemp[i, j] = new Pixel(0, 0, 0);
+                            MatriceBGRnew[i, j] = new Pixel(0, 0, 0);
                         }
                     }
-                }
 
-                //facteur d'aggrandissement !=1
-                else
-                {
-                    //facteur d'aggrandissement <1
-                    if (largeur - image.MatriceBGR.GetLength(1) < 0)
+                    // initialisation de la nouvelle matrice
+                    for (int i = 0; i < longueur; i++)
                     {
-                        double b = Convert.ToDouble(agrandis);
-
-                        #region retrecissement en largeur
-                        bool[] tab = new bool[image.MatriceBGR.GetLength(1)];
-                        for (int i = 0; i < image.MatriceBGR.GetLength(1); i++)
+                        for (int j = 0; j < largeur; j++)
                         {
-                            tab[i] = false;
+                            MatriceBGRnew[i, j] = new Pixel(0, 0, 0);
                         }
-                        int cptLongueur = 0;
-                        int cptLargeur = 0;
-                        for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
-                        {
-                            double p = rnd.NextDouble();
-                            if (p <= b)
-                            {
-                                cptLargeur++;
-                            }
-                            else
-                            {
-                                if (j - cptLargeur < largeur)
-                                {
-                                    tab[j] = true;
-                                }
-                            }
-                        }
-                        #endregion
+                    }
 
-                        #region retrecissement en hauteur
-                        bool[] tab2 = new bool[image.MatriceBGR.GetLength(0)];
+                    //facteur d'aggrandissement =1
+                    if (largeur - image.MatriceBGR.GetLength(1) == 0)
+                    {
                         for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
                         {
-                            tab2[i] = false;
-                        }
-                        for (int j = 0; j < image.MatriceBGR.GetLength(0); j++)
-                        {
-
-                            double p = rnd.NextDouble();
-                            if (p <= b)
+                            for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
                             {
-                                cptLongueur++;
-                            }
-                            else
-                            {
-                                if (j - cptLongueur < longueur)
-                                {
-                                    tab2[j] = true;
-                                }
+                                MatriceBGRnew[i, j] = image.MatriceBGR[i, j];
                             }
                         }
-                        #endregion
-
-                        #region matrice
-                        int cptTemporaire1 = 1;
-                        int cptTemporaire2 = 1;
-                        cptLongueur = 0;
-                        for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
-                        {
-                            cptLargeur = 0;
-                            if (tab2[i] != true)
-                            {
-                                cptLongueur++;
-                                cptTemporaire1++;
-                            }
-                            else
-                            {
-                                for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
-                                {
-                                    if (tab[j] != true)
-                                    {
-                                        cptLargeur++;
-                                        cptTemporaire2++;
-                                    }
-                                    else
-                                    {
-                                        Pixel moyenne = new Pixel(0, 0, 0);
-                                        for (int cpt1 = 0; cpt1 < cptTemporaire1; cpt1++)
-                                        {
-                                            for (int cpt2 = 0; cpt2 < cptTemporaire2; cpt2++)
-                                            {
-                                                moyenne.R += image.MatriceBGR[i - cpt1, j - cpt2].R;
-                                                moyenne.V += image.MatriceBGR[i - cpt1, j - cpt2].V;
-                                                moyenne.B += image.MatriceBGR[i - cpt1, j - cpt2].B;
-                                            }
-                                        }
-                                        MatriceBGRnew[i - cptLongueur, j - cptLargeur].R = moyenne.R / (cptTemporaire1 * cptTemporaire2);
-                                        MatriceBGRnew[i - cptLongueur, j - cptLargeur].V = moyenne.V / (cptTemporaire1 * cptTemporaire2);
-                                        MatriceBGRnew[i - cptLongueur, j - cptLargeur].B = moyenne.B / (cptTemporaire1 * cptTemporaire2);
-                                        cptTemporaire2 = 1;
-                                    }
-                                    if (j - cptLargeur == largeur - 1)
-                                    {
-                                        cptTemporaire2 = 1;
-                                    }
-                                }
-                                cptTemporaire1 = 1;
-                            }
-                        }
-                        #endregion
                     }
-                    //facteur d'aggrandissement >1
+
+                    //facteur d'aggrandissement !=1
                     else
                     {
-                        a = Convert.ToInt32(Math.Floor(agrandis));
-                        double b = Convert.ToDouble(Convert.ToSingle(agrandis - a) % Convert.ToSingle(1));
-                        int cptLargeur = 0;
-                        int cptLongueur = 0;
-
-                        #region aggrandissmenet coef partie complete
-                        for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
+                        //facteur d'aggrandissement <1
+                        if (largeur - image.MatriceBGR.GetLength(1) < 0)
                         {
+                            double b = Convert.ToDouble(agrandis);
 
-                            for (int cpt1 = 0; cpt1 < a; cpt1++)
+                            #region retrecissement en largeur
+                            bool[] tab = new bool[image.MatriceBGR.GetLength(1)];
+                            for (int i = 0; i < image.MatriceBGR.GetLength(1); i++)
                             {
-                                for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
+                                tab[i] = false;
+                            }
+                            int cptLongueur = 0;
+                            int cptLargeur = 0;
+                            for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
+                            {
+                                double p = rnd.NextDouble();
+                                if (p <= b)
                                 {
-                                    for (int cpt2 = 0; cpt2 < a; cpt2++)
-                                    {
-                                        MatriceBGRnew[i + cptLongueur, j + cptLargeur] = image.MatriceBGR[i, j];
-                                        cptLargeur++;
-                                    }
-                                    cptLargeur--;
+                                    cptLargeur++;
                                 }
+                                else
+                                {
+                                    if (j - cptLargeur < largeur)
+                                    {
+                                        tab[j] = true;
+                                    }
+                                }
+                            }
+                            #endregion
+
+                            #region retrecissement en hauteur
+                            bool[] tab2 = new bool[image.MatriceBGR.GetLength(0)];
+                            for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
+                            {
+                                tab2[i] = false;
+                            }
+                            for (int j = 0; j < image.MatriceBGR.GetLength(0); j++)
+                            {
+
+                                double p = rnd.NextDouble();
+                                if (p <= b)
+                                {
+                                    cptLongueur++;
+                                }
+                                else
+                                {
+                                    if (j - cptLongueur < longueur)
+                                    {
+                                        tab2[j] = true;
+                                    }
+                                }
+                            }
+                            #endregion
+
+                            #region matrice
+                            int cptTemporaire1 = 1;
+                            int cptTemporaire2 = 1;
+                            cptLongueur = 0;
+                            for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
+                            {
                                 cptLargeur = 0;
-                                cptLongueur++;
-                            }
-                            cptLongueur--;
-                        }
-                        #endregion
-
-                        #region  aggrandissmenet coef partie decimal
-                        //aggrandissement largeur
-                        cptLargeur = 0;
-                        for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
-                        {
-
-                            Double p = rnd.NextDouble();
-                            if (p <= b)
-                            {
-                                for (int i = 0; i < image.MatriceBGR.GetLength(0) * a; i++)
-                                { if (j + cptLargeur < largeur)
+                                if (tab2[i] != true)
+                                {
+                                    cptLongueur++;
+                                    cptTemporaire1++;
+                                }
+                                else
+                                {
+                                    for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
                                     {
-                                        MatriceBGRtemp[i, j + cptLargeur] = MatriceBGRnew[i, j];
-                                        if (j + 1 + cptLargeur < largeur)
+                                        if (tab[j] != true)
                                         {
-                                            MatriceBGRtemp[i, j + 1 + cptLargeur] = MatriceBGRnew[i, j];
+                                            cptLargeur++;
+                                            cptTemporaire2++;
+                                        }
+                                        else
+                                        {
+                                            Pixel moyenne = new Pixel(0, 0, 0);
+                                            for (int cpt1 = 0; cpt1 < cptTemporaire1; cpt1++)
+                                            {
+                                                for (int cpt2 = 0; cpt2 < cptTemporaire2; cpt2++)
+                                                {
+                                                    moyenne.R += image.MatriceBGR[i - cpt1, j - cpt2].R;
+                                                    moyenne.V += image.MatriceBGR[i - cpt1, j - cpt2].V;
+                                                    moyenne.B += image.MatriceBGR[i - cpt1, j - cpt2].B;
+                                                }
+                                            }
+                                            MatriceBGRnew[i - cptLongueur, j - cptLargeur].R = moyenne.R / (cptTemporaire1 * cptTemporaire2);
+                                            MatriceBGRnew[i - cptLongueur, j - cptLargeur].V = moyenne.V / (cptTemporaire1 * cptTemporaire2);
+                                            MatriceBGRnew[i - cptLongueur, j - cptLargeur].B = moyenne.B / (cptTemporaire1 * cptTemporaire2);
+                                            cptTemporaire2 = 1;
+                                        }
+                                        if (j - cptLargeur == largeur - 1)
+                                        {
+                                            cptTemporaire2 = 1;
                                         }
                                     }
-
-                                }
-                                cptLargeur++;
-                            }
-                            else
-                            {
-                                for (int i = 0; i < image.MatriceBGR.GetLength(0) * a; i++)
-                                {
-                                    if (j + cptLargeur < largeur)
-                                    {
-                                        MatriceBGRtemp[i, j + cptLargeur] = MatriceBGRnew[i, j];
-                                    }
+                                    cptTemporaire1 = 1;
                                 }
                             }
+                            #endregion
                         }
-                        //aggrandissement hauteur
-                        cptLongueur = 0;
-                        for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
+                        //facteur d'aggrandissement >1
+                        else
                         {
+                            a = Convert.ToInt32(Math.Floor(agrandis));
+                            double b = Convert.ToDouble(Convert.ToSingle(agrandis - a) % Convert.ToSingle(1));
+                            int cptLargeur = 0;
+                            int cptLongueur = 0;
 
-                            Double p = rnd.NextDouble();
-                            if (p <= b)
+                            #region aggrandissmenet coef partie complete
+                            for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
                             {
-                                for (int j = 0; j < largeur; j++)
+
+                                for (int cpt1 = 0; cpt1 < a; cpt1++)
                                 {
-                                    if (i + cptLongueur < longueur)
+                                    for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
                                     {
-                                        MatriceBGRtemp[i + cptLongueur, j] = MatriceBGRnew[i, j];
-                                        if (i + 1 + cptLongueur < longueur)
+                                        for (int cpt2 = 0; cpt2 < a; cpt2++)
                                         {
-                                            MatriceBGRtemp[i + 1 + cptLongueur, j] = MatriceBGRnew[i, j];
+                                            MatriceBGRnew[i + cptLongueur, j + cptLargeur] = image.MatriceBGR[i, j];
+                                            cptLargeur++;
+                                        }
+                                        cptLargeur--;
+                                    }
+                                    cptLargeur = 0;
+                                    cptLongueur++;
+                                }
+                                cptLongueur--;
+                            }
+                            #endregion
+
+                            #region  aggrandissmenet coef partie decimal
+                            //aggrandissement largeur
+                            cptLargeur = 0;
+                            for (int j = 0; j < image.MatriceBGR.GetLength(1); j++)
+                            {
+
+                                Double p = rnd.NextDouble();
+                                if (p <= b)
+                                {
+                                    for (int i = 0; i < image.MatriceBGR.GetLength(0) * a; i++)
+                                    {
+                                        if (j + cptLargeur < largeur)
+                                        {
+                                            MatriceBGRtemp[i, j + cptLargeur] = MatriceBGRnew[i, j];
+                                            if (j + 1 + cptLargeur < largeur)
+                                            {
+                                                MatriceBGRtemp[i, j + 1 + cptLargeur] = MatriceBGRnew[i, j];
+                                            }
+                                        }
+
+                                    }
+                                    cptLargeur++;
+                                }
+                                else
+                                {
+                                    for (int i = 0; i < image.MatriceBGR.GetLength(0) * a; i++)
+                                    {
+                                        if (j + cptLargeur < largeur)
+                                        {
+                                            MatriceBGRtemp[i, j + cptLargeur] = MatriceBGRnew[i, j];
                                         }
                                     }
                                 }
-                                cptLongueur++;
                             }
-                            else
+                            //aggrandissement hauteur
+                            cptLongueur = 0;
+                            for (int i = 0; i < image.MatriceBGR.GetLength(0); i++)
                             {
-                                for (int j = 0; j < largeur; j++)
+
+                                Double p = rnd.NextDouble();
+                                if (p <= b)
                                 {
-                                    if (i + cptLongueur < longueur)
+                                    for (int j = 0; j < largeur; j++)
                                     {
-                                        MatriceBGRtemp[i + cptLongueur, j] = MatriceBGRnew[i, j];
+                                        if (i + cptLongueur < longueur)
+                                        {
+                                            MatriceBGRtemp[i + cptLongueur, j] = MatriceBGRnew[i, j];
+                                            if (i + 1 + cptLongueur < longueur)
+                                            {
+                                                MatriceBGRtemp[i + 1 + cptLongueur, j] = MatriceBGRnew[i, j];
+                                            }
+                                        }
+                                    }
+                                    cptLongueur++;
+                                }
+                                else
+                                {
+                                    for (int j = 0; j < largeur; j++)
+                                    {
+                                        if (i + cptLongueur < longueur)
+                                        {
+                                            MatriceBGRtemp[i + cptLongueur, j] = MatriceBGRnew[i, j];
+                                        }
                                     }
                                 }
                             }
+                            #endregion
                         }
-                        #endregion
                     }
+
+                    #region enregistrement, apparition de la nouvelle image 
+                    image.MatriceBGR = MatriceBGRtemp;
+                    image.Taille = image.Offset + longueur * largeur * 3;
+                    image.Largeur = largeur;
+                    image.Hauteur = longueur;
+                    byte[] largeur2 = image.Convertir_Int_To_Endian(largeur, 4);
+                    byte[] taille2 = image.Convertir_Int_To_Endian(image.Taille, 4);
+                    byte[] hauteur2 = image.Convertir_Int_To_Endian(longueur, 4);
+                    byte[] taille_image2 = image.Convertir_Int_To_Endian((largeur * longueur * 3), 4);
+                    byte[] header = image.Header;
+                    header[2] = taille2[0];
+                    header[3] = taille2[1];
+                    header[4] = taille2[2];
+                    header[5] = taille2[3];
+                    header[18] = largeur2[0];
+                    header[19] = largeur2[1];
+                    header[20] = largeur2[2];
+                    header[21] = largeur2[3];
+                    header[22] = hauteur2[0];
+                    header[23] = hauteur2[1];
+                    header[24] = hauteur2[2];
+                    header[25] = hauteur2[3];
+                    header[34] = taille_image2[0];
+                    header[35] = taille_image2[1];
+                    header[36] = taille_image2[2];
+                    header[37] = taille_image2[3];
+                    image.Header = header;
+
+                    image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
+                    this.bitmap = new BitmapImage();
+                    this.bitmap.BeginInit();
+                    this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
+                    this.bitmap.EndInit();
+                    ImageViewer.Source = this.bitmap;
+                    compteurDeModification++;
+                    #endregion
+
                 }
-
-                #region enregistrement, apparition de la nouvelle image 
-                image.MatriceBGR = MatriceBGRtemp;
-                image.Taille = image.Offset + longueur * largeur * 3;
-                image.Largeur = largeur;
-                image.Hauteur = longueur;
-                byte[] largeur2 = image.Convertir_Int_To_Endian(largeur, 4);
-                byte[] taille2 = image.Convertir_Int_To_Endian(image.Taille, 4);
-                byte[] hauteur2 = image.Convertir_Int_To_Endian(longueur, 4);
-                byte[] taille_image2 = image.Convertir_Int_To_Endian((largeur * longueur * 3), 4);
-                byte[] header = image.Header;
-                header[2] = taille2[0];
-                header[3] = taille2[1];
-                header[4] = taille2[2];
-                header[5] = taille2[3];
-                header[18] = largeur2[0];
-                header[19] = largeur2[1];
-                header[20] = largeur2[2];
-                header[21] = largeur2[3];
-                header[22] = hauteur2[0];
-                header[23] = hauteur2[1];
-                header[24] = hauteur2[2];
-                header[25] = hauteur2[3];
-                header[34] = taille_image2[0];
-                header[35] = taille_image2[1];
-                header[36] = taille_image2[2];
-                header[37] = taille_image2[3];
-                image.Header = header;
-
-                image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
-                this.bitmap = new BitmapImage();
-                this.bitmap.BeginInit();
-                this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
-                this.bitmap.EndInit();
-                ImageViewer.Source = this.bitmap;
-                compteurDeModification++;
-                #endregion
-
             }
             Thread.Sleep(250);
             CheckBoxAgrandir.IsChecked = false;
@@ -858,99 +876,105 @@ namespace WpfApp1
         private void Rotation2(object sender, RoutedEventArgs e)
         {
             double angle = Convert.ToDouble(coeffRotation.Text);
-            int hauteur_ = this.image.Hauteur;
-            int largeur_ = this.image.Largeur;
-            Pixel[,] matriceBGRRotation = new Pixel[hauteur_, largeur_];
-            Pixel[,] matriceBGR = image.MatriceBGR;
-
-            #region Reduction de l'angle à un angle inferieur à 90°
-            while (angle % 360 >= 90)
+            if (angle <= 0) Erreur2.Visibility = Visibility.Visible;
+            else
             {
-                matriceBGRRotation = new Pixel[matriceBGR.GetLength(1), matriceBGR.GetLength(0)];
-                for (int j = matriceBGRRotation.GetLength(1) - 1; j >= 0; j--)
+                if (this.flag == true)
                 {
-                    for (int i = 0; i < matriceBGRRotation.GetLength(0); i++)
+                    int hauteur_ = this.image.Hauteur;
+                    int largeur_ = this.image.Largeur;
+                    Pixel[,] matriceBGRRotation = new Pixel[hauteur_, largeur_];
+                    Pixel[,] matriceBGR = image.MatriceBGR;
+
+                    #region Reduction de l'angle à un angle inferieur à 90°
+                    while (angle % 360 >= 90)
                     {
-                        matriceBGRRotation[i, j] = matriceBGR[Math.Abs(j - matriceBGRRotation.GetLength(1) + 1), i];
+                        matriceBGRRotation = new Pixel[matriceBGR.GetLength(1), matriceBGR.GetLength(0)];
+                        for (int j = matriceBGRRotation.GetLength(1) - 1; j >= 0; j--)
+                        {
+                            for (int i = 0; i < matriceBGRRotation.GetLength(0); i++)
+                            {
+                                matriceBGRRotation[i, j] = matriceBGR[Math.Abs(j - matriceBGRRotation.GetLength(1) + 1), i];
+                            }
+                        }
+                        angle -= 90;
+                        matriceBGR = matriceBGRRotation;
+                        this.image.Hauteur = matriceBGR.GetLength(0);
+                        this.image.Largeur = matriceBGR.GetLength(1);
+                        hauteur_ = this.image.Hauteur;
+                        largeur_ = this.image.Largeur;
                     }
-                }
-                angle -= 90;
-                matriceBGR = matriceBGRRotation;
-                this.image.Hauteur = matriceBGR.GetLength(0);
-                this.image.Largeur = matriceBGR.GetLength(1);
-                hauteur_ = this.image.Hauteur;
-                largeur_ = this.image.Largeur;
-            }
-            angle %= 90;
-            #endregion
+                    angle %= 90;
+                    #endregion
 
-            #region appliquation de l'angle inferieur a 90°
-            if (angle > 0)
-            {
-                angle *= Math.PI / 180;
-                this.image.Hauteur= Convert.ToInt32(largeur_ * Math.Sin(angle) + hauteur_ * Math.Cos(angle));
-                this.image.Largeur= Convert.ToInt32(hauteur_ * Math.Sin(angle) + largeur_ * Math.Cos(angle));
-                int hauteur = this.image.Hauteur;
-                int largeur = this.image.Largeur;
-                matriceBGRRotation = new Pixel[hauteur, largeur];
-                for (int i = 0; i < hauteur; i++)
-                {
-                    for (int j = 0; j < largeur; j++)
+                    #region appliquation de l'angle inferieur a 90°
+                    if (angle > 0)
                     {
-                        int I = (int)(Math.Cos(angle) * (i - hauteur / 2) - Math.Sin(angle) * (j - largeur / 2) + hauteur_ / 2);
-                        int J = (int)(Math.Sin(angle) * (i - hauteur / 2) + Math.Cos(angle) * (j - largeur / 2) + largeur_ / 2);
+                        angle *= Math.PI / 180;
+                        this.image.Hauteur = Convert.ToInt32(largeur_ * Math.Sin(angle) + hauteur_ * Math.Cos(angle));
+                        this.image.Largeur = Convert.ToInt32(hauteur_ * Math.Sin(angle) + largeur_ * Math.Cos(angle));
+                        int hauteur = this.image.Hauteur;
+                        int largeur = this.image.Largeur;
+                        matriceBGRRotation = new Pixel[hauteur, largeur];
+                        for (int i = 0; i < hauteur; i++)
+                        {
+                            for (int j = 0; j < largeur; j++)
+                            {
+                                int I = (int)(Math.Cos(angle) * (i - hauteur / 2) - Math.Sin(angle) * (j - largeur / 2) + hauteur_ / 2);
+                                int J = (int)(Math.Sin(angle) * (i - hauteur / 2) + Math.Cos(angle) * (j - largeur / 2) + largeur_ / 2);
 
-                        if (I >= 0 && J >= 0 && I < hauteur_ && J < largeur_)
-                        {
-                            matriceBGRRotation[i, j] = matriceBGR[I, J];
+                                if (I >= 0 && J >= 0 && I < hauteur_ && J < largeur_)
+                                {
+                                    matriceBGRRotation[i, j] = matriceBGR[I, J];
+                                }
+                                else
+                                {
+                                    matriceBGRRotation[i, j] = new Pixel(255, 255, 255);
+                                }
+                            }
                         }
-                        else
-                        {
-                            matriceBGRRotation[i, j] = new Pixel(255, 255, 255);
-                        }
+                        matriceBGR = matriceBGRRotation;
                     }
+                    #endregion
+
+                    #region enregistrement, apparition de la nouvelle image 
+                    image.Taille = image.Offset + this.image.Hauteur * this.image.Largeur * 3;
+                    byte[] largeur2 = image.Convertir_Int_To_Endian(this.image.Largeur, 4);
+                    byte[] taille2 = image.Convertir_Int_To_Endian(image.Taille, 4);
+                    byte[] hauteur2 = image.Convertir_Int_To_Endian(this.image.Hauteur, 4);
+                    byte[] taille_image2 = image.Convertir_Int_To_Endian((this.image.Largeur * this.image.Hauteur * 3), 4);
+                    byte[] header = image.Header;
+                    header[2] = taille2[0];
+                    header[3] = taille2[1];
+                    header[4] = taille2[2];
+                    header[5] = taille2[3];
+                    header[18] = largeur2[0];
+                    header[19] = largeur2[1];
+                    header[20] = largeur2[2];
+                    header[21] = largeur2[3];
+                    header[22] = hauteur2[0];
+                    header[23] = hauteur2[1];
+                    header[24] = hauteur2[2];
+                    header[25] = hauteur2[3];
+                    header[34] = taille_image2[0];
+                    header[35] = taille_image2[1];
+                    header[36] = taille_image2[2];
+                    header[37] = taille_image2[3];
+                    image.Header = header;
+
+
+                    image.MatriceBGR = matriceBGRRotation;
+                    image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
+                    this.bitmap = new BitmapImage();
+                    this.bitmap.BeginInit();
+                    this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
+                    this.bitmap.EndInit();
+                    ImageViewer.Source = this.bitmap;
+                    compteurDeModification++;
+                    #endregion
+
                 }
-                matriceBGR = matriceBGRRotation;
             }
-            #endregion
-
-            #region enregistrement, apparition de la nouvelle image 
-            image.Taille = image.Offset + this.image.Hauteur * this.image.Largeur * 3;
-            byte[] largeur2 = image.Convertir_Int_To_Endian(this.image.Largeur, 4);
-            byte[] taille2 = image.Convertir_Int_To_Endian(image.Taille, 4);
-            byte[] hauteur2 = image.Convertir_Int_To_Endian(this.image.Hauteur, 4);
-            byte[] taille_image2 = image.Convertir_Int_To_Endian((this.image.Largeur * this.image.Hauteur * 3), 4);
-            byte[] header = image.Header;
-            header[2] = taille2[0];
-            header[3] = taille2[1];
-            header[4] = taille2[2];
-            header[5] = taille2[3];
-            header[18] = largeur2[0];
-            header[19] = largeur2[1];
-            header[20] = largeur2[2];
-            header[21] = largeur2[3];
-            header[22] = hauteur2[0];
-            header[23] = hauteur2[1];
-            header[24] = hauteur2[2];
-            header[25] = hauteur2[3];
-            header[34] = taille_image2[0];
-            header[35] = taille_image2[1];
-            header[36] = taille_image2[2];
-            header[37] = taille_image2[3];
-            image.Header = header;
-
-
-            image.MatriceBGR = matriceBGRRotation;
-            image.From_Image_To_File(name + "\\temp" + compteurDeModification + ".bmp");
-            this.bitmap = new BitmapImage();
-            this.bitmap.BeginInit();
-            this.bitmap.UriSource = new Uri(name + "\\temp" + compteurDeModification + ".bmp");
-            this.bitmap.EndInit();
-            ImageViewer.Source = this.bitmap;
-            compteurDeModification++;
-            #endregion
-
-        
         Thread.Sleep(250);
             CheckBoxRotation.IsChecked = false;
         }

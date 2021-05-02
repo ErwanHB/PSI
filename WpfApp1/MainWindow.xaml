@@ -147,6 +147,7 @@
         </ComboBox>
         <TextBlock x:Name="TextCreation" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Margin="20.8,57.4,73.6,0" Grid.Column="1" RenderTransformOrigin="0.699,0.534" Text="Creation d'image :" Grid.Row="1" Visibility="Hidden" IsHitTestVisible="False" IsEnabled="False"/>
         <!--#endregion-->
+        <Button x:Name="Erreur2" Content="Erreur de saisie" Margin="0,3,0,0" Click="ErreurImage" RenderTransformOrigin="5.64,-2.529" Foreground="White" BorderBrush="Red" Background="Black" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Height="512" VerticalAlignment="Top" Visibility="Hidden" />
 
         <!-- passage au mode QR codes -->
         <Button x:Name="passage12" Content="Passer au mode QR codes " Margin="0,0,10,10" Click="PassageModeQRCode" RenderTransformOrigin="5.64,-2.529" Foreground="White" BorderBrush="Red" Background="Black" Height="58" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="179" Visibility="Hidden"/>
@@ -162,7 +163,7 @@
         <TextBox x:Name="TextBoxGenerateur2" Height="18" TextWrapping="Wrap" Text="20" VerticalAlignment="Top" Grid.Column="1" Margin="9,235,154,0" Grid.Row="1" Background="Black" BorderBrush="#FFFC1200" Foreground="White" FontSize="10" Visibility="Hidden"/>
         <CheckBox x:Name="checkboxGenerateur"  VerticalAlignment="Top" Margin="173,235,10,0" Grid.Column="1" Grid.Row="1" Visibility="Hidden" Checked="CreationQRCode" RenderTransformOrigin="-0.154,0.4"/>
         <!--#endregion-->
-
+        <ProgressBar x:Name="barre" Height="5" VerticalAlignment="Top" Background="White" BorderBrush="{x:Null}" Foreground="{x:Null}" IsEnabled="False" Visibility="Hidden" Grid.Column="1" Margin="7,5,10,0" Grid.Row="2"/>
         <!--#region Lecteur de QR code-->
         <TextBlock x:Name="QRcodeEspace2" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="12.8,10.2,0,0" Grid.Row="2" Height="22" Foreground="#FFFAFAFA" FontSize="14" HorizontalAlignment="Left" Width="176" Visibility="Hidden"><Run Text="Lecture de Q"/><Run Text="R"/><Run Text=" code :"/></TextBlock>
         <TextBox x:Name="TexteOuvrir" Height="49" TextWrapping="Wrap" Text="Choisissez un QRCode de version 1 ou 2 puis cliquez sur le bouton pour le décoder" VerticalAlignment="Top" Grid.Column="1" Margin="6,37,10,0" Grid.Row="2" Background="Black" BorderBrush="#FFFC1200" Foreground="White" FontSize="10" IsEnabled="False" Visibility="Hidden"/>
