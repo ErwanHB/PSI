@@ -415,7 +415,7 @@ namespace WpfApp1
         private void Agrandir(object sender, RoutedEventArgs e)
         {
             decimal agrandis = Convert.ToDecimal(coefficient.Text);
-            if (agrandis <= 0 || agrandis >= 2) Erreur2.Visibility = Visibility.Visible;
+            if (agrandis < 1 || agrandis >= 2) Erreur2.Visibility = Visibility.Visible;
             else
             {
                 if (this.flag == true)
@@ -462,6 +462,7 @@ namespace WpfApp1
                         //facteur d'aggrandissement <1
                         if (largeur - image.MatriceBGR.GetLength(1) < 0)
                         {
+                            /*
                             double b = Convert.ToDouble(agrandis);
 
                             #region retrecissement en largeur
@@ -559,8 +560,9 @@ namespace WpfApp1
                                     cptTemporaire1 = 1;
                                 }
                             }
-                            #endregion
+                            #endregion*/
                         }
+
                         //facteur d'aggrandissement >1
                         else
                         {
