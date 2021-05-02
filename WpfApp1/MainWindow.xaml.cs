@@ -134,6 +134,7 @@ namespace WpfApp1
             BoutonImage.Visibility = Visibility.Hidden;
             BoutonQRcode.Visibility = Visibility.Hidden;
 
+            barre.Visibility = Visibility.Visible;
             BoutonOuvrir.Visibility = Visibility.Visible;
             ImageQrcode.Visibility = Visibility.Visible;
             passage21.Visibility = Visibility.Visible;
@@ -235,6 +236,7 @@ namespace WpfApp1
             passage12.Visibility= Visibility.Hidden;
             ImageViewer.Visibility = Visibility.Hidden;
 
+            barre.Visibility = Visibility.Visible;
             ImageQrcode.Visibility = Visibility.Visible;
             passage21.Visibility = Visibility.Visible;
             QRcodeEspace1.Visibility = Visibility.Visible;
@@ -266,6 +268,7 @@ namespace WpfApp1
             passage12.Visibility = Visibility.Visible;
             ImageViewer.Visibility = Visibility.Visible;
 
+            barre.Visibility = Visibility.Hidden;
             FondBlanc.Visibility = Visibility.Hidden;
             ImageQrcode.Visibility = Visibility.Hidden;
             passage21.Visibility = Visibility.Hidden;
